@@ -9,7 +9,6 @@ import {
   Menu, 
   X, 
   LayoutDashboard,
-  Layers,
   ArrowRight
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -40,16 +39,17 @@ export const Navbar = ({ currentPath, navigate }) => {
       position: 'sticky',
       top: 0,
       zIndex: 50,
-      backgroundColor: 'rgba(11, 15, 23, 0.85)',
+      backgroundColor: 'rgba(255, 255, 255, 0.92)',
       backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
-      borderBottom: '1px solid var(--border-subtle)'
+      borderBottom: '1px solid var(--border-subtle)',
+      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)'
     }}>
       <div style={{
         maxWidth: 1280,
         margin: '0 auto',
-        padding: '0 20px',
-        height: 72,
+        padding: '0 24px',
+        height: 70,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -67,33 +67,40 @@ export const Navbar = ({ currentPath, navigate }) => {
           }}
         >
           <div style={{
-            width: 40,
-            height: 40,
-            borderRadius: 12,
-            background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+            width: 38,
+            height: 38,
+            borderRadius: 10,
+            background: '#09090b',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 14px rgba(59, 130, 246, 0.4)'
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
           }}>
-            <ShoppingBag size={22} color="#ffffff" />
+            <ShoppingBag size={20} color="#ffffff" />
           </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ 
-                fontSize: '1.35rem', 
-                fontWeight: 800, 
-                letterSpacing: '-0.03em',
-                background: 'linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
-                ShopAI
-              </span>
-              <span className="badge badge-blue" style={{ fontSize: '0.65rem', padding: '2px 6px' }}>
-                MARKETPLACE
-              </span>
-            </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ 
+              fontSize: '1.3rem', 
+              fontWeight: 800, 
+              letterSpacing: '-0.03em',
+              color: '#09090b',
+              fontFamily: 'var(--font-display)'
+            }}>
+              ShopAI
+            </span>
+            <span style={{
+              fontSize: '0.66rem',
+              fontWeight: 700,
+              padding: '2px 7px',
+              borderRadius: 20,
+              background: '#f4f4f5',
+              color: '#52525b',
+              border: '1px solid #e4e4e7',
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase'
+            }}>
+              Marketplace
+            </span>
           </div>
         </div>
 
@@ -101,8 +108,8 @@ export const Navbar = ({ currentPath, navigate }) => {
         <nav style={{
           display: 'none',
           alignItems: 'center',
-          gap: 28,
-          margin: '0 10px'
+          gap: 32,
+          margin: '0 12px'
         }} className="desktop-nav">
           {navLinks.map((link) => {
             const isActive = currentPath === link.path;
@@ -112,8 +119,8 @@ export const Navbar = ({ currentPath, navigate }) => {
                 onClick={() => navigate(link.path)}
                 style={{
                   fontSize: '0.92rem',
-                  fontWeight: isActive ? 600 : 500,
-                  color: isActive ? '#ffffff' : 'var(--text-muted)',
+                  fontWeight: isActive ? 700 : 500,
+                  color: isActive ? '#09090b' : '#52525b',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 6,
@@ -121,6 +128,8 @@ export const Navbar = ({ currentPath, navigate }) => {
                   position: 'relative',
                   transition: 'color 0.15s ease'
                 }}
+                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = '#09090b'; }}
+                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = '#52525b'; }}
               >
                 {link.label}
                 {isActive && (
@@ -131,7 +140,7 @@ export const Navbar = ({ currentPath, navigate }) => {
                     right: 0,
                     height: 2,
                     borderRadius: 2,
-                    background: '#3b82f6'
+                    background: '#09090b'
                   }} />
                 )}
               </button>
@@ -146,39 +155,41 @@ export const Navbar = ({ currentPath, navigate }) => {
           position: 'relative',
           display: 'none'
         }} className="desktop-search">
-          <Search size={17} style={{
+          <Search size={16} style={{
             position: 'absolute',
             left: 14,
             top: '50%',
             transform: 'translateY(-50%)',
-            color: 'var(--text-subtle)',
+            color: 'var(--text-muted)',
             pointerEvents: 'none'
           }} />
           <input
             type="text"
-            placeholder="Search stores, products, brands..."
+            placeholder="Search verified stores, products, tags..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               width: '100%',
-              height: 40,
-              paddingLeft: 42,
+              height: 38,
+              paddingLeft: 40,
               paddingRight: 16,
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid var(--border-subtle)',
+              background: '#f4f4f6',
+              border: '1px solid transparent',
               borderRadius: 'var(--radius-full)',
-              color: '#ffffff',
-              fontSize: '0.88rem',
+              color: '#09090b',
+              fontSize: '0.86rem',
               outline: 'none',
-              transition: 'border-color 0.2s ease, background 0.2s ease'
+              transition: 'all 0.15s ease'
             }}
             onFocus={(e) => {
-              e.target.style.borderColor = '#3b82f6';
-              e.target.style.background = 'rgba(255, 255, 255, 0.08)';
+              e.target.style.borderColor = '#d1d5db';
+              e.target.style.background = '#ffffff';
+              e.target.style.boxShadow = '0 0 0 3px rgba(0, 0, 0, 0.04)';
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = 'var(--border-subtle)';
-              e.target.style.background = 'rgba(255, 255, 255, 0.05)';
+              e.target.style.borderColor = 'transparent';
+              e.target.style.background = '#f4f4f6';
+              e.target.style.boxShadow = 'none';
             }}
           />
         </form>
@@ -190,27 +201,27 @@ export const Navbar = ({ currentPath, navigate }) => {
             <button
               onClick={() => navigate('/dashboard')}
               style={{
-                background: 'rgba(59, 130, 246, 0.15)',
-                color: '#60a5fa',
-                border: '1px solid rgba(59, 130, 246, 0.3)',
-                padding: '7px 14px',
+                background: '#09090b',
+                color: '#ffffff',
+                padding: '7px 15px',
                 borderRadius: 'var(--radius-full)',
                 fontSize: '0.84rem',
                 fontWeight: 600,
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 6
+                gap: 6,
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)'
               }}
             >
-              <LayoutDashboard size={15} />
-              <span>Store Dashboard</span>
+              <LayoutDashboard size={14} />
+              <span>Dashboard</span>
             </button>
           ) : (
             <button
               onClick={() => navigate('/sell')}
               className="btn-sell"
             >
-              <Sparkles size={15} />
+              <Sparkles size={14} />
               <span>Sell on ShopAI</span>
             </button>
           )}
@@ -225,10 +236,19 @@ export const Navbar = ({ currentPath, navigate }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'var(--bg-surface-elevated)',
+              background: '#ffffff',
               border: '1px solid var(--border-subtle)',
-              color: 'var(--text-main)',
+              color: '#52525b',
+              boxShadow: 'var(--shadow-xs)',
               transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#cbd5e1';
+              e.currentTarget.style.color = '#09090b';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-subtle)';
+              e.currentTarget.style.color = '#52525b';
             }}
             title="Customer Profile & Orders"
           >
@@ -240,36 +260,43 @@ export const Navbar = ({ currentPath, navigate }) => {
             onClick={() => navigate('/cart')}
             style={{
               position: 'relative',
-              width: 40,
-              height: 40,
-              borderRadius: 12,
+              width: 38,
+              height: 38,
+              borderRadius: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'rgba(255, 255, 255, 0.06)',
+              background: '#ffffff',
               border: '1px solid var(--border-subtle)',
-              color: '#ffffff',
+              color: '#09090b',
+              boxShadow: 'var(--shadow-xs)',
               transition: 'all 0.15s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#cbd5e1';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-subtle)';
             }}
             title="Shopping Cart"
           >
-            <ShoppingCart size={19} />
+            <ShoppingCart size={18} />
             {totalCount > 0 && (
               <span style={{
                 position: 'absolute',
-                top: -4,
-                right: -4,
-                background: '#ef4444',
+                top: -5,
+                right: -5,
+                background: '#09090b',
                 color: '#ffffff',
-                fontSize: '0.72rem',
+                fontSize: '0.68rem',
                 fontWeight: 700,
-                width: 20,
-                height: 20,
+                width: 19,
+                height: 19,
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.5)'
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)'
               }}>
                 {totalCount}
               </span>
@@ -287,7 +314,8 @@ export const Navbar = ({ currentPath, navigate }) => {
               height: 38,
               borderRadius: 10,
               color: 'var(--text-main)',
-              border: '1px solid var(--border-subtle)'
+              border: '1px solid var(--border-subtle)',
+              background: '#ffffff'
             }}
             className="mobile-menu-btn"
           >
@@ -300,19 +328,20 @@ export const Navbar = ({ currentPath, navigate }) => {
       {mobileMenuOpen && (
         <div style={{
           padding: '16px 20px 24px',
-          backgroundColor: 'var(--bg-surface)',
+          backgroundColor: '#ffffff',
           borderBottom: '1px solid var(--border-subtle)',
+          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.05)',
           display: 'flex',
           flexDirection: 'column',
-          gap: 16
+          gap: 14
         }}>
           <form onSubmit={handleSearchSubmit} style={{ position: 'relative' }}>
-            <Search size={17} style={{
+            <Search size={16} style={{
               position: 'absolute',
               left: 14,
               top: '50%',
               transform: 'translateY(-50%)',
-              color: 'var(--text-subtle)'
+              color: 'var(--text-muted)'
             }} />
             <input
               type="text"
@@ -321,18 +350,18 @@ export const Navbar = ({ currentPath, navigate }) => {
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
                 width: '100%',
-                height: 42,
-                paddingLeft: 42,
-                background: 'rgba(255, 255, 255, 0.05)',
+                height: 40,
+                paddingLeft: 40,
+                background: '#f4f4f6',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 10,
-                color: '#ffffff',
+                color: '#09090b',
                 fontSize: '0.9rem'
               }}
             />
           </form>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {navLinks.map((link) => (
               <button
                 key={link.path}
@@ -341,13 +370,13 @@ export const Navbar = ({ currentPath, navigate }) => {
                   setMobileMenuOpen(false);
                 }}
                 style={{
-                  padding: '12px 14px',
+                  padding: '10px 12px',
                   borderRadius: 8,
                   textAlign: 'left',
-                  fontSize: '0.95rem',
-                  fontWeight: currentPath === link.path ? 600 : 500,
-                  backgroundColor: currentPath === link.path ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                  color: currentPath === link.path ? '#60a5fa' : 'var(--text-main)'
+                  fontSize: '0.92rem',
+                  fontWeight: currentPath === link.path ? 700 : 500,
+                  backgroundColor: currentPath === link.path ? '#f4f4f6' : 'transparent',
+                  color: currentPath === link.path ? '#09090b' : '#52525b'
                 }}
               >
                 {link.label}
@@ -359,11 +388,11 @@ export const Navbar = ({ currentPath, navigate }) => {
                 setMobileMenuOpen(false);
               }}
               style={{
-                padding: '12px 14px',
+                padding: '10px 12px',
                 borderRadius: 8,
                 textAlign: 'left',
-                fontSize: '0.95rem',
-                color: 'var(--text-main)'
+                fontSize: '0.92rem',
+                color: '#52525b'
               }}
             >
               My Orders & Returns
@@ -374,12 +403,12 @@ export const Navbar = ({ currentPath, navigate }) => {
                 setMobileMenuOpen(false);
               }}
               style={{
-                padding: '12px 14px',
+                padding: '10px 12px',
                 borderRadius: 8,
                 textAlign: 'left',
-                fontSize: '0.95rem',
-                color: '#a78bfa',
-                fontWeight: 600
+                fontSize: '0.92rem',
+                color: '#09090b',
+                fontWeight: 700
               }}
             >
               Sell on ShopAI →
@@ -388,7 +417,7 @@ export const Navbar = ({ currentPath, navigate }) => {
         </div>
       )}
 
-      {/* Global CSS media helpers for navbar */}
+      {/* Media helpers */}
       <style>{`
         @media (min-width: 768px) {
           .desktop-nav { display: flex !important; }
