@@ -151,33 +151,33 @@ export default function App() {
       <div className="app-container">
         {/* Prototype Demo Banner Switcher Helper */}
         <div style={{
-          backgroundColor: '#1e1b4b',
-          borderBottom: '1px solid rgba(129, 140, 248, 0.25)',
-          padding: '8px 16px',
+          backgroundColor: '#09090b',
+          borderBottom: '1px solid #27272a',
+          padding: '6px 20px',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'space-between',
-          fontSize: '0.78rem',
-          color: '#c7d2fe',
-          gap: 8,
+          fontSize: '0.76rem',
+          color: '#a1a1aa',
+          gap: 10,
           zIndex: 60,
           position: 'relative'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ background: '#4f46e5', color: '#ffffff', padding: '1px 6px', borderRadius: 4, fontWeight: 700 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ background: '#27272a', color: '#ffffff', padding: '2px 7px', borderRadius: 4, fontWeight: 700, letterSpacing: '0.02em', fontSize: '0.7rem' }}>
               ShopAI Prototype
             </span>
-            <span>Local State Mode (Decoupled from AWS/Azure)</span>
+            <span style={{ color: '#71717a' }}>• Multi-Vendor Local Demo</span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ color: 'var(--text-subtle)' }}>Quick Demo Nav:</span>
-            <button onClick={() => navigate('/store/STORE-1001')} style={{ color: '#93c5fd', textDecoration: 'underline' }}>Urban Threads</button>
-            <button onClick={() => navigate('/store/STORE-1002')} style={{ color: '#93c5fd', textDecoration: 'underline' }}>TechHub</button>
-            <button onClick={() => navigate('/orders/ORD-10452')} style={{ color: '#93c5fd', textDecoration: 'underline' }}>Track Order (ORD-10452)</button>
-            <button onClick={() => navigate('/sell/create')} style={{ color: '#c084fc', textDecoration: 'underline', fontWeight: 600 }}>+ Create Store</button>
-            <button onClick={() => navigate('/dashboard')} style={{ color: '#34d399', textDecoration: 'underline', fontWeight: 600 }}>Merchant Dashboard</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+            <span style={{ color: '#71717a', fontWeight: 500 }}>Quick Nav:</span>
+            <button onClick={() => navigate('/store/STORE-1001')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Urban Threads</button>
+            <button onClick={() => navigate('/store/STORE-1002')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>TechHub</button>
+            <button onClick={() => navigate('/orders/ORD-10452')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Track Order</button>
+            <button onClick={() => navigate('/sell/create')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600 }}>+ Create Store</button>
+            <button onClick={() => navigate('/dashboard')} style={{ color: '#10b981', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 700 }}>Merchant Dashboard →</button>
           </div>
         </div>
 
