@@ -6,19 +6,19 @@ Designed with clean service abstractions (`src/services/`) for seamless future c
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-### 🛒 Marketplace & Customer Experience
+### Marketplace & Customer Experience
 - **Curated Store Directory (`/stores`)**: Browse 5 verified independent stores across India with category filters and ratings.
 - **Dedicated Storefronts (`/store/:storeId`)**: Individual merchant storefronts with custom banners, store info, verified customer reviews, and store-specific product catalogs.
 - **Product Catalog & Filters (`/products`)**: Filter by category, price slider, minimum rating, and search keywords. Sort by popularity, rating, or price.
 - **Product Details (`/product/:productId`)**: High-res imagery, INR pricing, stock availability, specifications, quantity selector, and "More from this store".
 - **Cart & Simulated Checkout (`/cart`, `/checkout`)**: Real-time quantity controls, automatic free delivery threshold (> ₹1,500), simulated UPI, Card, and COD payments, with confetti celebration and order ID generation.
 - **Visual Order Tracking (`/orders/:orderId`)**: Interactive 6-stage fulfillment stepper timeline:
-  `Order Placed` ➔ `Confirmed` ➔ `Packed` ➔ `Shipped` ➔ `Out for Delivery` ➔ `Delivered`.
+  `Order Placed` -> `Confirmed` -> `Packed` -> `Shipped` -> `Out for Delivery` -> `Delivered`.
 - **Customer Profile & Returns (`/profile`, `/orders`)**: Order history, saved addresses, and an interactive return request workflow.
 
-### 💼 Merchant Platform & Dashboard
+### Merchant Platform & Dashboard
 - **Seller Landing & Onboarding Wizard (`/sell`, `/sell/create`)**:
   - 5-step onboarding wizard for store name, category, owner details, origin location, and custom handle slug (`shopai.com/store/handle`).
   - Instant store activation with zero wait time.
@@ -33,7 +33,7 @@ Designed with clean service abstractions (`src/services/`) for seamless future c
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## Tech Stack & Architecture
 
 - **Frontend**: React 19, Vite, Lucide React, Canvas Confetti
 - **Styling**: Vanilla CSS with modern dark mode, glassmorphism, responsive mobile drawers, and CSS variables
@@ -47,7 +47,7 @@ Designed with clean service abstractions (`src/services/`) for seamless future c
 
 ---
 
-## 💻 Getting Started Locally
+## Getting Started Locally
 
 ```bash
 # Clone the repository
