@@ -5,11 +5,11 @@ import {
   Package, 
   Users, 
   ArrowUpRight, 
-  ArrowDownRight, 
   Sparkles, 
   Clock,
   CheckCircle2,
-  ChevronRight
+  ChevronRight,
+  Plus
 } from 'lucide-react';
 import { storeService } from '../../services/storeService';
 import { orderService } from '../../services/orderService';
@@ -48,7 +48,7 @@ export const Overview = ({ navigate }) => {
     maximumFractionDigits: 0
   }).format(val || 0);
 
-  if (loading || !store) return <div>Loading dashboard...</div>;
+  if (loading || !store) return <div style={{ padding: 40, color: '#64748b' }}>Loading dashboard...</div>;
 
   const totalSales = orders.reduce((sum, o) => sum + o.totalAmount, store.metrics?.totalSales || 0);
   const totalOrdersCount = orders.length > 0 ? orders.length : (store.metrics?.totalOrders || 0);
@@ -65,24 +65,24 @@ export const Overview = ({ navigate }) => {
   ];
 
   return (
-    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {/* Top Welcome */}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
         <div>
-          <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ffffff', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
             Store Overview
           </h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginTop: 2 }}>
-            Here is what's happening with <strong style={{ color: '#ffffff' }}>{store.name}</strong> today.
+          <p style={{ color: '#64748b', fontSize: '0.88rem', marginTop: 2 }}>
+            Here is what is happening with <strong style={{ color: '#09090b' }}>{store.name}</strong> today.
           </p>
         </div>
 
         <button
           onClick={() => navigate('/dashboard/products')}
           className="btn-primary"
-          style={{ padding: '9px 18px', fontSize: '0.85rem' }}
+          style={{ padding: '8px 16px', fontSize: '0.85rem' }}
         >
-          <Package size={15} />
+          <Plus size={15} />
           <span>Add New Product</span>
         </button>
       </div>
@@ -90,73 +90,73 @@ export const Overview = ({ navigate }) => {
       {/* 4 Stat Cards */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: 18
+        gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+        gap: 16
       }}>
         {/* Total Sales */}
-        <div className="glass-card" style={{ padding: '20px' }}>
+        <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Total Revenue</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(59, 130, 246, 0.12)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Total Revenue</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <TrendingUp size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#ffffff' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
             {formatINR(totalSales)}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: '0.78rem', color: '#34d399' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>
             <ArrowUpRight size={14} />
             <span>+14.8% from last week</span>
           </div>
         </div>
 
         {/* Orders */}
-        <div className="glass-card" style={{ padding: '20px' }}>
+        <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Total Orders</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(16, 185, 129, 0.12)', color: '#34d399', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Total Orders</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ShoppingCart size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#ffffff' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
             {totalOrdersCount}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: '0.78rem', color: '#34d399' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>
             <ArrowUpRight size={14} />
             <span>+8 new this week</span>
           </div>
         </div>
 
         {/* Active Products */}
-        <div className="glass-card" style={{ padding: '20px' }}>
+        <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Active Products</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(139, 92, 246, 0.12)', color: '#a78bfa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Active Products</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#f5f3ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Package size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#ffffff' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
             {products.length}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: '0.78rem', color: 'var(--text-subtle)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#64748b' }}>
             <span>Across {store.category} catalog</span>
           </div>
         </div>
 
         {/* Customers */}
-        <div className="glass-card" style={{ padding: '20px' }}>
+        <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Total Customers</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'rgba(245, 158, 11, 0.12)', color: '#fbbf24', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Total Customers</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#fffbeb', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Users size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#ffffff' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
             {customers.length > 0 ? customers.length : 84}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 6, fontSize: '0.78rem', color: '#34d399' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>
             <ArrowUpRight size={14} />
-            <span>92% positive rating</span>
+            <span>92% positive reviews</span>
           </div>
         </div>
       </div>
@@ -164,16 +164,16 @@ export const Overview = ({ navigate }) => {
       {/* Charts Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20 }}>
         {/* Sales Over Time Chart */}
-        <div className="glass-card" style={{ padding: '24px' }}>
+        <div className="clean-card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff' }}>Sales Over Time</h3>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Daily revenue volume this week</div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>Sales Over Time</h3>
+              <div style={{ fontSize: '0.78rem', color: '#64748b' }}>Daily revenue volume this week</div>
             </div>
             <span className="badge badge-blue">7 Days</span>
           </div>
 
-          {/* Synthetic SVG/CSS Bar Graph */}
+          {/* Bar Graph */}
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: 160, paddingTop: 20, gap: 10 }}>
             {chartData.map((d, idx) => (
               <div key={idx} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
@@ -182,57 +182,57 @@ export const Overview = ({ navigate }) => {
                     width: '100%',
                     maxWidth: 36,
                     height: `${d.height}%`,
-                    background: 'linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%)',
-                    borderRadius: '6px 6px 0 0',
+                    background: '#18181b',
+                    borderRadius: '4px 4px 0 0',
                     transition: 'all 0.3s ease',
                     position: 'relative'
                   }}
                   title={`₹${d.sales.toLocaleString('en-IN')}`}
                 />
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-subtle)', marginTop: 8 }}>{d.day}</span>
+                <span style={{ fontSize: '0.72rem', color: '#64748b', marginTop: 8, fontWeight: 500 }}>{d.day}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Orders Over Time Chart */}
-        <div className="glass-card" style={{ padding: '24px' }}>
+        {/* Fulfillment Efficiency */}
+        <div className="clean-card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff' }}>Fulfillment Efficiency</h3>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Order lifecycle completion rate</div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>Fulfillment Efficiency</h3>
+              <div style={{ fontSize: '0.78rem', color: '#64748b' }}>Order lifecycle completion rate</div>
             </div>
             <span className="badge badge-emerald">98.4% On-time</span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 6 }}>
-                <span style={{ color: 'var(--text-muted)' }}>Orders Delivered</span>
-                <span style={{ fontWeight: 700, color: '#ffffff' }}>78%</span>
+                <span style={{ color: '#475569', fontWeight: 500 }}>Orders Delivered</span>
+                <span style={{ fontWeight: 700, color: '#09090b' }}>78%</span>
               </div>
-              <div style={{ height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 4, overflow: 'hidden' }}>
+              <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
                 <div style={{ width: '78%', height: '100%', background: '#10b981' }} />
               </div>
             </div>
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 6 }}>
-                <span style={{ color: 'var(--text-muted)' }}>In-Transit / Out for Delivery</span>
-                <span style={{ fontWeight: 700, color: '#ffffff' }}>18%</span>
+                <span style={{ color: '#475569', fontWeight: 500 }}>In-Transit / Out for Delivery</span>
+                <span style={{ fontWeight: 700, color: '#09090b' }}>18%</span>
               </div>
-              <div style={{ height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{ width: '18%', height: '100%', background: '#3b82f6' }} />
+              <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
+                <div style={{ width: '18%', height: '100%', background: '#2563eb' }} />
               </div>
             </div>
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 6 }}>
-                <span style={{ color: 'var(--text-muted)' }}>Returns & Exchanges</span>
-                <span style={{ fontWeight: 700, color: '#ffffff' }}>4%</span>
+                <span style={{ color: '#475569', fontWeight: 500 }}>Returns & Claims</span>
+                <span style={{ fontWeight: 700, color: '#09090b' }}>4%</span>
               </div>
-              <div style={{ height: 8, background: 'rgba(255,255,255,0.06)', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{ width: '4%', height: '100%', background: '#fb7185' }} />
+              <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
+                <div style={{ width: '4%', height: '100%', background: '#f43f5e' }} />
               </div>
             </div>
           </div>
@@ -240,14 +240,14 @@ export const Overview = ({ navigate }) => {
       </div>
 
       {/* Recent Orders Table */}
-      <div className="glass-card" style={{ padding: '24px' }}>
+      <div className="clean-card" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff' }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>
             Recent Store Orders
           </h3>
           <button
             onClick={() => navigate('/dashboard/orders')}
-            style={{ fontSize: '0.82rem', color: '#60a5fa', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 4 }}
+            style={{ fontSize: '0.82rem', color: '#18181b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4, background: 'transparent', border: 'none', cursor: 'pointer' }}
           >
             <span>Manage all</span>
             <ChevronRight size={14} />
@@ -255,29 +255,29 @@ export const Overview = ({ navigate }) => {
         </div>
 
         {orders.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '30px', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+          <div style={{ textAlign: 'center', padding: '36px', color: '#64748b', fontSize: '0.88rem' }}>
             No customer orders placed for this store yet.
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-subtle)', textAlign: 'left' }}>
-                  <th style={{ padding: '10px 12px' }}>Order ID</th>
-                  <th style={{ padding: '10px 12px' }}>Customer</th>
-                  <th style={{ padding: '10px 12px' }}>Date</th>
-                  <th style={{ padding: '10px 12px' }}>Amount</th>
-                  <th style={{ padding: '10px 12px' }}>Status</th>
+                <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
+                  <th style={{ padding: '10px 14px', fontWeight: 600 }}>Order ID</th>
+                  <th style={{ padding: '10px 14px', fontWeight: 600 }}>Customer</th>
+                  <th style={{ padding: '10px 14px', fontWeight: 600 }}>Date</th>
+                  <th style={{ padding: '10px 14px', fontWeight: 600 }}>Amount</th>
+                  <th style={{ padding: '10px 14px', fontWeight: 600 }}>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.slice(0, 5).map(o => (
-                  <tr key={o.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                    <td style={{ padding: '12px', fontWeight: 700, color: '#60a5fa', fontFamily: 'var(--font-mono)' }}>{o.id}</td>
-                    <td style={{ padding: '12px', color: '#ffffff' }}>{o.customerName}</td>
-                    <td style={{ padding: '12px', color: 'var(--text-muted)' }}>{o.date}</td>
-                    <td style={{ padding: '12px', fontWeight: 600 }}>{formatINR(o.totalAmount)}</td>
-                    <td style={{ padding: '12px' }}>
+                  <tr key={o.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '12px 14px', fontWeight: 700, color: '#09090b', fontFamily: 'var(--font-mono)' }}>{o.id}</td>
+                    <td style={{ padding: '12px 14px', color: '#09090b', fontWeight: 500 }}>{o.customerName}</td>
+                    <td style={{ padding: '12px 14px', color: '#64748b' }}>{o.date}</td>
+                    <td style={{ padding: '12px 14px', fontWeight: 700 }}>{formatINR(o.totalAmount)}</td>
+                    <td style={{ padding: '12px 14px' }}>
                       <StatusBadge status={o.status} />
                     </td>
                   </tr>
