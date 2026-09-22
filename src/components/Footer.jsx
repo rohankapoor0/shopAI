@@ -4,16 +4,16 @@ import { ShoppingBag, ShieldCheck, Truck, RefreshCw, Sparkles, Heart } from 'luc
 export const Footer = ({ navigate }) => {
   return (
     <footer style={{
-      backgroundColor: 'var(--bg-surface)',
+      backgroundColor: '#ffffff',
       borderTop: '1px solid var(--border-subtle)',
-      paddingTop: 48,
-      paddingBottom: 32,
+      paddingTop: 54,
+      paddingBottom: 36,
       marginTop: 64
     }}>
       <div style={{
         maxWidth: 1280,
         margin: '0 auto',
-        padding: '0 20px'
+        padding: '0 24px'
       }}>
         {/* Value Prop Badges */}
         <div style={{
@@ -28,16 +28,17 @@ export const Footer = ({ navigate }) => {
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: 'rgba(59, 130, 246, 0.12)',
-              color: '#60a5fa',
+              background: '#f4f4f5',
+              color: '#09090b',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              border: '1px solid #e4e4e7'
             }}>
-              <Truck size={22} />
+              <Truck size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>Free Express Delivery</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Free Direct Dispatch</div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>On all orders above ₹1,500</div>
             </div>
           </div>
@@ -47,17 +48,18 @@ export const Footer = ({ navigate }) => {
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: 'rgba(16, 185, 129, 0.12)',
-              color: '#34d399',
+              background: '#ecfdf5',
+              color: '#059669',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              border: '1px solid #a7f3d0'
             }}>
-              <ShieldCheck size={22} />
+              <ShieldCheck size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>100% Genuine Brands</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Verified independent sellers</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>100% Verified Stores</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Authentic independent labels</div>
             </div>
           </div>
 
@@ -66,17 +68,18 @@ export const Footer = ({ navigate }) => {
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: 'rgba(139, 92, 246, 0.12)',
-              color: '#a78bfa',
+              background: '#eff6ff',
+              color: '#2563eb',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              border: '1px solid #bfdbfe'
             }}>
-              <RefreshCw size={22} />
+              <RefreshCw size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>Hassle-Free Returns</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>7-day seamless doorstep pickup</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Hassle-Free Returns</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>7-day doorstep pickup guarantee</div>
             </div>
           </div>
 
@@ -85,17 +88,18 @@ export const Footer = ({ navigate }) => {
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: 'rgba(245, 158, 11, 0.12)',
-              color: '#fbbf24',
+              background: '#faf5ff',
+              color: '#7c3aed',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              border: '1px solid #e9d5ff'
             }}>
-              <Sparkles size={22} />
+              <Sparkles size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>Shopify-Grade Architecture</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Engineered for hyperscale</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Shopify-Grade Architecture</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Multi-vendor local performance</div>
             </div>
           </div>
         </div>
@@ -103,90 +107,91 @@ export const Footer = ({ navigate }) => {
         {/* Links Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
           gap: 32,
-          paddingTop: 40,
-          paddingBottom: 40
+          paddingTop: 44,
+          paddingBottom: 44
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
               <div style={{
                 width: 28,
                 height: 28,
                 borderRadius: 8,
-                background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                background: '#09090b',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
                 <ShoppingBag size={15} color="#ffffff" />
               </div>
-              <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>ShopAI</span>
+              <span style={{ fontWeight: 800, fontSize: '1.15rem', color: '#09090b' }}>ShopAI</span>
             </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-              India's premier multi-vendor commerce platform connecting independent boutique brands with discerning customers.
+            <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
+              The multi-vendor commerce marketplace connecting discerning shoppers with independent brands and studios across India.
             </p>
           </div>
 
           <div>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-subtle)', marginBottom: 14 }}>
+            <h4 style={{ fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-subtle)', marginBottom: 14 }}>
               Marketplace
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-              <li><button onClick={() => navigate('/stores')}>All Stores</button></li>
-              <li><button onClick={() => navigate('/products')}>Featured Catalog</button></li>
-              <li><button onClick={() => navigate('/products?category=Fashion')}>Fashion & Apparel</button></li>
-              <li><button onClick={() => navigate('/products?category=Electronics')}>Electronics & Audio</button></li>
-              <li><button onClick={() => navigate('/products?category=Home')}>Home & Lighting</button></li>
+              <li><button onClick={() => navigate('/stores')} style={{ transition: 'color 0.15s' }}>All Stores</button></li>
+              <li><button onClick={() => navigate('/products')} style={{ transition: 'color 0.15s' }}>Curated Catalog</button></li>
+              <li><button onClick={() => navigate('/products?category=Fashion')} style={{ transition: 'color 0.15s' }}>Fashion & Apparel</button></li>
+              <li><button onClick={() => navigate('/products?category=Electronics')} style={{ transition: 'color 0.15s' }}>Electronics & Audio</button></li>
+              <li><button onClick={() => navigate('/products?category=Home')} style={{ transition: 'color 0.15s' }}>Home Living</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-subtle)', marginBottom: 14 }}>
-              For Sellers
+            <h4 style={{ fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-subtle)', marginBottom: 14 }}>
+              For Merchants
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-              <li><button onClick={() => navigate('/sell')} style={{ color: '#818cf8', fontWeight: 600 }}>Sell on ShopAI</button></li>
-              <li><button onClick={() => navigate('/sell/create')}>Store Onboarding</button></li>
-              <li><button onClick={() => navigate('/dashboard')}>Merchant Dashboard</button></li>
-              <li><button onClick={() => navigate('/dashboard/products')}>Product Inventory</button></li>
+              <li><button onClick={() => navigate('/sell')} style={{ color: '#09090b', fontWeight: 700 }}>Sell on ShopAI</button></li>
+              <li><button onClick={() => navigate('/sell/create')} style={{ transition: 'color 0.15s' }}>Store Registration</button></li>
+              <li><button onClick={() => navigate('/dashboard')} style={{ transition: 'color 0.15s' }}>Store Dashboard</button></li>
+              <li><button onClick={() => navigate('/dashboard/products')} style={{ transition: 'color 0.15s' }}>Catalog Management</button></li>
+              <li><button onClick={() => navigate('/dashboard/orders')} style={{ transition: 'color 0.15s' }}>Order Fulfillment</button></li>
             </ul>
           </div>
 
           <div>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-subtle)', marginBottom: 14 }}>
-              Customer Support
+            <h4 style={{ fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-subtle)', marginBottom: 14 }}>
+              Customer Care
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-              <li><button onClick={() => navigate('/orders')}>Track Your Order</button></li>
-              <li><button onClick={() => navigate('/orders')}>Request Return / Refund</button></li>
-              <li><button onClick={() => navigate('/profile')}>Saved Addresses</button></li>
-              <li><button onClick={() => navigate('/profile')}>Customer Profile</button></li>
+              <li><button onClick={() => navigate('/orders')} style={{ transition: 'color 0.15s' }}>Track Orders</button></li>
+              <li><button onClick={() => navigate('/profile')} style={{ transition: 'color 0.15s' }}>Account Profile</button></li>
+              <li><button onClick={() => navigate('/cart')} style={{ transition: 'color 0.15s' }}>Shopping Bag</button></li>
+              <li><button onClick={() => navigate('/orders')} style={{ transition: 'color 0.15s' }}>Returns & Refunds</button></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div style={{
-          borderTop: '1px solid var(--border-subtle)',
           paddingTop: 24,
+          borderTop: '1px solid var(--border-subtle)',
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
           justifyContent: 'space-between',
-          gap: 16,
+          gap: 12,
           fontSize: '0.82rem',
-          color: 'var(--text-subtle)'
+          color: 'var(--text-muted)'
         }}>
           <div>
-            © 2026 ShopAI Multi-Vendor Prototype. Crafted with precision for high-performance e-commerce.
+            © {new Date().getFullYear()} ShopAI Marketplace Technologies Inc. All rights reserved.
           </div>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <span>Local Storage Mock Mode</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <span>Clean Architecture</span>
             <span>•</span>
-            <span>INR Pricing Engine</span>
+            <span>Zero External Cloud Lock-in</span>
             <span>•</span>
-            <span>Cloud Service Decoupled</span>
+            <span>Local State Multi-Vendor</span>
           </div>
         </div>
       </div>
