@@ -39,7 +39,7 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
   if (!order) {
     return (
       <div style={{ maxWidth: 500, margin: '80px auto', textAlign: 'center', padding: '0 20px' }}>
-        <h2>Order Not Found</h2>
+        <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Order Not Found</h2>
         <p style={{ color: 'var(--text-muted)', marginTop: 6, marginBottom: 20 }}>
           Could not locate tracking records for {orderId}.
         </p>
@@ -67,7 +67,7 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
   const effectiveIndex = currentStageIndex === -1 ? (order.status === 'Cancelled' ? -1 : 0) : currentStageIndex;
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: 960, margin: '0 auto', padding: '32px 20px 80px' }}>
+    <div className="animate-fade-in" style={{ maxWidth: 960, margin: '0 auto', padding: '36px 24px 80px' }}>
       <button
         onClick={() => navigate('/orders')}
         style={{
@@ -76,31 +76,34 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
           gap: 6,
           color: 'var(--text-muted)',
           fontSize: '0.88rem',
-          marginBottom: 24
+          marginBottom: 24,
+          fontWeight: 600
         }}
+        onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
+        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
       >
         <ArrowLeft size={16} />
         <span>Back to orders</span>
       </button>
 
       {/* Header Info */}
-      <div className="glass-card" style={{ padding: '24px 28px', marginBottom: 28 }}>
+      <div className="clean-card" style={{ padding: '24px 28px', marginBottom: 28, borderRadius: 16 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-mono)' }}>
+              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
                 {order.id}
               </h1>
               <StatusBadge status={order.status} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 6, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              <span onClick={() => navigate(`/store/${order.storeId}`)} style={{ color: '#60a5fa', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <span onClick={() => navigate(`/store/${order.storeId}`)} style={{ color: '#2563eb', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
                 <Store size={14} /> {order.storeName}
               </span>
               <span>•</span>
               <span>Placed: {order.date}</span>
               <span>•</span>
-              <span style={{ color: '#34d399', fontWeight: 600 }}>Est: {order.expectedDelivery}</span>
+              <span style={{ color: '#059669', fontWeight: 600 }}>Est: {order.expectedDelivery}</span>
             </div>
           </div>
 
@@ -110,11 +113,11 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
               style={{
                 padding: '8px 16px',
                 borderRadius: 8,
-                fontSize: '0.85rem',
+                fontSize: '0.84rem',
                 fontWeight: 600,
-                background: 'rgba(244, 63, 94, 0.12)',
-                color: '#fb7185',
-                border: '1px solid rgba(244, 63, 94, 0.3)',
+                background: '#fff1f2',
+                color: '#e11d48',
+                border: '1px solid #fecdd3',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6
@@ -128,8 +131,8 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
       </div>
 
       {/* Visual Tracking Stepper */}
-      <div className="glass-card" style={{ padding: '36px 28px', marginBottom: 28 }}>
-        <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 28 }}>
+      <div className="clean-card" style={{ padding: '36px 28px', marginBottom: 28, borderRadius: 16 }}>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: 32, color: '#09090b' }}>
           Fulfillment Timeline
         </h2>
 
@@ -142,13 +145,13 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
             left: 24,
             right: 24,
             height: 3,
-            background: 'var(--border-subtle)',
+            background: '#e5e7eb',
             zIndex: 1
           }}>
             <div style={{
               height: '100%',
               width: `${(Math.max(0, effectiveIndex) / (stages.length - 1)) * 100}%`,
-              background: 'linear-gradient(90deg, #3b82f6 0%, #10b981 100%)',
+              background: '#09090b',
               transition: 'width 0.4s ease'
             }} />
           </div>
@@ -168,7 +171,7 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   textAlign: 'center',
-                  width: 90
+                  width: 96
                 }}
               >
                 <div style={{
@@ -178,20 +181,20 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  background: isCompleted ? (isCurrent ? '#3b82f6' : '#10b981') : 'var(--bg-surface-elevated)',
-                  border: isCompleted ? 'none' : '2px solid var(--border-subtle)',
-                  color: isCompleted ? '#ffffff' : 'var(--text-subtle)',
-                  boxShadow: isCurrent ? '0 0 16px rgba(59, 130, 246, 0.6)' : 'none',
+                  background: isCompleted ? (isCurrent ? '#09090b' : '#059669') : '#ffffff',
+                  border: isCompleted ? 'none' : '2px solid #d1d5db',
+                  color: isCompleted ? '#ffffff' : '#9ca3af',
+                  boxShadow: isCurrent ? '0 0 12px rgba(0, 0, 0, 0.2)' : 'none',
                   transition: 'all 0.3s ease',
                   marginBottom: 10
                 }}>
-                  {isCompleted ? <Check size={18} strokeWidth={2.5} /> : <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--text-subtle)' }} />}
+                  {isCompleted ? <Check size={17} strokeWidth={2.5} /> : <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#d1d5db' }} />}
                 </div>
 
                 <div style={{
                   fontSize: '0.78rem',
-                  fontWeight: isCurrent ? 700 : (isCompleted ? 600 : 400),
-                  color: isCompleted ? '#ffffff' : 'var(--text-subtle)',
+                  fontWeight: isCurrent ? 800 : (isCompleted ? 700 : 500),
+                  color: isCompleted ? '#09090b' : '#71717a',
                   lineHeight: 1.3
                 }}>
                   {stage.title}
@@ -208,55 +211,55 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
       {/* Details Breakdown: Items & Delivery Address */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
         {/* Products in this shipment */}
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: 16 }}>
+        <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
             Package Contents ({order.items.length})
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {order.items.map((it, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <img src={it.image} alt={it.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover' }} />
+                  <img src={it.image} alt={it.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover', backgroundColor: '#f4f4f6' }} />
                   <div>
-                    <div style={{ fontSize: '0.88rem', fontWeight: 600 }}>{it.name}</div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#09090b' }}>{it.name}</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Qty: {it.quantity}</div>
                   </div>
                 </div>
-                <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>
+                <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#09090b' }}>
                   {formatINR(it.price * it.quantity)}
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 14, marginTop: 16, display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ borderTop: '1px solid #f4f4f6', paddingTop: 14, marginTop: 16, display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Order Total:</span>
-            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff' }}>{formatINR(order.totalAmount)}</span>
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#09090b' }}>{formatINR(order.totalAmount)}</span>
           </div>
         </div>
 
         {/* Shipping Address */}
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-            <MapPin size={16} color="#60a5fa" />
+        <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, color: '#09090b' }}>
+            <MapPin size={16} color="#2563eb" />
             <span>Delivery Destination</span>
           </h3>
           <div style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-            <div style={{ fontWeight: 600, color: '#ffffff', marginBottom: 2 }}>
+            <div style={{ fontWeight: 700, color: '#09090b', marginBottom: 2 }}>
               {order.customerName}
             </div>
             <div>{order.shippingAddress?.address}</div>
             <div>{order.shippingAddress?.city}, {order.shippingAddress?.state} - {order.shippingAddress?.pincode}</div>
-            <div style={{ marginTop: 8, color: 'var(--text-subtle)', fontSize: '0.8rem' }}>
+            <div style={{ marginTop: 8, color: '#71717a', fontSize: '0.8rem' }}>
               Contact: {order.customerPhone}
             </div>
           </div>
 
-          <div style={{ marginTop: 24, padding: '14px', borderRadius: 10, background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-subtle)' }}>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-subtle)', textTransform: 'uppercase', fontWeight: 700 }}>
+          <div style={{ marginTop: 24, padding: '14px', borderRadius: 10, background: '#f8fafc', border: '1px solid #e5e7eb' }}>
+            <div style={{ fontSize: '0.76rem', color: '#9ca3af', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
               Payment Method
             </div>
-            <div style={{ fontWeight: 600, fontSize: '0.9rem', marginTop: 2 }}>
+            <div style={{ fontWeight: 700, fontSize: '0.9rem', marginTop: 2, color: '#09090b' }}>
               {order.paymentMethod}
             </div>
           </div>
