@@ -69,7 +69,7 @@ export const ProductDetails = ({ productId, navigate }) => {
   if (!product) {
     return (
       <div style={{ maxWidth: 600, margin: '80px auto', textAlign: 'center', padding: '0 20px' }}>
-        <h2>Product Not Found</h2>
+        <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Product Not Found</h2>
         <p style={{ color: 'var(--text-muted)', marginTop: 8, marginBottom: 20 }}>
           The requested product does not exist or has been delisted.
         </p>
@@ -93,7 +93,7 @@ export const ProductDetails = ({ productId, navigate }) => {
   }).format(product.originalPrice) : null;
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: 1280, margin: '0 auto', padding: '28px 20px 80px' }}>
+    <div className="animate-fade-in" style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 24px 80px' }}>
       {/* Back button */}
       <button
         onClick={() => navigate('/products')}
@@ -104,38 +104,39 @@ export const ProductDetails = ({ productId, navigate }) => {
           color: 'var(--text-muted)',
           fontSize: '0.88rem',
           marginBottom: 24,
-          fontWeight: 500
+          fontWeight: 600
         }}
+        onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
+        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
       >
         <ArrowLeft size={16} />
         <span>Back to products</span>
       </button>
 
       {/* Main Showcase Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 48, marginBottom: 64 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 48, marginBottom: 64 }}>
         {/* Left: Product Image */}
         <div>
-          <div className="glass-card" style={{
+          <div className="clean-card" style={{
             position: 'relative',
-            borderRadius: 20,
+            borderRadius: 18,
             overflow: 'hidden',
-            backgroundColor: '#1e293b',
-            boxShadow: '0 12px 30px rgba(0, 0, 0, 0.4)'
+            backgroundColor: '#f8fafc',
+            border: '1px solid #e5e7eb',
+            boxShadow: 'var(--shadow-sm)'
           }}>
             {product.discount && (
               <span style={{
                 position: 'absolute',
-                top: 18,
-                left: 18,
+                top: 16,
+                left: 16,
                 zIndex: 2,
-                background: 'rgba(15, 23, 42, 0.85)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                color: '#fb7185',
-                fontSize: '0.82rem',
+                background: '#09090b',
+                color: '#ffffff',
+                fontSize: '0.8rem',
                 fontWeight: 700,
-                padding: '4px 12px',
-                borderRadius: 8
+                padding: '3px 10px',
+                borderRadius: 6
               }}>
                 {product.discount}
               </span>
@@ -165,57 +166,58 @@ export const ProductDetails = ({ productId, navigate }) => {
               cursor: 'pointer',
               padding: '6px 14px',
               borderRadius: 8,
-              background: 'rgba(59, 130, 246, 0.12)',
-              border: '1px solid rgba(59, 130, 246, 0.25)',
+              background: '#eff6ff',
+              border: '1px solid #bfdbfe',
               alignSelf: 'flex-start'
             }}
           >
-            <Store size={15} color="#60a5fa" />
-            <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#60a5fa' }}>
+            <Store size={14} color="#2563eb" />
+            <span style={{ fontSize: '0.84rem', fontWeight: 600, color: '#2563eb' }}>
               Sold by {product.storeName}
             </span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.3rem)', fontWeight: 800, lineHeight: 1.25, color: '#ffffff' }}>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.3rem)', fontWeight: 800, lineHeight: 1.2, color: '#09090b' }}>
             {product.name}
           </h1>
 
           {/* Ratings & Stock */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               gap: 4,
-              background: 'rgba(245, 158, 11, 0.15)',
-              color: '#fbbf24',
-              padding: '4px 10px',
+              background: '#fffbeb',
+              color: '#b45309',
+              border: '1px solid #fef3c7',
+              padding: '3px 8px',
               borderRadius: 6,
               fontSize: '0.82rem',
               fontWeight: 700
             }}>
-              <Star size={14} fill="#fbbf24" strokeWidth={0} />
+              <Star size={13} fill="#b45309" strokeWidth={0} />
               <span>{product.rating}</span>
             </div>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-subtle)' }}>
-              ({product.reviewsCount} customer reviews)
+            <span style={{ fontSize: '0.85rem', color: '#71717a' }}>
+              ({product.reviewsCount} reviews)
             </span>
             <span>•</span>
             <span className={product.stock > 5 ? 'badge badge-emerald' : 'badge badge-amber'}>
-              {product.stock > 0 ? `${product.stock} in stock` : 'Out of Stock'}
+              {product.stock > 0 ? `${product.stock} units available` : 'Out of Stock'}
             </span>
           </div>
 
           {/* Pricing */}
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 14, marginTop: 4 }}>
-            <span style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff' }}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 4 }}>
+            <span style={{ fontSize: '2.2rem', fontWeight: 800, color: '#09090b' }}>
               {formattedPrice}
             </span>
             {formattedOriginal && (
-              <span style={{ fontSize: '1.1rem', color: 'var(--text-subtle)', textDecoration: 'line-through' }}>
+              <span style={{ fontSize: '1.1rem', color: '#a1a1aa', textDecoration: 'line-through' }}>
                 {formattedOriginal}
               </span>
             )}
-            <span style={{ fontSize: '0.85rem', color: '#34d399', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.84rem', color: '#059669', fontWeight: 600 }}>
               Inclusive of all taxes
             </span>
           </div>
@@ -230,16 +232,16 @@ export const ProductDetails = ({ productId, navigate }) => {
             <div style={{
               padding: '16px 20px',
               borderRadius: 12,
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid var(--border-subtle)'
+              background: '#f8fafc',
+              border: '1px solid #e5e7eb'
             }}>
-              <div style={{ fontSize: '0.82rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-subtle)', marginBottom: 8 }}>
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', color: '#9ca3af', marginBottom: 8, letterSpacing: '0.04em' }}>
                 Product Highlights
               </div>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.88rem', color: '#e2e8f0' }}>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.88rem', color: '#09090b' }}>
                 {product.features.map((feat, i) => (
                   <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Check size={14} color="#10b981" />
+                    <Check size={14} color="#059669" />
                     <span>{feat}</span>
                   </li>
                 ))}
@@ -248,27 +250,27 @@ export const ProductDetails = ({ productId, navigate }) => {
           )}
 
           {/* Quantity and Actions */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center', marginTop: 10 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center', marginTop: 8 }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              border: '1px solid var(--border-subtle)',
+              border: '1px solid #d1d5db',
               borderRadius: 10,
-              background: 'var(--bg-surface-elevated)',
+              background: '#ffffff',
               overflow: 'hidden'
             }}>
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}
+                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090b' }}
               >
                 <Minus size={15} />
               </button>
-              <span style={{ width: 44, textAlign: 'center', fontWeight: 700, fontSize: '0.95rem' }}>
+              <span style={{ width: 44, textAlign: 'center', fontWeight: 700, fontSize: '0.95rem', color: '#09090b' }}>
                 {quantity}
               </span>
               <button
                 onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}
+                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090b' }}
               >
                 <Plus size={15} />
               </button>
@@ -276,37 +278,32 @@ export const ProductDetails = ({ productId, navigate }) => {
 
             <button
               onClick={handleAddToCart}
-              className="btn-primary"
+              className="btn-secondary"
               style={{
-                flex: '1 1 180px',
+                flex: '1 1 170px',
                 height: 46,
                 justifyContent: 'center',
                 fontSize: '0.95rem',
-                borderRadius: 12
+                borderRadius: 10
               }}
             >
-              <ShoppingCart size={18} />
+              <ShoppingCart size={17} />
               <span>{addedMessage ? 'Added to Cart ✓' : 'Add to Cart'}</span>
             </button>
 
             <button
               onClick={handleBuyNow}
+              className="btn-primary"
               style={{
-                flex: '1 1 180px',
+                flex: '1 1 170px',
                 height: 46,
-                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                color: '#ffffff',
-                borderRadius: 12,
+                borderRadius: 10,
                 fontWeight: 700,
                 fontSize: '0.95rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-                boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)'
+                justifyContent: 'center'
               }}
             >
-              <Zap size={18} />
+              <Zap size={17} />
               <span>Buy Now</span>
             </button>
           </div>
@@ -316,25 +313,25 @@ export const ProductDetails = ({ productId, navigate }) => {
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: 12,
-            marginTop: 16,
-            paddingTop: 20,
-            borderTop: '1px solid var(--border-subtle)',
+            marginTop: 12,
+            paddingTop: 18,
+            borderTop: '1px solid #f4f4f6',
             textAlign: 'center'
           }}>
             <div>
-              <Truck size={20} color="#60a5fa" style={{ margin: '0 auto 6px' }} />
-              <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>Fast Shipping</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>Dispatches in 24h</div>
+              <Truck size={18} color="#2563eb" style={{ margin: '0 auto 4px' }} />
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#09090b' }}>Fast Dispatch</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Within 24h</div>
             </div>
             <div>
-              <ShieldCheck size={20} color="#34d399" style={{ margin: '0 auto 6px' }} />
-              <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>Authentic Item</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>Direct from store</div>
+              <ShieldCheck size={18} color="#059669" style={{ margin: '0 auto 4px' }} />
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#09090b' }}>Verified Maker</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Direct provenance</div>
             </div>
             <div>
-              <RefreshCw size={20} color="#a78bfa" style={{ margin: '0 auto 6px' }} />
-              <div style={{ fontSize: '0.78rem', fontWeight: 600 }}>7-Day Returns</div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-subtle)' }}>Doorstep pickup</div>
+              <RefreshCw size={18} color="#7c3aed" style={{ margin: '0 auto 4px' }} />
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#09090b' }}>7-Day Returns</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Doorstep pickup</div>
             </div>
           </div>
         </div>
@@ -345,16 +342,16 @@ export const ProductDetails = ({ productId, navigate }) => {
         <div style={{ marginTop: 60 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
             <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
                 More from {product.storeName}
               </h2>
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Discover related products created by this artisan
+              <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
+                Discover related handcrafted products from this creator
               </p>
             </div>
             <button
               onClick={() => navigate(`/store/${product.storeId}`)}
-              style={{ fontSize: '0.88rem', fontWeight: 600, color: '#60a5fa' }}
+              style={{ fontSize: '0.88rem', fontWeight: 700, color: '#09090b' }}
             >
               View Storefront →
             </button>
