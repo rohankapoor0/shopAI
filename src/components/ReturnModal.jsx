@@ -56,22 +56,23 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(0, 0, 0, 0.75)',
-      backdropFilter: 'blur(8px)',
+      backgroundColor: 'rgba(9, 9, 11, 0.65)',
+      backdropFilter: 'blur(6px)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 100,
       padding: '20px'
     }}>
-      <div className="glass-card animate-fade-in" style={{
+      <div className="animate-fade-in" style={{
         maxWidth: 520,
         width: '100%',
-        backgroundColor: '#0f172a',
-        border: '1px solid var(--border-strong)',
-        borderRadius: 20,
+        backgroundColor: '#ffffff',
+        border: '1px solid #e5e7eb',
+        borderRadius: 18,
         padding: '28px',
-        position: 'relative'
+        position: 'relative',
+        boxShadow: 'var(--shadow-modal)'
       }}>
         <button
           onClick={onClose}
@@ -79,33 +80,37 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
             position: 'absolute',
             top: 20,
             right: 20,
-            color: 'var(--text-subtle)',
-            padding: 4
+            color: '#71717a',
+            padding: 4,
+            borderRadius: 6
           }}
+          onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
+          onMouseLeave={(e) => e.currentTarget.style.color = '#71717a'}
         >
-          <X size={20} />
+          <X size={18} />
         </button>
 
         {submitted ? (
-          <div style={{ textAlign: 'center', padding: '20px 10px' }}>
+          <div style={{ textAlign: 'center', padding: '16px 8px' }}>
             <div style={{
-              width: 60,
-              height: 60,
+              width: 58,
+              height: 58,
               borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.15)',
-              color: '#10b981',
+              background: '#ecfdf5',
+              color: '#059669',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              margin: '0 auto 16px'
+              margin: '0 auto 16px',
+              border: '1px solid #a7f3d0'
             }}>
               <CheckCircle2 size={32} />
             </div>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff', marginBottom: 8 }}>
-              Return Request Submitted!
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#09090b', marginBottom: 8 }}>
+              Return Request Submitted
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: 24 }}>
-              Your return request has been submitted to <strong>{order.storeName}</strong>. The merchant will review and schedule a pickup.
+              Your request has been routed to <strong>{order.storeName}</strong>. The store will review and trigger a doorstep pickup schedule.
             </p>
             <button
               onClick={onClose}
@@ -118,18 +123,32 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
         ) : (
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-              <RotateCcw size={20} color="#fb7185" />
-              <h2 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#ffffff' }}>
-                Request Return / Refund
-              </h2>
+              <div style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: '#fff1f2',
+                color: '#e11d48',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px solid #fecdd3'
+              }}>
+                <RotateCcw size={18} />
+              </div>
+              <div>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#09090b' }}>
+                  Request Return / Refund
+                </h2>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                  Order: <strong>{order.id}</strong> • Fulfilled by {order.storeName}
+                </div>
+              </div>
             </div>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: 20 }}>
-              Order: <strong>{order.id}</strong> • Fulfilled by {order.storeName}
-            </p>
 
             {/* Select Product if multiple */}
             {order.items.length > 1 && (
-              <div style={{ marginBottom: 18 }}>
+              <div style={{ marginTop: 18, marginBottom: 16 }}>
                 <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 8 }}>
                   Select Item to Return
                 </label>
@@ -139,11 +158,11 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: 10,
-                      padding: '10px',
-                      borderRadius: 8,
+                      padding: '10px 12px',
+                      borderRadius: 10,
                       border: '1px solid',
-                      borderColor: selectedProduct.productId === item.productId ? '#3b82f6' : 'var(--border-subtle)',
-                      background: selectedProduct.productId === item.productId ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
+                      borderColor: selectedProduct.productId === item.productId ? '#09090b' : '#e5e7eb',
+                      background: selectedProduct.productId === item.productId ? '#f4f4f6' : '#ffffff',
                       cursor: 'pointer'
                     }}>
                       <input
@@ -151,10 +170,10 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
                         name="returnItem"
                         checked={selectedProduct.productId === item.productId}
                         onChange={() => setSelectedProduct(item)}
-                        style={{ accentColor: '#3b82f6' }}
+                        style={{ accentColor: '#09090b' }}
                       />
                       <img src={item.image} alt={item.name} style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover' }} />
-                      <div style={{ fontSize: '0.85rem', fontWeight: 500, flex: 1 }}>{item.name}</div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#09090b', flex: 1 }}>{item.name}</div>
                     </label>
                   ))}
                 </div>
@@ -162,8 +181,8 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
             )}
 
             {/* Reason Selector */}
-            <div style={{ marginBottom: 18 }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 8 }}>
+            <div style={{ marginTop: 18, marginBottom: 16 }}>
+              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
                 Reason for Return
               </label>
               <select
@@ -171,12 +190,12 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
                 onChange={(e) => setReason(e.target.value)}
                 style={{
                   width: '100%',
-                  height: 42,
+                  height: 40,
                   padding: '0 12px',
                   borderRadius: 8,
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid var(--border-subtle)',
-                  color: '#ffffff',
+                  background: '#ffffff',
+                  border: '1px solid #d1d5db',
+                  color: '#09090b',
                   fontSize: '0.88rem',
                   outline: 'none'
                 }}
@@ -188,8 +207,8 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
             </div>
 
             {/* Additional Notes */}
-            <div style={{ marginBottom: 24 }}>
-              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 8 }}>
+            <div style={{ marginBottom: 22 }}>
+              <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>
                 Additional Details (Optional)
               </label>
               <textarea
@@ -201,9 +220,9 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
                   width: '100%',
                   padding: '10px 12px',
                   borderRadius: 8,
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid var(--border-subtle)',
-                  color: '#ffffff',
+                  background: '#ffffff',
+                  border: '1px solid #d1d5db',
+                  color: '#09090b',
                   fontSize: '0.88rem',
                   outline: 'none',
                   resize: 'none'
@@ -226,7 +245,7 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
                 className="btn-primary"
                 style={{ flex: 1, justifyContent: 'center', background: '#e11d48' }}
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Return Request'}
+                {isSubmitting ? 'Submitting...' : 'Submit Request'}
               </button>
             </div>
           </form>
