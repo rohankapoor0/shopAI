@@ -100,7 +100,7 @@ export const Checkout = ({ navigate }) => {
   if (cartItems.length === 0) {
     return (
       <div style={{ maxWidth: 500, margin: '80px auto', textAlign: 'center', padding: '0 20px' }}>
-        <h2>Cart is empty</h2>
+        <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Cart is empty</h2>
         <p style={{ color: 'var(--text-muted)', marginTop: 6, marginBottom: 20 }}>
           Please add items to your cart before checking out.
         </p>
@@ -110,7 +110,7 @@ export const Checkout = ({ navigate }) => {
   }
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: 1180, margin: '0 auto', padding: '32px 20px 80px' }}>
+    <div className="animate-fade-in" style={{ maxWidth: 1180, margin: '0 auto', padding: '36px 24px 80px' }}>
       <button
         onClick={() => navigate('/cart')}
         style={{
@@ -119,19 +119,22 @@ export const Checkout = ({ navigate }) => {
           gap: 6,
           color: 'var(--text-muted)',
           fontSize: '0.88rem',
-          marginBottom: 24
+          marginBottom: 24,
+          fontWeight: 600
         }}
+        onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
+        onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
       >
         <ArrowLeft size={16} />
         <span>Back to cart</span>
       </button>
 
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: '2.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>
+        <h1 style={{ fontSize: '2.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
           Simulated Checkout
         </h1>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: 4 }}>
-          Safe sandbox environment • No real financial transactions are executed
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginTop: 4 }}>
+          Safe sandbox environment • High-trust multi-vendor local simulation
         </p>
       </div>
 
@@ -139,9 +142,9 @@ export const Checkout = ({ navigate }) => {
         {/* Left Column: Details */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* 1. Customer Information */}
-          <div className="glass-card" style={{ padding: '24px' }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span>1. Customer Information</span>
+          <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
+              1. Customer Information
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
               <div>
@@ -153,7 +156,7 @@ export const Checkout = ({ navigate }) => {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: '#ffffff' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
                 />
               </div>
 
@@ -166,7 +169,7 @@ export const Checkout = ({ navigate }) => {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: '#ffffff' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
                 />
               </div>
 
@@ -179,15 +182,15 @@ export const Checkout = ({ navigate }) => {
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: '#ffffff' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
                 />
               </div>
             </div>
           </div>
 
           {/* 2. Shipping Address */}
-          <div className="glass-card" style={{ padding: '24px' }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: 16 }}>
+          <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
               2. Shipping Address
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -200,7 +203,7 @@ export const Checkout = ({ navigate }) => {
                   required
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: '#ffffff' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
                 />
               </div>
 
@@ -214,7 +217,7 @@ export const Checkout = ({ navigate }) => {
                     required
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: '#ffffff' }}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
                   />
                 </div>
 
@@ -227,7 +230,7 @@ export const Checkout = ({ navigate }) => {
                     required
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: '#ffffff' }}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
                   />
                 </div>
 
@@ -240,7 +243,7 @@ export const Checkout = ({ navigate }) => {
                     required
                     value={formData.pincode}
                     onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', color: '#ffffff' }}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
                   />
                 </div>
               </div>
@@ -248,8 +251,8 @@ export const Checkout = ({ navigate }) => {
           </div>
 
           {/* 3. Payment Method */}
-          <div className="glass-card" style={{ padding: '24px' }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: 16 }}>
+          <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
               3. Payment Method
             </h2>
 
@@ -262,8 +265,8 @@ export const Checkout = ({ navigate }) => {
                 padding: '14px 16px',
                 borderRadius: 10,
                 border: '1px solid',
-                borderColor: paymentMethod === 'UPI' ? '#3b82f6' : 'var(--border-subtle)',
-                background: paymentMethod === 'UPI' ? 'rgba(59, 130, 246, 0.12)' : 'transparent',
+                borderColor: paymentMethod === 'UPI' ? '#09090b' : '#e5e7eb',
+                background: paymentMethod === 'UPI' ? '#f4f4f6' : '#ffffff',
                 cursor: 'pointer'
               }}>
                 <input
@@ -271,11 +274,11 @@ export const Checkout = ({ navigate }) => {
                   name="payment"
                   checked={paymentMethod === 'UPI'}
                   onChange={() => setPaymentMethod('UPI')}
-                  style={{ accentColor: '#3b82f6' }}
+                  style={{ accentColor: '#09090b' }}
                 />
-                <Smartphone size={20} color="#60a5fa" />
+                <Smartphone size={20} color="#2563eb" />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>UPI / QR Code</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>UPI / Instant QR</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Google Pay, PhonePe, Paytm, BHIM</div>
                 </div>
               </label>
@@ -291,10 +294,10 @@ export const Checkout = ({ navigate }) => {
                       width: '100%',
                       height: 38,
                       padding: '0 12px',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--border-subtle)',
+                      background: '#ffffff',
+                      border: '1px solid #d1d5db',
                       borderRadius: 8,
-                      color: '#ffffff',
+                      color: '#09090b',
                       fontSize: '0.85rem'
                     }}
                   />
@@ -309,8 +312,8 @@ export const Checkout = ({ navigate }) => {
                 padding: '14px 16px',
                 borderRadius: 10,
                 border: '1px solid',
-                borderColor: paymentMethod === 'Card' ? '#3b82f6' : 'var(--border-subtle)',
-                background: paymentMethod === 'Card' ? 'rgba(59, 130, 246, 0.12)' : 'transparent',
+                borderColor: paymentMethod === 'Card' ? '#09090b' : '#e5e7eb',
+                background: paymentMethod === 'Card' ? '#f4f4f6' : '#ffffff',
                 cursor: 'pointer'
               }}>
                 <input
@@ -318,11 +321,11 @@ export const Checkout = ({ navigate }) => {
                   name="payment"
                   checked={paymentMethod === 'Card'}
                   onChange={() => setPaymentMethod('Card')}
-                  style={{ accentColor: '#3b82f6' }}
+                  style={{ accentColor: '#09090b' }}
                 />
-                <CreditCard size={20} color="#a78bfa" />
+                <CreditCard size={20} color="#7c3aed" />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>Credit / Debit Card</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Credit / Debit Card</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Visa, Mastercard, RuPay</div>
                 </div>
               </label>
@@ -337,10 +340,10 @@ export const Checkout = ({ navigate }) => {
                       width: '100%',
                       height: 38,
                       padding: '0 12px',
-                      background: 'rgba(255,255,255,0.05)',
-                      border: '1px solid var(--border-subtle)',
+                      background: '#ffffff',
+                      border: '1px solid #d1d5db',
                       borderRadius: 8,
-                      color: '#ffffff',
+                      color: '#09090b',
                       fontSize: '0.85rem'
                     }}
                   />
@@ -355,8 +358,8 @@ export const Checkout = ({ navigate }) => {
                 padding: '14px 16px',
                 borderRadius: 10,
                 border: '1px solid',
-                borderColor: paymentMethod === 'COD' ? '#3b82f6' : 'var(--border-subtle)',
-                background: paymentMethod === 'COD' ? 'rgba(59, 130, 246, 0.12)' : 'transparent',
+                borderColor: paymentMethod === 'COD' ? '#09090b' : '#e5e7eb',
+                background: paymentMethod === 'COD' ? '#f4f4f6' : '#ffffff',
                 cursor: 'pointer'
               }}>
                 <input
@@ -364,12 +367,12 @@ export const Checkout = ({ navigate }) => {
                   name="payment"
                   checked={paymentMethod === 'COD'}
                   onChange={() => setPaymentMethod('COD')}
-                  style={{ accentColor: '#3b82f6' }}
+                  style={{ accentColor: '#09090b' }}
                 />
-                <Banknote size={20} color="#34d399" />
+                <Banknote size={20} color="#059669" />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>Cash on Delivery</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Pay cash or UPI upon doorstep arrival</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Cash on Delivery</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Pay upon doorstep arrival</div>
                 </div>
               </label>
             </div>
@@ -378,8 +381,8 @@ export const Checkout = ({ navigate }) => {
 
         {/* Right Column: Order Review */}
         <div>
-          <div className="glass-card" style={{ padding: '26px', position: 'sticky', top: 96 }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 18, color: '#ffffff' }}>
+          <div className="clean-card" style={{ padding: '26px', position: 'sticky', top: 96, borderRadius: 16 }}>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: 18, color: '#09090b' }}>
               Items in Order ({cartItems.length})
             </h2>
 
@@ -388,38 +391,38 @@ export const Checkout = ({ navigate }) => {
                 <div key={item.id} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                   <img src={item.image} alt={item.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover' }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#09090b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {item.name}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       Qty: {item.quantity} • {formatINR(item.price)}
                     </div>
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#09090b' }}>
                     {formatINR(item.price * item.quantity)}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+            <div style={{ borderTop: '1px solid #f4f4f6', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Subtotal</span>
-                <span style={{ color: '#ffffff', fontWeight: 600 }}>{formatINR(subtotal)}</span>
+                <span style={{ color: '#09090b', fontWeight: 700 }}>{formatINR(subtotal)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Delivery</span>
-                <span style={{ color: '#34d399', fontWeight: 600 }}>{shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}</span>
+                <span style={{ color: '#059669', fontWeight: 700 }}>{shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}</span>
               </div>
               {discount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#34d399' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#059669' }}>
                   <span>Discount</span>
                   <span>- {formatINR(discount)}</span>
                 </div>
               )}
-              <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontWeight: 700, fontSize: '1rem', color: '#ffffff' }}>Total to Pay</span>
-                <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#ffffff' }}>{formatINR(total)}</span>
+              <div style={{ borderTop: '1px solid #f4f4f6', paddingTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <span style={{ fontWeight: 800, fontSize: '1rem', color: '#09090b' }}>Total to Pay</span>
+                <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#09090b' }}>{formatINR(total)}</span>
               </div>
             </div>
 
@@ -432,7 +435,7 @@ export const Checkout = ({ navigate }) => {
                 height: 48,
                 justifyContent: 'center',
                 fontSize: '1rem',
-                borderRadius: 12,
+                borderRadius: 10,
                 marginTop: 22
               }}
             >
