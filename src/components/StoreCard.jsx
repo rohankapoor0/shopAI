@@ -5,21 +5,36 @@ export const StoreCard = ({ store, navigate }) => {
   return (
     <div
       onClick={() => navigate(`/store/${store.id}`)}
-      className="glass-card"
+      className="clean-card"
       style={{
         overflow: 'hidden',
         cursor: 'pointer',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        position: 'relative'
+        position: 'relative',
+        borderRadius: 14,
+        background: '#ffffff',
+        border: '1px solid #e5e7eb',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+        transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-3px)';
+        e.currentTarget.style.boxShadow = '0 8px 20px -4px rgba(0,0,0,0.08)';
+        e.currentTarget.style.borderColor = '#cbd5e1';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)';
+        e.currentTarget.style.borderColor = '#e5e7eb';
       }}
     >
       {/* Mini Banner Header */}
       <div style={{
-        height: 100,
+        height: 104,
         position: 'relative',
-        backgroundColor: '#1e293b',
+        backgroundColor: '#f1f5f9',
         overflow: 'hidden'
       }}>
         <img
@@ -29,22 +44,27 @@ export const StoreCard = ({ store, navigate }) => {
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
-            filter: 'brightness(0.75)'
+            objectFit: 'cover'
           }}
         />
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 100%)'
+        }} />
         <span style={{
           position: 'absolute',
           top: 10,
           right: 10,
-          background: 'rgba(15, 23, 42, 0.75)',
+          background: 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(8px)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          color: '#ffffff',
+          border: '1px solid rgba(255, 255, 255, 0.6)',
+          color: '#09090b',
           fontSize: '0.72rem',
-          fontWeight: 600,
-          padding: '3px 8px',
-          borderRadius: 20
+          fontWeight: 700,
+          padding: '2px 9px',
+          borderRadius: 20,
+          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)'
         }}>
           {store.category}
         </span>
@@ -53,23 +73,25 @@ export const StoreCard = ({ store, navigate }) => {
       {/* Profile & Info */}
       <div style={{
         padding: '0 16px 16px',
-        marginTop: -26,
+        marginTop: -24,
         display: 'flex',
         flexDirection: 'column',
         flex: 1,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        position: 'relative',
+        zIndex: 2
       }}>
         <div>
           {/* Logo */}
           <div style={{
-            width: 52,
-            height: 52,
-            borderRadius: 14,
+            width: 50,
+            height: 50,
+            borderRadius: 12,
             overflow: 'hidden',
-            border: '3px solid var(--bg-surface)',
-            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.4)',
+            border: '3px solid #ffffff',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
             marginBottom: 10,
-            backgroundColor: '#0f172a'
+            backgroundColor: '#ffffff'
           }}>
             <img
               src={store.logo}
@@ -79,14 +101,14 @@ export const StoreCard = ({ store, navigate }) => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>
               {store.name}
             </h3>
-            <ArrowUpRight size={18} color="var(--text-subtle)" />
+            <ArrowUpRight size={17} color="#9ca3af" />
           </div>
 
           <p style={{
-            fontSize: '0.82rem',
+            fontSize: '0.83rem',
             color: 'var(--text-muted)',
             marginTop: 4,
             lineHeight: 1.45,
@@ -98,8 +120,8 @@ export const StoreCard = ({ store, navigate }) => {
             {store.tagline || store.description}
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8, fontSize: '0.78rem', color: 'var(--text-subtle)' }}>
-            <MapPin size={13} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 8, fontSize: '0.78rem', color: '#71717a' }}>
+            <MapPin size={13} color="#9ca3af" />
             <span>{store.location.city}, {store.location.state}</span>
           </div>
         </div>
@@ -111,20 +133,20 @@ export const StoreCard = ({ store, navigate }) => {
           justifyContent: 'space-between',
           paddingTop: 12,
           marginTop: 14,
-          borderTop: '1px solid var(--border-subtle)'
+          borderTop: '1px solid #f4f4f6'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <Star size={13} fill="#fbbf24" strokeWidth={0} />
-            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fbbf24' }}>
+            <Star size={13} fill="#b45309" color="#b45309" strokeWidth={0} />
+            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#09090b' }}>
               {store.rating}
             </span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-subtle)' }}>
+            <span style={{ fontSize: '0.74rem', color: '#71717a' }}>
               ({store.reviewsCount})
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            <Package size={14} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.8rem', color: '#52525b', fontWeight: 500 }}>
+            <Package size={13} color="#9ca3af" />
             <span>{store.productsCount} products</span>
           </div>
         </div>
