@@ -20,38 +20,38 @@ export const SellLanding = ({ navigate }) => {
     {
       icon: Globe,
       title: "Reach More Customers",
-      desc: "Instant exposure to discerning shoppers looking for verified independent Indian labels.",
-      color: "#3b82f6"
+      desc: "Instant exposure to shoppers looking for verified independent labels and artisanal creators.",
+      color: "#09090b"
     },
     {
       icon: Layers,
       title: "Manage Your Products",
       desc: "Easily publish items, set discounted INR pricing, upload high-res imagery and manage catalogs.",
-      color: "#6366f1"
+      color: "#2563eb"
     },
     {
       icon: BarChart3,
-      title: "Track Orders & Analytics",
+      title: "Track Orders & Velocity",
       desc: "Real-time updates across fulfillment stages: Confirmed, Packed, Shipped, to Delivery.",
-      color: "#10b981"
+      color: "#059669"
     },
     {
       icon: Users,
       title: "Manage Inventory & Stock",
       desc: "Never oversell. Automated low-stock thresholds and one-click restock controls.",
-      color: "#f59e0b"
+      color: "#d97706"
     },
     {
       icon: TrendingUp,
       title: "Grow Your Business",
-      desc: "Comprehensive customer analytics, average order values, and customer lifetime metrics.",
-      color: "#8b5cf6"
+      desc: "Comprehensive customer analytics, average order values, and repeat buyer metrics.",
+      color: "#7c3aed"
     },
     {
       icon: ShieldCheck,
       title: "Automated Return Handling",
       desc: "Streamlined inspection workflow to approve, reject, or schedule pickups for customer returns.",
-      color: "#ec4899"
+      color: "#e11d48"
     }
   ];
 
@@ -59,23 +59,24 @@ export const SellLanding = ({ navigate }) => {
     <div className="animate-fade-in" style={{ paddingBottom: 90 }}>
       {/* Hero Section */}
       <section style={{
-        padding: '70px 20px 80px',
+        padding: '76px 24px 84px',
         textAlign: 'center',
-        background: 'radial-gradient(ellipse at 50% 10%, rgba(99, 102, 241, 0.2), transparent 70%)'
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid var(--border-subtle)'
       }}>
         <div style={{ maxWidth: 840, margin: '0 auto' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: 8,
-            padding: '6px 16px',
-            background: 'rgba(99, 102, 241, 0.12)',
-            border: '1px solid rgba(99, 102, 241, 0.3)',
+            padding: '5px 15px',
+            background: '#f4f4f5',
+            border: '1px solid #e4e4e7',
             borderRadius: 'var(--radius-full)',
             marginBottom: 24
           }}>
-            <Sparkles size={14} color="#818cf8" />
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#c7d2fe' }}>
+            <Sparkles size={14} color="#2563eb" />
+            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#09090b' }}>
               ShopAI Merchant Platform
             </span>
           </div>
@@ -83,10 +84,11 @@ export const SellLanding = ({ navigate }) => {
           <h1 style={{
             fontSize: 'clamp(2.4rem, 5vw, 3.8rem)',
             fontWeight: 800,
-            lineHeight: 1.15,
+            lineHeight: 1.12,
             letterSpacing: '-0.03em',
             marginBottom: 20,
-            color: '#ffffff'
+            color: '#09090b',
+            fontFamily: 'var(--font-display)'
           }}>
             Start selling on ShopAI.
           </h1>
@@ -98,7 +100,7 @@ export const SellLanding = ({ navigate }) => {
             margin: '0 auto 36px',
             lineHeight: 1.6
           }}>
-            Create your store and reach customers everywhere. A Shopify-grade merchant dashboard engineered to scale your brand.
+            Create your store and reach customers everywhere. A Shopify-grade merchant dashboard engineered to scale your independent brand.
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: 16 }}>
@@ -106,7 +108,7 @@ export const SellLanding = ({ navigate }) => {
               <button
                 onClick={() => navigate('/dashboard')}
                 className="btn-primary"
-                style={{ padding: '14px 32px', fontSize: '1rem', borderRadius: 12 }}
+                style={{ padding: '14px 32px', fontSize: '1rem', borderRadius: 10 }}
               >
                 <span>Go to Store Dashboard</span>
                 <ArrowRight size={18} />
@@ -114,12 +116,11 @@ export const SellLanding = ({ navigate }) => {
             ) : (
               <button
                 onClick={() => navigate('/sell/create')}
-                className="btn-sell"
+                className="btn-primary"
                 style={{
                   padding: '14px 34px',
-                  fontSize: '1.05rem',
-                  borderRadius: 14,
-                  boxShadow: '0 8px 24px rgba(99, 102, 241, 0.4)'
+                  fontSize: '1.02rem',
+                  borderRadius: 10
                 }}
               >
                 <span>Create Your Store</span>
@@ -131,9 +132,9 @@ export const SellLanding = ({ navigate }) => {
       </section>
 
       {/* Value Pillars */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '0 20px 70px' }}>
+      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px 70px' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#ffffff' }}>
+          <h2 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#09090b' }}>
             Everything You Need to Power Your Online Business
           </h2>
           <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginTop: 6 }}>
@@ -151,24 +152,24 @@ export const SellLanding = ({ navigate }) => {
             return (
               <div
                 key={i}
-                className="glass-card"
-                style={{ padding: '28px', display: 'flex', gap: 18, alignItems: 'flex-start' }}
+                className="clean-card"
+                style={{ padding: '28px', display: 'flex', gap: 18, alignItems: 'flex-start', borderRadius: 14 }}
               >
                 <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 14,
-                  backgroundColor: `${b.color}15`,
+                  width: 46,
+                  height: 46,
+                  borderRadius: 12,
+                  backgroundColor: '#f4f4f6',
                   color: b.color,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0
                 }}>
-                  <Icon size={24} />
+                  <Icon size={22} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b', marginBottom: 6 }}>
                     {b.title}
                   </h3>
                   <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.55 }}>
@@ -182,9 +183,9 @@ export const SellLanding = ({ navigate }) => {
       </section>
 
       {/* Onboarding Flow Preview */}
-      <section style={{ maxWidth: 900, margin: '0 auto', padding: '0 20px' }}>
-        <div className="glass-card" style={{ padding: '36px', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: 10 }}>
+      <section style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px' }}>
+        <div className="clean-card" style={{ padding: '36px', textAlign: 'center', borderRadius: 16 }}>
+          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#09090b', marginBottom: 10 }}>
             How It Works in 5 Easy Steps
           </h3>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: 28 }}>
@@ -199,11 +200,11 @@ export const SellLanding = ({ navigate }) => {
               { num: "04", label: "Handle & URL" },
               { num: "05", label: "Instant Launch" }
             ].map(step => (
-              <div key={step.num} style={{ background: 'rgba(255,255,255,0.03)', padding: '16px 12px', borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#818cf8', fontFamily: 'var(--font-mono)' }}>
+              <div key={step.num} style={{ background: '#f8fafc', padding: '16px 12px', borderRadius: 12, border: '1px solid #e5e7eb' }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
                   {step.num}
                 </div>
-                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#e2e8f0', marginTop: 4 }}>
+                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#52525b', marginTop: 4 }}>
                   {step.label}
                 </div>
               </div>
@@ -212,8 +213,8 @@ export const SellLanding = ({ navigate }) => {
 
           <button
             onClick={() => navigate('/sell/create')}
-            className="btn-sell"
-            style={{ marginTop: 32, padding: '12px 30px', fontSize: '0.95rem' }}
+            className="btn-primary"
+            style={{ marginTop: 32, padding: '12px 30px', fontSize: '0.95rem', borderRadius: 10 }}
           >
             <span>Start Store Registration</span>
             <ArrowRight size={16} />
