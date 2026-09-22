@@ -13,7 +13,8 @@ import {
   Home as HomeIcon,
   Heart,
   Dumbbell,
-  Watch
+  Watch,
+  CheckCircle2
 } from 'lucide-react';
 import { storeService } from '../services/storeService';
 import { productService } from '../services/productService';
@@ -37,25 +38,26 @@ export const Home = ({ navigate }) => {
   }, []);
 
   const categories = [
-    { name: 'Fashion', icon: Shirt, count: '120+ items', color: '#6366f1' },
-    { name: 'Electronics', icon: Cpu, count: '85+ items', color: '#3b82f6' },
-    { name: 'Home', icon: HomeIcon, count: '64+ items', color: '#f59e0b' },
-    { name: 'Beauty', icon: Heart, count: '92+ items', color: '#ec4899' },
-    { name: 'Sports', icon: Dumbbell, count: '50+ items', color: '#10b981' },
-    { name: 'Accessories', icon: Watch, count: '40+ items', color: '#8b5cf6' }
+    { name: 'Fashion', icon: Shirt, count: '120+ items', color: '#09090b' },
+    { name: 'Electronics', icon: Cpu, count: '85+ items', color: '#2563eb' },
+    { name: 'Home', icon: HomeIcon, count: '64+ items', color: '#d97706' },
+    { name: 'Beauty', icon: Heart, count: '92+ items', color: '#e11d48' },
+    { name: 'Sports', icon: Dumbbell, count: '50+ items', color: '#059669' },
+    { name: 'Accessories', icon: Watch, count: '40+ items', color: '#7c3aed' }
   ];
 
   return (
     <div className="animate-fade-in">
-      {/* 1. Hero Section */}
+      {/* 1. Hero Section (Editorial Commerce Aesthetic) */}
       <section style={{
         position: 'relative',
         overflow: 'hidden',
-        padding: '70px 20px 90px',
-        background: 'radial-gradient(ellipse at 50% 10%, rgba(59, 130, 246, 0.15), transparent 70%), radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.1), transparent 60%)'
+        padding: '76px 24px 84px',
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid var(--border-subtle)'
       }}>
         <div style={{
-          maxWidth: 1100,
+          maxWidth: 960,
           margin: '0 auto',
           textAlign: 'center'
         }}>
@@ -64,30 +66,29 @@ export const Home = ({ navigate }) => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: 8,
-            padding: '6px 16px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid var(--border-subtle)',
+            padding: '5px 15px',
+            background: '#f4f4f5',
+            border: '1px solid #e4e4e7',
             borderRadius: 'var(--radius-full)',
             marginBottom: 24
           }}>
-            <Sparkles size={14} color="#60a5fa" />
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#e2e8f0' }}>
-              The Modern Multi-Vendor Commerce Experience
+            <Sparkles size={14} color="#2563eb" />
+            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#09090b' }}>
+              The Multi-Vendor Marketplace for Independent Stores
             </span>
           </div>
 
           <h1 style={{
             fontSize: 'clamp(2.4rem, 5.5vw, 4.2rem)',
             fontWeight: 800,
-            lineHeight: 1.15,
+            lineHeight: 1.12,
             letterSpacing: '-0.035em',
             marginBottom: 20,
-            background: 'linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
+            color: '#09090b',
+            fontFamily: 'var(--font-display)'
           }}>
             Everything you love, <br />
-            from stores you'll love.
+            from stores you'll cherish.
           </h1>
 
           <p style={{
@@ -97,7 +98,7 @@ export const Home = ({ navigate }) => {
             margin: '0 auto 36px',
             lineHeight: 1.6
           }}>
-            Discover independent brands, artisanal lifestyle essentials, and next-gen tech gear — all unified in one seamless marketplace.
+            Discover curated independent brands, verified boutique creators, and high-quality products — all unified in one seamless shopping experience.
           </p>
 
           <div style={{
@@ -110,20 +111,47 @@ export const Home = ({ navigate }) => {
             <button
               onClick={() => navigate('/stores')}
               className="btn-primary"
-              style={{ padding: '13px 28px', fontSize: '1rem', borderRadius: 14 }}
+              style={{ padding: '13px 30px', fontSize: '0.98rem', borderRadius: 12 }}
             >
               <Compass size={18} />
-              <span>Explore Stores</span>
+              <span>Explore Verified Stores</span>
             </button>
 
             <button
               onClick={() => navigate('/sell')}
               className="btn-secondary"
-              style={{ padding: '13px 28px', fontSize: '1rem', borderRadius: 14 }}
+              style={{ padding: '13px 30px', fontSize: '0.98rem', borderRadius: 12 }}
             >
-              <StoreIcon size={18} color="#a78bfa" />
-              <span>Start Selling</span>
+              <StoreIcon size={18} color="#09090b" />
+              <span>Start Selling on ShopAI</span>
             </button>
+          </div>
+
+          {/* Trust Metrics Bar */}
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 28,
+            marginTop: 48,
+            paddingTop: 32,
+            borderTop: '1px solid #f4f4f6',
+            fontSize: '0.85rem',
+            color: 'var(--text-muted)'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <CheckCircle2 size={16} color="#059669" />
+              <span><strong>100%</strong> Verified Merchants</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <CheckCircle2 size={16} color="#059669" />
+              <span>Direct Studio Dispatch</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <CheckCircle2 size={16} color="#059669" />
+              <span>Doorstep Pickup Returns</span>
+            </div>
           </div>
         </div>
       </section>
@@ -132,7 +160,7 @@ export const Home = ({ navigate }) => {
       <section style={{
         maxWidth: 1280,
         margin: '0 auto',
-        padding: '20px 20px 60px'
+        padding: '50px 24px 60px'
       }}>
         <div style={{
           display: 'flex',
@@ -141,11 +169,11 @@ export const Home = ({ navigate }) => {
           marginBottom: 28
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#60a5fa', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
-              <StoreIcon size={16} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#2563eb', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
+              <StoreIcon size={15} />
               <span>Curated Brands</span>
             </div>
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '1.85rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
               Featured Stores
             </h2>
           </div>
@@ -156,8 +184,8 @@ export const Home = ({ navigate }) => {
               alignItems: 'center',
               gap: 6,
               fontSize: '0.9rem',
-              fontWeight: 600,
-              color: '#60a5fa'
+              fontWeight: 700,
+              color: '#09090b'
             }}
           >
             <span>View all stores</span>
@@ -168,7 +196,7 @@ export const Home = ({ navigate }) => {
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: 20
+          gap: 22
         }}>
           {stores.slice(0, 5).map(store => (
             <StoreCard key={store.id} store={store} navigate={navigate} />
@@ -180,14 +208,14 @@ export const Home = ({ navigate }) => {
       <section style={{
         maxWidth: 1280,
         margin: '0 auto',
-        padding: '20px 20px 60px'
+        padding: '20px 24px 60px'
       }}>
         <div style={{ marginBottom: 28 }}>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+          <h2 style={{ fontSize: '1.85rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
             Shop by Category
           </h2>
-          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-            Explore handpicked collections across independent merchants
+          <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)' }}>
+            Explore handpicked collections across independent creators
           </p>
         </div>
 
@@ -202,7 +230,7 @@ export const Home = ({ navigate }) => {
               <div
                 key={cat.name}
                 onClick={() => navigate(`/products?category=${cat.name}`)}
-                className="glass-card"
+                className="clean-card"
                 style={{
                   padding: '22px 18px',
                   display: 'flex',
@@ -210,34 +238,39 @@ export const Home = ({ navigate }) => {
                   alignItems: 'center',
                   textAlign: 'center',
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
+                  borderRadius: 14,
+                  background: '#ffffff',
+                  border: '1px solid #e5e7eb',
+                  transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.borderColor = cat.color;
+                  e.currentTarget.style.borderColor = '#09090b';
+                  e.currentTarget.style.boxShadow = '0 8px 16px -4px rgba(0,0,0,0.06)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                  e.currentTarget.style.borderColor = '#e5e7eb';
+                  e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
                 }}
               >
                 <div style={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 14,
-                  backgroundColor: `${cat.color}15`,
-                  color: cat.color,
+                  width: 46,
+                  height: 46,
+                  borderRadius: 12,
+                  backgroundColor: '#f4f4f6',
+                  color: '#09090b',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: 12
                 }}>
-                  <Icon size={24} />
+                  <Icon size={22} />
                 </div>
-                <div style={{ fontWeight: 600, fontSize: '0.98rem', color: '#ffffff' }}>
+                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: '#09090b' }}>
                   {cat.name}
                 </div>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-subtle)', marginTop: 2 }}>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: 2 }}>
                   {cat.count}
                 </div>
               </div>
@@ -250,7 +283,7 @@ export const Home = ({ navigate }) => {
       <section style={{
         maxWidth: 1280,
         margin: '0 auto',
-        padding: '20px 20px 70px'
+        padding: '20px 24px 70px'
       }}>
         <div style={{
           display: 'flex',
@@ -259,11 +292,11 @@ export const Home = ({ navigate }) => {
           marginBottom: 28
         }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#f59e0b', fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
-              <Flame size={16} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#d97706', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
+              <Flame size={15} />
               <span>Community Favorites</span>
             </div>
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '1.85rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
               Trending Products
             </h2>
           </div>
@@ -274,8 +307,8 @@ export const Home = ({ navigate }) => {
               alignItems: 'center',
               gap: 6,
               fontSize: '0.9rem',
-              fontWeight: 600,
-              color: '#60a5fa'
+              fontWeight: 700,
+              color: '#09090b'
             }}
           >
             <span>View full catalog</span>
@@ -298,13 +331,12 @@ export const Home = ({ navigate }) => {
       <section style={{
         maxWidth: 1280,
         margin: '0 auto',
-        padding: '0 20px 80px'
+        padding: '0 24px 80px'
       }}>
         <div style={{
-          background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%)',
-          border: '1px solid rgba(139, 92, 246, 0.3)',
-          borderRadius: 24,
-          padding: '50px 36px',
+          background: '#09090b',
+          borderRadius: 20,
+          padding: '54px 44px',
           position: 'relative',
           overflow: 'hidden',
           display: 'flex',
@@ -312,30 +344,55 @@ export const Home = ({ navigate }) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 32,
-          boxShadow: '0 20px 50px -10px rgba(99, 102, 241, 0.15)'
+          boxShadow: '0 20px 40px -12px rgba(0, 0, 0, 0.25)'
         }}>
           <div style={{ maxWidth: 640 }}>
-            <span className="badge badge-purple" style={{ marginBottom: 12 }}>
+            <span style={{
+              display: 'inline-block',
+              background: 'rgba(255, 255, 255, 0.12)',
+              color: '#ffffff',
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              padding: '3px 10px',
+              borderRadius: 20,
+              marginBottom: 14
+            }}>
               ShopAI For Merchants
             </span>
-            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, lineHeight: 1.25, marginBottom: 12 }}>
-              Have something to sell? <br />
-              Create your own store on ShopAI.
+            <h2 style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: 12, color: '#ffffff' }}>
+              Have products to sell? <br />
+              Open your independent storefront on ShopAI.
             </h2>
-            <p style={{ fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-              Join hundreds of independent artisans, apparel brands, and hardware creators. Full inventory control, automated order routing, and instant storefront activation.
+            <p style={{ fontSize: '1rem', color: '#a1a1aa', lineHeight: 1.6 }}>
+              Join independent artisans, apparel brands, and makers. Complete inventory control, multi-status order fulfillment, and automated return processing.
             </p>
           </div>
 
           <div>
             <button
               onClick={() => navigate('/sell')}
-              className="btn-sell"
               style={{
+                background: '#ffffff',
+                color: '#09090b',
                 padding: '14px 32px',
-                fontSize: '1rem',
-                borderRadius: 14,
-                boxShadow: '0 8px 24px rgba(139, 92, 246, 0.4)'
+                fontSize: '0.98rem',
+                fontWeight: 700,
+                borderRadius: 12,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 8,
+                boxShadow: '0 4px 16px rgba(255, 255, 255, 0.15)',
+                transition: 'all 0.15s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f4f4f5';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#ffffff';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               <span>Start Selling Today</span>
