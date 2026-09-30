@@ -16,6 +16,7 @@ import {
 import { productService } from '../services/productService';
 import { storeService } from '../services/storeService';
 import { useCart } from '../context/CartContext';
+import { getRatingColors } from '../utils/rating';
 import { ProductCard } from '../components/ProductCard';
 
 export const ProductDetails = ({ productId, navigate }) => {
@@ -187,15 +188,13 @@ export const ProductDetails = ({ productId, navigate }) => {
               display: 'flex',
               alignItems: 'center',
               gap: 4,
-              background: '#fffbeb',
-              color: '#b45309',
-              border: '1px solid #fef3c7',
+              ...getRatingColors(product.rating),
               padding: '3px 8px',
               borderRadius: 6,
               fontSize: '0.82rem',
               fontWeight: 700
             }}>
-              <Star size={13} fill="#b45309" strokeWidth={0} />
+              <Star size={13} fill="currentColor" strokeWidth={0} />
               <span>{product.rating}</span>
             </div>
             <span style={{ fontSize: '0.85rem', color: '#71717a' }}>

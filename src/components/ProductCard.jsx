@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Star, ShoppingCart, Store, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { getRatingColors } from '../utils/rating';
 
 export const ProductCard = ({ product, navigate }) => {
   const { addToCart } = useCart();
@@ -174,15 +175,13 @@ export const ProductCard = ({ product, navigate }) => {
               display: 'flex',
               alignItems: 'center',
               gap: 3,
-              background: '#fffbeb',
-              color: '#b45309',
-              border: '1px solid #fef3c7',
+              ...getRatingColors(product.rating),
               padding: '1px 6px',
               borderRadius: 4,
               fontSize: '0.74rem',
               fontWeight: 700
             }}>
-              <Star size={11} fill="#b45309" strokeWidth={0} />
+              <Star size={11} fill="currentColor" strokeWidth={0} />
               <span>{product.rating}</span>
             </div>
             <span style={{ fontSize: '0.74rem', color: '#71717a' }}>
