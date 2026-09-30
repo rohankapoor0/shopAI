@@ -50,33 +50,38 @@ export const Checkout = ({ navigate }) => {
     setIsPlacing(true);
 
     try {
-      // Primary store from first item
-      const primaryStore = cartItems[0];
+      // One order per store; cart-level shipping and discount go on the first order
+      const storeGroups = Object.values(Object.groupBy(cartItems, item => item.storeId));
+      const newOrders = [];
 
-      const newOrder = await orderService.createOrder({
-        storeId: primaryStore.storeId,
-        storeName: primaryStore.storeName,
-        customerId: "CUST-1",
-        customerName: formData.name,
-        customerEmail: formData.email,
-        customerPhone: formData.phone,
-        items: cartItems.map(item => ({
-          productId: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image: item.image
-        })),
-        amount: subtotal,
-        totalAmount: total,
-        paymentMethod: paymentMethod === 'UPI' ? `UPI (${upiId})` : paymentMethod === 'Card' ? `Card (${cardNumber})` : 'Cash on Delivery',
-        shippingAddress: {
-          address: formData.address,
-          city: formData.city,
-          state: formData.state,
-          pincode: formData.pincode
-        }
-      });
+      for (const [idx, group] of storeGroups.entries()) {
+        const groupSubtotal = group.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        newOrders.push(await orderService.createOrder({
+          storeId: group[0].storeId,
+          storeName: group[0].storeName,
+          customerId: "CUST-1",
+          customerName: formData.name,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          items: group.map(item => ({
+            productId: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image
+          })),
+          amount: groupSubtotal,
+          totalAmount: idx === 0 ? groupSubtotal + total - subtotal : groupSubtotal,
+          paymentMethod: paymentMethod === 'UPI' ? `UPI (${upiId})` : paymentMethod === 'Card' ? `Card (•••• ${cardNumber.replace(/\D/g, '').slice(-4)})` : 'Cash on Delivery',
+          shippingAddress: {
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode
+          }
+        }));
+      }
+      const newOrder = newOrders[0];
 
       // Trigger celebration confetti
       try {

@@ -64,7 +64,7 @@ export const storeService = {
   },
 
   getActiveStoreId: () => {
-    return localStorage.getItem(STORAGE_KEYS.ACTIVE_STORE_ID);
+    return localStorage.getItem(STORAGE_KEYS.ACTIVE_STORE_ID) || getFromStorage(STORAGE_KEYS.STORES)[0]?.id;
   },
 
   setActiveStoreId: (storeId) => {

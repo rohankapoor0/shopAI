@@ -389,7 +389,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, children }) 
 
         {/* Dynamic Nested Content */}
         <main style={{ flex: 1, padding: '28px 28px 80px', maxWidth: 1280, width: '100%', margin: '0 auto' }}>
-          {children}
+          <React.Fragment key={currentStore?.id}>{children}</React.Fragment>
         </main>
       </div>
 

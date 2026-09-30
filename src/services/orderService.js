@@ -1,9 +1,10 @@
 import { getFromStorage, saveToStorage, STORAGE_KEYS } from './db';
+import { productService } from './productService';
 
 const STAGES = ["Order Placed", "Confirmed", "Packed", "Shipped", "Out for Delivery", "Delivered"];
 
 const buildTrackingUpdates = (currentStatus) => {
-  const currentIndex = STAGES.indexOf(currentStatus);
+  const currentIndex = STAGES.indexOf(currentStatus === "Placed" ? "Order Placed" : currentStatus);
   const now = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
   return STAGES.map((stage, idx) => {
@@ -63,6 +64,14 @@ export const orderService = {
 
     const updated = [newOrder, ...orders];
     saveToStorage(STORAGE_KEYS.ORDERS, updated);
+
+    // Deduct purchased quantities from stock
+    for (const item of newOrder.items) {
+      const product = await productService.getProductById(item.productId);
+      if (product) {
+        await productService.updateProduct(product.id, { stock: Math.max(0, product.stock - item.quantity) });
+      }
+    }
 
     // Update store metrics
     const stores = getFromStorage(STORAGE_KEYS.STORES);
