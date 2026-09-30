@@ -32,6 +32,39 @@ export const Checkout = ({ navigate }) => {
   const [upiId, setUpiId] = useState("rohan.kapoor@okhdfcbank");
   const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8921");
   const [isPlacing, setIsPlacing] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const REQUIRED_FIELDS = {
+    name: 'Full Name',
+    email: 'Email Address',
+    phone: 'Phone Number',
+    address: 'Street Address',
+    city: 'City',
+    state: 'State',
+    pincode: 'PIN Code'
+  };
+
+  // Returns { fieldKey: label } for every required field that is blank
+  const getMissingFields = () => {
+    const values = { ...formData, upiId, cardNumber };
+    const required = { ...REQUIRED_FIELDS };
+    if (paymentMethod === 'UPI') required.upiId = 'UPI ID';
+    if (paymentMethod === 'Card') required.cardNumber = 'Card Number';
+    return Object.fromEntries(Object.entries(required).filter(([key]) => !String(values[key] ?? '').trim()));
+  };
+
+  const clearError = (key) => {
+    if (errors[key]) setErrors(({ [key]: _removed, ...rest }) => rest);
+  };
+
+  const updateField = (key, value) => {
+    setFormData({ ...formData, [key]: value });
+    clearError(key);
+  };
+
+  const fieldError = (key) => errors[key] && (
+    <div style={{ color: '#dc2626', fontSize: '0.75rem', fontWeight: 600, marginTop: 4 }}>Required</div>
+  );
 
   const formatINR = (val) => new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -44,6 +77,12 @@ export const Checkout = ({ navigate }) => {
     if (cartItems.length === 0) {
       alert("Your cart is empty.");
       navigate('/products');
+      return;
+    }
+
+    const missing = getMissingFields();
+    if (Object.keys(missing).length > 0) {
+      setErrors(missing);
       return;
     }
 
@@ -143,7 +182,7 @@ export const Checkout = ({ navigate }) => {
         </p>
       </div>
 
-      <form onSubmit={handlePlaceOrder} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 36 }}>
+      <form onSubmit={handlePlaceOrder} noValidate style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 36 }}>
         {/* Left Column: Details */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* 1. Customer Information */}
@@ -160,9 +199,11 @@ export const Checkout = ({ navigate }) => {
                   type="text"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                  aria-invalid={!!errors.name}
+                  onChange={(e) => updateField('name', e.target.value)}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.name ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
                 />
+                {fieldError('name')}
               </div>
 
               <div>
@@ -173,9 +214,11 @@ export const Checkout = ({ navigate }) => {
                   type="email"
                   required
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                  aria-invalid={!!errors.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.email ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
                 />
+                {fieldError('email')}
               </div>
 
               <div>
@@ -186,9 +229,11 @@ export const Checkout = ({ navigate }) => {
                   type="tel"
                   required
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                  aria-invalid={!!errors.phone}
+                  onChange={(e) => updateField('phone', e.target.value)}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.phone ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
                 />
+                {fieldError('phone')}
               </div>
             </div>
           </div>
@@ -207,9 +252,11 @@ export const Checkout = ({ navigate }) => {
                   type="text"
                   required
                   value={formData.address}
-                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                  aria-invalid={!!errors.address}
+                  onChange={(e) => updateField('address', e.target.value)}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.address ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
                 />
+                {fieldError('address')}
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
@@ -221,9 +268,11 @@ export const Checkout = ({ navigate }) => {
                     type="text"
                     required
                     value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                    aria-invalid={!!errors.city}
+                    onChange={(e) => updateField('city', e.target.value)}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.city ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
                   />
+                  {fieldError('city')}
                 </div>
 
                 <div>
@@ -234,9 +283,11 @@ export const Checkout = ({ navigate }) => {
                     type="text"
                     required
                     value={formData.state}
-                    onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                    aria-invalid={!!errors.state}
+                    onChange={(e) => updateField('state', e.target.value)}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.state ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
                   />
+                  {fieldError('state')}
                 </div>
 
                 <div>
@@ -247,9 +298,11 @@ export const Checkout = ({ navigate }) => {
                     type="text"
                     required
                     value={formData.pincode}
-                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                    aria-invalid={!!errors.pincode}
+                    onChange={(e) => updateField('pincode', e.target.value)}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.pincode ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
                   />
+                  {fieldError('pincode')}
                 </div>
               </div>
             </div>
@@ -292,20 +345,23 @@ export const Checkout = ({ navigate }) => {
                 <div style={{ padding: '0 10px 10px 38px' }}>
                   <input
                     type="text"
+                    required
+                    aria-invalid={!!errors.upiId}
                     value={upiId}
-                    onChange={(e) => setUpiId(e.target.value)}
+                    onChange={(e) => { setUpiId(e.target.value); clearError('upiId'); }}
                     placeholder="example@upi"
                     style={{
                       width: '100%',
                       height: 38,
                       padding: '0 12px',
                       background: '#ffffff',
-                      border: '1px solid #d1d5db',
+                      border: `1px solid ${errors.upiId ? '#ef4444' : '#d1d5db'}`,
                       borderRadius: 8,
                       color: '#09090b',
                       fontSize: '0.85rem'
                     }}
                   />
+                  {fieldError('upiId')}
                 </div>
               )}
 
@@ -339,19 +395,22 @@ export const Checkout = ({ navigate }) => {
                 <div style={{ padding: '0 10px 10px 38px' }}>
                   <input
                     type="text"
+                    required
+                    aria-invalid={!!errors.cardNumber}
                     value={cardNumber}
-                    onChange={(e) => setCardNumber(e.target.value)}
+                    onChange={(e) => { setCardNumber(e.target.value); clearError('cardNumber'); }}
                     style={{
                       width: '100%',
                       height: 38,
                       padding: '0 12px',
                       background: '#ffffff',
-                      border: '1px solid #d1d5db',
+                      border: `1px solid ${errors.cardNumber ? '#ef4444' : '#d1d5db'}`,
                       borderRadius: 8,
                       color: '#09090b',
                       fontSize: '0.85rem'
                     }}
                   />
+                  {fieldError('cardNumber')}
                 </div>
               )}
 
@@ -430,6 +489,12 @@ export const Checkout = ({ navigate }) => {
                 <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#09090b' }}>{formatINR(total)}</span>
               </div>
             </div>
+
+            {Object.keys(errors).length > 0 && (
+              <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
+                Please fill in: {Object.values(errors).join(', ')}
+              </div>
+            )}
 
             <button
               type="submit"

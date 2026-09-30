@@ -14,30 +14,51 @@ import {
   X,
   Sparkles,
   ArrowLeft,
-  ShoppingBag
+  ShoppingBag,
+  LogOut
 } from 'lucide-react';
 import { storeService } from '../../services/storeService';
 
-export const DashboardLayout = ({ activeTab = 'overview', navigate, children }) => {
+export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, children }) => {
   const [stores, setStores] = useState([]);
   const [currentStore, setCurrentStore] = useState(null);
+  const [status, setStatus] = useState('loading'); // loading | error | empty | ready
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [storeSwitcherOpen, setStoreSwitcherOpen] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     const loadStores = async () => {
-      const all = await storeService.getStores();
-      setStores(all);
-      const activeId = storeService.getActiveStoreId() || all[0]?.id;
-      const found = all.find(s => s.id === activeId) || all[0];
-      setCurrentStore(found);
+      try {
+        const all = await storeService.getStores();
+        setStores(all);
+        if (all.length === 0) {
+          setStatus('empty');
+          return;
+        }
+        const activeId = storeService.getActiveStoreId();
+        const found = all.find(s => s.id === activeId) || all[0];
+        storeService.setActiveStoreId(found.id);
+        setCurrentStore(found);
+        setStatus('ready');
+      } catch (err) {
+        console.error('Failed to load stores:', err);
+        setStatus('error');
+      }
     };
     loadStores();
-  }, []);
+  }, [reloadKey]);
 
+  const retryLoad = () => {
+    setStatus('loading');
+    setReloadKey(k => k + 1);
+  };
+
+  // Tab content is keyed by store id, so switching remounts it and it reloads that store's data
   const handleSelectStore = (storeId) => {
-    storeService.setActiveStoreId(storeId);
     const selected = stores.find(s => s.id === storeId);
+    if (!selected) return;
+    storeService.setActiveStoreId(storeId);
     setCurrentStore(selected);
     setStoreSwitcherOpen(false);
   };
@@ -52,7 +73,25 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, children }) 
     { id: 'settings', label: 'Store Settings', icon: Settings, path: '/dashboard/settings' },
   ];
 
-  if (!currentStore) return null;
+  if (status !== 'ready') {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, backgroundColor: '#f8fafc', color: '#64748b' }}>
+        {status === 'loading' && <div>Loading stores...</div>}
+        {status === 'error' && (
+          <>
+            <div>Could not load stores.</div>
+            <button onClick={retryLoad} className="btn-secondary">Retry</button>
+          </>
+        )}
+        {status === 'empty' && (
+          <>
+            <div>No stores yet.</div>
+            <button onClick={() => navigate('/sell/create')} className="btn-primary">Create a store</button>
+          </>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc' }}>
@@ -326,6 +365,26 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, children }) 
           >
             <ArrowLeft size={14} />
             <span>Return to Marketplace</span>
+          </button>
+
+          <button
+            onClick={onLogout}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '8px 12px',
+              color: '#64748b',
+              fontSize: '0.82rem',
+              textAlign: 'left',
+              background: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              borderRadius: 6
+            }}
+          >
+            <LogOut size={14} />
+            <span>Log out</span>
           </button>
         </div>
       </aside>

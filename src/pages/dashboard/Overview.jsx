@@ -48,7 +48,8 @@ export const Overview = ({ navigate }) => {
     maximumFractionDigits: 0
   }).format(val || 0);
 
-  if (loading || !store) return <div style={{ padding: 40, color: '#64748b' }}>Loading dashboard...</div>;
+  if (loading) return <div style={{ padding: 40, color: '#64748b' }}>Loading dashboard...</div>;
+  if (!store) return <div style={{ padding: 40, color: '#64748b' }}>Store not found.</div>;
 
   const totalSales = orders.reduce((sum, o) => sum + o.totalAmount, store.metrics?.totalSales || 0);
   const totalOrdersCount = orders.length > 0 ? orders.length : (store.metrics?.totalOrders || 0);

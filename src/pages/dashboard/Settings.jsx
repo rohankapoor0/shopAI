@@ -14,12 +14,14 @@ import { storeService } from '../../services/storeService';
 export const Settings = ({ navigate }) => {
   const [store, setStore] = useState(null);
   const [savedMessage, setSavedMessage] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       const activeId = storeService.getActiveStoreId();
       const current = await storeService.getStoreById(activeId);
       setStore(current);
+      setLoading(false);
     };
     load();
   }, []);
@@ -32,7 +34,8 @@ export const Settings = ({ navigate }) => {
     setTimeout(() => setSavedMessage(false), 2500);
   };
 
-  if (!store) return null;
+  if (loading) return <div style={{ padding: 40, color: '#64748b' }}>Loading settings...</div>;
+  if (!store) return <div style={{ padding: 40, color: '#64748b' }}>Store not found.</div>;
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 860 }}>

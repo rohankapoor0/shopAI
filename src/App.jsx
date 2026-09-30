@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { initDB } from './services/db';
+import { authService } from './services/authService';
 import { CartProvider } from './context/CartContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -19,6 +20,7 @@ import { OrderTracking } from './pages/OrderTracking';
 import { Profile } from './pages/Profile';
 import { SellLanding } from './pages/SellLanding';
 import { StoreRegister } from './pages/StoreRegister';
+import { Login } from './pages/Login';
 
 // Dashboard Pages
 import { DashboardLayout } from './pages/dashboard/DashboardLayout';
@@ -34,6 +36,7 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
   const [activeReturnOrder, setActiveReturnOrder] = useState(null);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(authService.isAuthenticated());
 
   useEffect(() => {
     initDB();
@@ -49,6 +52,12 @@ export default function App() {
     window.history.pushState({}, '', path);
     setCurrentPath(path.split('?')[0]);
     window.scrollTo(0, 0);
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthed(false);
+    navigate('/');
   };
 
   const openReturnModal = (order) => {
@@ -69,6 +78,11 @@ export default function App() {
 
   // Route Dispatcher
   const renderRoute = () => {
+    // 0. Whole app is behind the admin login
+    if (!isAuthed) {
+      return <Login onLogin={() => setIsAuthed(true)} />;
+    }
+
     // 1. Dashboard Routes (/dashboard/*)
     if (currentPath.startsWith('/dashboard')) {
       let subTab = 'overview';
@@ -95,7 +109,7 @@ export default function App() {
       }
 
       return (
-        <DashboardLayout activeTab={subTab} navigate={navigate}>
+        <DashboardLayout activeTab={subTab} navigate={navigate} onLogout={handleLogout}>
           <ContentComponent navigate={navigate} />
         </DashboardLayout>
       );
@@ -178,6 +192,7 @@ export default function App() {
             <button onClick={() => navigate('/orders/ORD-10452')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Track Order</button>
             <button onClick={() => navigate('/sell/create')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600 }}>+ Create Store</button>
             <button onClick={() => navigate('/dashboard')} style={{ color: '#10b981', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 700 }}>Merchant Dashboard →</button>
+            <button onClick={handleLogout} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Log out</button>
           </div>
         </div>
 
