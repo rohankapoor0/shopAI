@@ -21,6 +21,7 @@ import { Profile } from './pages/Profile';
 import { SellLanding } from './pages/SellLanding';
 import { StoreRegister } from './pages/StoreRegister';
 import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 
 // Dashboard Pages
 import { DashboardLayout } from './pages/dashboard/DashboardLayout';
@@ -36,7 +37,8 @@ export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
   const [activeReturnOrder, setActiveReturnOrder] = useState(null);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
-  const [isAuthed, setIsAuthed] = useState(authService.isAuthenticated());
+  const [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
+  const isAdmin = authService.isAdmin(currentUser);
 
   useEffect(() => {
     initDB();
@@ -56,7 +58,7 @@ export default function App() {
 
   const handleLogout = () => {
     authService.logout();
-    setIsAuthed(false);
+    setCurrentUser(null);
     navigate('/');
   };
 
@@ -78,13 +80,15 @@ export default function App() {
 
   // Route Dispatcher
   const renderRoute = () => {
-    // 0. Whole app is behind the admin login
-    if (!isAuthed) {
-      return <Login onLogin={() => setIsAuthed(true)} />;
+    // 0. Whole app is behind login; /register is the only public route
+    if (!currentUser) {
+      return currentPath === '/register'
+        ? <Register navigate={navigate} onRegistered={setCurrentUser} />
+        : <Login navigate={navigate} onLogin={setCurrentUser} />;
     }
 
-    // 1. Dashboard Routes (/dashboard/*)
-    if (currentPath.startsWith('/dashboard')) {
+    // 1. Dashboard Routes (/dashboard/*) - admin only
+    if (currentPath.startsWith('/dashboard') && isAdmin) {
       let subTab = 'overview';
       let ContentComponent = Overview;
 
@@ -118,7 +122,17 @@ export default function App() {
     // 2. Marketplace Routes (Wrapped in standard Navbar & Footer)
     let pageContent = null;
 
-    if (currentPath === '/') {
+    if (currentPath.startsWith('/dashboard')) {
+      pageContent = (
+        <div style={{ textAlign: 'center', padding: '100px 20px' }}>
+          <h2>Admin access required</h2>
+          <p style={{ color: 'var(--text-muted)', marginTop: 6 }}>The Store Dashboard is only available to the admin account.</p>
+          <button onClick={() => navigate('/')} className="btn-primary" style={{ marginTop: 16 }}>
+            Back to Home
+          </button>
+        </div>
+      );
+    } else if (currentPath === '/') {
       pageContent = <Home navigate={navigate} />;
     } else if (currentPath === '/stores') {
       pageContent = <Stores navigate={navigate} />;
@@ -191,7 +205,7 @@ export default function App() {
             <button onClick={() => navigate('/store/STORE-1002')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>TechHub</button>
             <button onClick={() => navigate('/orders/ORD-10452')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Track Order</button>
             <button onClick={() => navigate('/sell/create')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600 }}>+ Create Store</button>
-            <button onClick={() => navigate('/dashboard')} style={{ color: '#10b981', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 700 }}>Merchant Dashboard →</button>
+            {isAdmin && <button onClick={() => navigate('/dashboard')} style={{ color: '#10b981', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 700 }}>Merchant Dashboard →</button>}
             <button onClick={handleLogout} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Log out</button>
           </div>
         </div>

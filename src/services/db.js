@@ -20,7 +20,8 @@ const STORAGE_KEYS = {
   CART: 'shopai_cart_v1',
   ACTIVE_STORE_ID: 'shopai_active_store_id_v1',
   ACTIVE_USER: 'shopai_active_user_v1',
-  ADMIN_SESSION: 'shopai_admin_session_v1'
+  SESSION: 'shopai_session_v2',
+  USERS: 'shopai_users_v1'
 };
 
 // Initialize DB with seed data if not present

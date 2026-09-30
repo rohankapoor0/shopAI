@@ -1,21 +1,26 @@
-import { STORAGE_KEYS } from './db';
+import { getFromStorage, STORAGE_KEYS } from './db';
+import { userService } from './userService';
 
-// ponytail: hardcoded local credentials, prototype only; replace with real auth (e.g. Cognito) later
-const ADMIN_USERNAME = 'admin';
+// ponytail: hardcoded built-in admin, prototype only; replace with real auth (e.g. Cognito) later
+const ADMIN_USER = { id: 'ADMIN', name: 'Admin', username: 'admin', role: 'admin' };
 const ADMIN_PASSWORD = 'admin';
 
 export const authService = {
-  login: (username, password) => {
-    const ok = username.trim() === ADMIN_USERNAME && password === ADMIN_PASSWORD;
-    if (ok) localStorage.setItem(STORAGE_KEYS.ADMIN_SESSION, ADMIN_USERNAME);
-    return ok;
+  // Accepts the admin username or a registered user's email. Returns the signed-in user, or null.
+  login: async (identifier, password) => {
+    const id = identifier.trim();
+    const user = id === ADMIN_USER.username
+      ? (password === ADMIN_PASSWORD ? ADMIN_USER : null)
+      : await userService.verifyCredentials(id, password);
+    if (user) localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user));
+    return user;
   },
 
   logout: () => {
-    localStorage.removeItem(STORAGE_KEYS.ADMIN_SESSION);
+    localStorage.removeItem(STORAGE_KEYS.SESSION);
   },
 
-  isAuthenticated: () => {
-    return localStorage.getItem(STORAGE_KEYS.ADMIN_SESSION) === ADMIN_USERNAME;
-  }
+  getCurrentUser: () => getFromStorage(STORAGE_KEYS.SESSION, null),
+
+  isAdmin: (user) => user?.role === 'admin'
 };

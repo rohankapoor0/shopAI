@@ -62,3 +62,11 @@ npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## Docs
+
+- [docs/handoff.md](docs/handoff.md) — current status, accounts, known gaps, next steps
+- [docs/implementation.md](docs/implementation.md) — how the frontend works (routing, auth, checkout, dashboard, data model)
+- [docs/cloud-migration.md](docs/cloud-migration.md) — DynamoDB tables, API Gateway routes, Lambda, S3 and Azure OpenAI plan
