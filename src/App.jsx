@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { ReturnModal } from './components/ReturnModal';
+import { ChatWidget } from './components/ChatWidget';
 
 // Pages
 import { Home } from './pages/Home';
@@ -215,6 +216,9 @@ export default function App() {
           {pageContent}
         </div>
         <Footer navigate={navigate} />
+
+        {/* AI shopping assistant (UI only until the Azure OpenAI backend is connected) */}
+        <ChatWidget navigate={navigate} />
 
         {/* Global Return / Refund Modal */}
         <ReturnModal

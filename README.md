@@ -17,6 +17,7 @@ Designed with clean service abstractions (`src/services/`) for seamless future c
 - **Visual Order Tracking (`/orders/:orderId`)**: Interactive 6-stage fulfillment stepper timeline:
   `Order Placed` -> `Confirmed` -> `Packed` -> `Shipped` -> `Out for Delivery` -> `Delivered`.
 - **Customer Profile & Returns (`/profile`, `/orders`)**: Order history, saved addresses, and an interactive return request workflow.
+- **AI Shopping Assistant (UI)**: Floating chat button on every marketplace page; hide/expand panel, suggestion chips, product suggestions. Ready to connect to Azure OpenAI (see `docs/ai-assistant.md`).
 
 ### Merchant Platform & Dashboard
 - **Seller Landing & Onboarding Wizard (`/sell`, `/sell/create`)**:
@@ -70,3 +71,4 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 - [docs/handoff.md](docs/handoff.md) — current status, accounts, known gaps, next steps
 - [docs/implementation.md](docs/implementation.md) — how the frontend works (routing, auth, checkout, dashboard, data model)
 - [docs/cloud-migration.md](docs/cloud-migration.md) — DynamoDB tables, API Gateway routes, Lambda, S3 and Azure OpenAI plan
+- [docs/ai-assistant.md](docs/ai-assistant.md) — connecting the chat widget to Azure OpenAI (API contract + Lambda sketch)

@@ -36,7 +36,8 @@ To reset all local data, clear the site's `localStorage` in DevTools (keys start
 - Merchant: sell landing page, 5-step store onboarding, Store Dashboard (overview, products, orders, inventory, customers, returns, settings).
 - Fixes (commit `6866429`): dashboard no longer stuck loading on first visit; a multi-store cart creates one order per store; purchases reduce stock; tracking data for new orders is correct; only the last 4 card digits are stored.
 - Commit `bf3d92c`: admin login gate; checkout blocks orders until required fields are filled; dashboard loading/error/empty states; store switching reloads the tab for the selected store.
-- Uncommitted at time of writing: customer registration (`/register`), login by email, admin-only dashboard, and these docs.
+- Commit `e09fc2b`: customer registration (`/register`), login by email, admin-only dashboard, docs. Commit `4c8e817`: product rating badges colored by score (green 4–5, orange 2–4, red below 2).
+- AI chat widget UI: bottom-right button on marketplace pages that opens a chat panel, which can be hidden and expanded. It replies "not connected yet" until the Azure OpenAI backend exists ([ai-assistant.md](ai-assistant.md)).
 
 ## Known gaps and limitations
 
@@ -55,7 +56,7 @@ To reset all local data, clear the site's `localStorage` in DevTools (keys start
 2. Build the backend following [cloud-migration.md](cloud-migration.md): DynamoDB tables, then Lambda + API Gateway for auth and users, then the other services one at a time.
 3. Replace the hardcoded admin with a real admin role (a `role: 'admin'` user in the Users table, or Cognito groups).
 4. S3 uploads for product images.
-5. One Azure OpenAI feature (shopping assistant or recommendations), as planned in the architecture sketch in `docs/`.
+5. Connect the chat widget to Azure OpenAI: deploy the `/assistant` Lambda and set `VITE_API_BASE_URL` ([ai-assistant.md](ai-assistant.md)). The UI is done, and this can happen in parallel with the steps above.
 
 ## How to verify (manual checklist)
 
@@ -65,6 +66,7 @@ To reset all local data, clear the site's `localStorage` in DevTools (keys start
 - As a customer, open `/dashboard` → "Admin access required".
 - As admin, switch between all stores in the dashboard sidebar → header and tab content always show the same store.
 - Checkout with a blank required field → "Please fill in: …", no order created. Valid checkout → order success page.
+- Chat button bottom-right on marketplace pages (not on the dashboard). Open → suggestion chips; send → typing dots, then "not connected yet" reply. Expand/shrink, Hide and Escape work; reopening keeps the messages.
 
 ## Where things are
 
@@ -73,6 +75,7 @@ To reset all local data, clear the site's `localStorage` in DevTools (keys start
 | `src/App.jsx` | Router, login gate, admin-only dashboard check, demo banner |
 | `src/services/` | Data layer (one file per entity) — the part that becomes the backend |
 | `src/pages/`, `src/pages/dashboard/` | Screens |
-| `src/components/` | Shared UI (Navbar, Footer, cards, ReturnModal, AuthCard) |
+| `src/components/` | Shared UI (Navbar, Footer, cards, ReturnModal, AuthCard, ChatWidget) |
+| `src/services/assistantService.js`, `src/services/api.js` | AI assistant seam and API client (see ai-assistant.md) |
 | `src/context/CartContext.jsx` | Cart state |
 | `docs/` | These docs, plus the target architecture sketch (WhatsApp image) |

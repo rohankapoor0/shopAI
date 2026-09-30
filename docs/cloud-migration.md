@@ -14,10 +14,12 @@ The frontend does not need a rewrite. Every function in `src/services/` is alrea
 
 ## 1. Frontend switch-over pattern
 
-Add a tiny client, for example `src/services/api.js`:
+The client already exists in `src/services/api.js` (it is used by the AI assistant):
 
 ```js
 const BASE_URL = import.meta.env.VITE_API_BASE_URL; // e.g. https://abc123.execute-api.ap-south-1.amazonaws.com
+
+export const isApiConfigured = Boolean(BASE_URL);
 
 export const apiFetch = async (path, { method = 'GET', body, token } = {}) => {
   const res = await fetch(`${BASE_URL}${path}`, {
@@ -34,7 +36,7 @@ export const apiFetch = async (path, { method = 'GET', body, token } = {}) => {
 };
 ```
 
-Then, for example, in `userService.js`:
+To migrate a service, replace its body with an `apiFetch` call. For example, in `userService.js`:
 
 ```js
 register: (data) => apiFetch('/auth/register', { method: 'POST', body: data }),
@@ -106,9 +108,10 @@ The bucket stays private and is served through CloudFront. Allow only `image/*` 
 
 ## 6. Azure OpenAI (one feature)
 
+The shopping assistant **UI is already built** (`ChatWidget` plus `assistantService`). It needs one Lambda behind `POST /assistant` that calls Azure OpenAI and returns `{ reply, productIds }`. The full contract, a Lambda sketch, configuration and security notes are in **[ai-assistant.md](ai-assistant.md)**.
+
 - **Keep the key server-side.** It lives in the `/assistant` Lambda's environment (or Secrets Manager); never ship it to the browser.
-- **Suggested first feature:** a shopping assistant. The Lambda receives the question, fetches relevant products from DynamoDB (by category or keyword), and sends them plus the question to the Azure OpenAI chat deployment with a system prompt like "only recommend products from this list". It returns the answer and product ids, which the UI renders as `ProductCard`s.
-- **Guardrails:** rate-limit per user in API Gateway and cap `max_tokens`.
+- **Guardrails:** rate-limit in API Gateway and cap `max_tokens`.
 
 ## 7. Suggested order
 
@@ -118,7 +121,7 @@ The bucket stays private and is served through CloudFront. Allow only `image/*` 
 4. Build orders (transactional checkout) and returns.
 5. Add the admin write routes and the authorizer role checks.
 6. Add S3 uploads.
-7. Add the Azure OpenAI assistant.
+7. Deploy the Azure OpenAI assistant Lambda ([ai-assistant.md](ai-assistant.md)). This step can be done any time, even first, because it does not depend on the other routes.
 
 After each step the app keeps working: services not yet migrated still use `localStorage`.
 
@@ -126,6 +129,6 @@ After each step the app keeps working: services not yet migrated still use `loca
 
 | Name | Example | Used by |
 |---|---|---|
-| `VITE_API_BASE_URL` | `https://abc123.execute-api.ap-south-1.amazonaws.com` | `src/services/api.js` |
+| `VITE_API_BASE_URL` | `https://abc123.execute-api.ap-south-1.amazonaws.com` | `src/services/api.js` (currently only `assistantService`) |
 
 Put it in `.env.local`, which git already ignores through `*.local`.

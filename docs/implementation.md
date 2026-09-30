@@ -17,6 +17,7 @@ pages / components  ──>  services (async)  ──>  db.js  ──>  localSto
 
 - **UI** never touches `localStorage` directly (two exceptions: `CartContext` persists the cart itself, and `Storefront` reads reviews via `getFromStorage`). It calls services.
 - **Services** (`src/services/*Service.js`) are all `async`, so replacing their bodies with `fetch()` calls to API Gateway will not change any caller.
+- **`api.js`** holds `apiFetch()` for the future API Gateway backend. It is only active when `VITE_API_BASE_URL` is set, and today only `assistantService` uses it.
 - **`db.js`** holds `STORAGE_KEYS`, `getFromStorage`, `saveToStorage` and `initDB()`, which seeds data from `initialData.js` on first load.
 
 ## Routing (`src/App.jsx`)
@@ -56,6 +57,14 @@ Files: `src/services/authService.js`, `src/services/userService.js`, `src/pages/
 - `DashboardLayout` loads all stores, picks the active one (`storeService.getActiveStoreId()`, falling back to the first store), and shows loading, error (with Retry) or empty ("No stores yet") states.
 - **Switching store** writes the active id and updates `currentStore`. Tab content is rendered inside `<React.Fragment key={currentStore.id}>`, so it remounts and every tab reloads its data for the new store. The old tab instance is discarded, so its late results can never show up. This is why rapid switching cannot leave stale data on screen.
 - Each tab (`Overview`, `Products`, `Orders`, `Inventory`, `Customers`, `Returns`, `Settings`) reads the active store id on mount and loads only that store's records. Overview and Settings show "Store not found." if the id is invalid.
+
+## AI chat widget (`src/components/ChatWidget.jsx`)
+
+- **Where:** rendered once in `App.jsx` inside the marketplace layout, so it appears on every marketplace page but not on login/register or the dashboard. `position: fixed` bottom-right, `z-index: 90` (above the navbar, below `ReturnModal`).
+- **States:** closed (round button) and open (panel 360×520). "Expand" grows it to 520×680 (capped to the viewport); "Hide" (or Escape) collapses it back to the button. Messages stay in component state while hidden and are lost on page reload. On phones (≤480px) the panel is full width, 75vh tall, and the expand button is hidden (CSS in `index.css`).
+- **Messages:** `{ id, role: 'user' | 'assistant', content, products?, isError? }`. Empty state shows 3 suggestion chips. Enter sends, Shift+Enter adds a newline. A typing indicator shows while waiting. Errors appear as a red assistant bubble and are not sent back to the model.
+- **Backend seam:** `assistantService.sendMessage(messages)` resolves `{ reply, productIds }`. Without `VITE_API_BASE_URL` it returns a "not connected yet" reply after about 0.6 s. With it, it calls `POST /assistant` through `apiFetch`. Product ids are resolved with `productService.getProductById` and shown as clickable rows (rating badge colored by `getRatingColors`); clicking one opens `/product/:id` and hides the panel.
+- **Connecting Azure OpenAI:** see [ai-assistant.md](ai-assistant.md). No UI changes needed.
 
 ## Data model (localStorage)
 
