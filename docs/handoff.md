@@ -18,7 +18,8 @@ cd backend && npm install && sam build && sam deploy && cd ..
 npm install
 npm run dev      # http://localhost:5173
 npm run build    # production build into dist/
-npm run lint     # oxlint (pre-existing unused-import warnings, 0 errors)
+npm run lint     # oxlint (0 errors, a few old warnings)
+npm run deploy:web   # build and publish the site to S3 + CloudFront (needs AWS credentials)
 cd backend && npm test   # backend unit checks, no AWS needed
 ```
 
@@ -44,11 +45,11 @@ The whole app is behind login. `/register` is the only page reachable while sign
 
 ## Known gaps and limitations
 
-1. **Frontend is not hosted yet.** It runs from `npm run dev`. Host it on S3 + CloudFront or Amplify and set the stack's `AllowedOrigin` to the site URL.
+1. **Hosting** is S3 website hosting (HTTP) until AWS verifies the account for CloudFront; then set `CloudFrontEnabled=true` for HTTPS on `*.cloudfront.net` (`npm run deploy:web` publishes either way). No custom domain yet.
 2. **Secrets are Lambda environment variables** (JWT secret, Azure key). Move them to Secrets Manager or SSM for production.
 3. **Payments are simulated.** No gateway.
 4. **Lookups use DynamoDB Scans.** Fine at prototype size. Add GSIs when tables grow (see cloud-migration.md).
-5. **Image uploads have no size cap**, and store logos and banners are still URLs.
+5. **Store logos and banners are still URLs.** Product images upload to S3 (5 MB cap).
 6. **Routing** is a hand-written `if` chain on `window.location.pathname` in `src/App.jsx`, not react-router.
 7. **Frontend tests:** none. Backend has `backend/test/backend.test.mjs` (no AWS needed).
 

@@ -220,13 +220,20 @@ export const deleteProduct = async ({ params }) => {
 // --- Image uploads: the browser PUTs the file straight to S3 with this presigned URL ---
 
 const IMAGE_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' };
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 
-// ponytail: a presigned PUT can't cap file size; switch to createPresignedPost with content-length-range if uploads get abused.
 export const presignProductImage = async ({ body }) => {
   const ext = IMAGE_TYPES[body.contentType];
   if (!ext) throw new HttpError(400, 'Only JPEG, PNG, WebP or GIF images are allowed');
+  const size = Number(body.size);
+  if (!Number.isInteger(size) || size <= 0) throw new HttpError(400, 'Image size is required');
+  if (size > MAX_IMAGE_BYTES) throw new HttpError(400, 'Images must be 5 MB or smaller');
   const bucket = process.env.BUCKET_NAME;
   const key = `products/${randomUUID()}.${ext}`;
-  const uploadUrl = await getSignedUrl(s3, new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: body.contentType }), { expiresIn: 300 });
+  // Type and size are signed, so S3 rejects an upload that differs from what was checked above
+  const uploadUrl = await getSignedUrl(s3, new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: body.contentType, ContentLength: size }), {
+    expiresIn: 300,
+    signableHeaders: new Set(['content-type', 'content-length'])
+  });
   return { uploadUrl, url: `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}` };
 };

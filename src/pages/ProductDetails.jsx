@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Star, 
-  Store, 
-  Truck, 
-  ShieldCheck, 
-  RefreshCw, 
-  Minus, 
-  Plus, 
-  ShoppingCart, 
-  Zap, 
-  Check, 
-  Share2, 
-  ArrowLeft 
+import {
+  Star,
+  Store,
+  Truck,
+  ShieldCheck,
+  RefreshCw,
+  Minus,
+  Plus,
+  ShoppingCart,
+  Zap,
+  Check,
+  ArrowLeft
 } from 'lucide-react';
 import { productService } from '../services/productService';
 import { storeService } from '../services/storeService';
@@ -109,7 +108,7 @@ export const ProductDetails = ({ productId, navigate }) => {
           marginBottom: 24,
           fontWeight: 600
         }}
-        onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
+        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-main)'}
         onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
       >
         <ArrowLeft size={16} />
@@ -124,8 +123,8 @@ export const ProductDetails = ({ productId, navigate }) => {
             position: 'relative',
             borderRadius: 18,
             overflow: 'hidden',
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e5e7eb',
+            backgroundColor: 'var(--bg-muted)',
+            border: '1px solid var(--border-subtle)',
             boxShadow: 'var(--shadow-sm)'
           }}>
             {product.discount && (
@@ -134,7 +133,7 @@ export const ProductDetails = ({ productId, navigate }) => {
                 top: 16,
                 left: 16,
                 zIndex: 2,
-                background: '#09090b',
+                background: 'var(--sale)',
                 color: '#ffffff',
                 fontSize: '0.8rem',
                 fontWeight: 700,
@@ -169,18 +168,18 @@ export const ProductDetails = ({ productId, navigate }) => {
               cursor: 'pointer',
               padding: '6px 14px',
               borderRadius: 8,
-              background: '#eff6ff',
-              border: '1px solid #bfdbfe',
+              background: 'var(--primary-tint)',
+              border: '1px solid var(--primary-border)',
               alignSelf: 'flex-start'
             }}
           >
-            <Store size={14} color="#2563eb" />
-            <span style={{ fontSize: '0.84rem', fontWeight: 600, color: '#2563eb' }}>
+            <Store size={14} color="var(--primary)" />
+            <span style={{ fontSize: '0.84rem', fontWeight: 600, color: 'var(--primary)' }}>
               Sold by {product.storeName}
             </span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.3rem)', fontWeight: 800, lineHeight: 1.2, color: '#09090b' }}>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.3rem)', fontWeight: 800, lineHeight: 1.2, color: 'var(--text-main)' }}>
             {product.name}
           </h1>
 
@@ -199,7 +198,7 @@ export const ProductDetails = ({ productId, navigate }) => {
               <Star size={13} fill="currentColor" strokeWidth={0} />
               <span>{product.rating}</span>
             </div>
-            <span style={{ fontSize: '0.85rem', color: '#71717a' }}>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
               ({product.reviewsCount} reviews)
             </span>
             <span>•</span>
@@ -210,15 +209,15 @@ export const ProductDetails = ({ productId, navigate }) => {
 
           {/* Pricing */}
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 4 }}>
-            <span style={{ fontSize: '2.2rem', fontWeight: 800, color: '#09090b' }}>
+            <span style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-main)' }}>
               {formattedPrice}
             </span>
             {formattedOriginal && (
-              <span style={{ fontSize: '1.1rem', color: '#a1a1aa', textDecoration: 'line-through' }}>
+              <span style={{ fontSize: '1.1rem', color: 'var(--text-subtle)', textDecoration: 'line-through' }}>
                 {formattedOriginal}
               </span>
             )}
-            <span style={{ fontSize: '0.84rem', color: '#059669', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.84rem', color: 'var(--success)', fontWeight: 600 }}>
               Inclusive of all taxes
             </span>
           </div>
@@ -233,16 +232,16 @@ export const ProductDetails = ({ productId, navigate }) => {
             <div style={{
               padding: '16px 20px',
               borderRadius: 12,
-              background: '#f8fafc',
-              border: '1px solid #e5e7eb'
+              background: 'var(--bg-muted)',
+              border: '1px solid var(--border-subtle)'
             }}>
-              <div style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', color: '#9ca3af', marginBottom: 8, letterSpacing: '0.04em' }}>
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-subtle)', marginBottom: 8, letterSpacing: '0.04em' }}>
                 Product Highlights
               </div>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.88rem', color: '#09090b' }}>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.88rem', color: 'var(--text-main)' }}>
                 {product.features.map((feat, i) => (
                   <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Check size={14} color="#059669" />
+                    <Check size={14} color="var(--success)" />
                     <span>{feat}</span>
                   </li>
                 ))}
@@ -255,23 +254,23 @@ export const ProductDetails = ({ productId, navigate }) => {
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              border: '1px solid #d1d5db',
+              border: '1px solid var(--border-strong)',
               borderRadius: 10,
               background: '#ffffff',
               overflow: 'hidden'
             }}>
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090b' }}
+                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-main)' }}
               >
                 <Minus size={15} />
               </button>
-              <span style={{ width: 44, textAlign: 'center', fontWeight: 700, fontSize: '0.95rem', color: '#09090b' }}>
+              <span style={{ width: 44, textAlign: 'center', fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)' }}>
                 {quantity}
               </span>
               <button
                 onClick={() => setQuantity(Math.max(1, Math.min(product.stock, quantity + 1)))}
-                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090b' }}
+                style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-main)' }}
               >
                 <Plus size={15} />
               </button>
@@ -296,7 +295,7 @@ export const ProductDetails = ({ productId, navigate }) => {
             <button
               onClick={handleBuyNow}
               disabled={isOutOfStock}
-              className="btn-primary"
+              className="btn-cta"
               style={{
                 flex: '1 1 170px',
                 height: 46,
@@ -318,22 +317,22 @@ export const ProductDetails = ({ productId, navigate }) => {
             gap: 12,
             marginTop: 12,
             paddingTop: 18,
-            borderTop: '1px solid #f4f4f6',
+            borderTop: '1px solid var(--bg-muted)',
             textAlign: 'center'
           }}>
             <div>
-              <Truck size={18} color="#2563eb" style={{ margin: '0 auto 4px' }} />
-              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#09090b' }}>Fast Dispatch</div>
+              <Truck size={18} color="var(--primary)" style={{ margin: '0 auto 4px' }} />
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-main)' }}>Fast Dispatch</div>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Within 24h</div>
             </div>
             <div>
-              <ShieldCheck size={18} color="#059669" style={{ margin: '0 auto 4px' }} />
-              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#09090b' }}>Verified Maker</div>
+              <ShieldCheck size={18} color="var(--success)" style={{ margin: '0 auto 4px' }} />
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-main)' }}>Verified Maker</div>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Direct provenance</div>
             </div>
             <div>
               <RefreshCw size={18} color="#7c3aed" style={{ margin: '0 auto 4px' }} />
-              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: '#09090b' }}>7-Day Returns</div>
+              <div style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-main)' }}>7-Day Returns</div>
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Doorstep pickup</div>
             </div>
           </div>
@@ -345,7 +344,7 @@ export const ProductDetails = ({ productId, navigate }) => {
         <div style={{ marginTop: 60 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
             <div>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
                 More from {product.storeName}
               </h2>
               <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
@@ -354,13 +353,13 @@ export const ProductDetails = ({ productId, navigate }) => {
             </div>
             <button
               onClick={() => navigate(`/store/${product.storeId}`)}
-              style={{ fontSize: '0.88rem', fontWeight: 700, color: '#09090b' }}
+              style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}
             >
               View Storefront →
             </button>
           </div>
 
-          <div style={{
+          <div className="stagger" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
             gap: 20

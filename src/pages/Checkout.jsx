@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  CreditCard, 
-  Smartphone, 
-  Banknote, 
-  ShieldCheck, 
-  ArrowLeft, 
-  Check, 
-  Sparkles,
-  Lock,
-  Store
+import {
+  CreditCard,
+  Smartphone,
+  Banknote,
+  ArrowLeft,
+  Lock
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { orderService } from '../services/orderService';
@@ -69,7 +65,7 @@ export const Checkout = ({ navigate }) => {
   };
 
   const fieldError = (key) => errors[key] && (
-    <div style={{ color: '#dc2626', fontSize: '0.75rem', fontWeight: 600, marginTop: 4 }}>Required</div>
+    <div style={{ color: 'var(--error)', fontSize: '0.75rem', fontWeight: 600, marginTop: 4 }}>Required</div>
   );
 
   const formatINR = (val) => new Intl.NumberFormat('en-IN', {
@@ -158,7 +154,7 @@ export const Checkout = ({ navigate }) => {
           marginBottom: 24,
           fontWeight: 600
         }}
-        onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
+        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-main)'}
         onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
       >
         <ArrowLeft size={16} />
@@ -166,7 +162,7 @@ export const Checkout = ({ navigate }) => {
       </button>
 
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: '2.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
+        <h1 style={{ fontSize: '2.1rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
           Simulated Checkout
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginTop: 4 }}>
@@ -179,7 +175,7 @@ export const Checkout = ({ navigate }) => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* 1. Customer Information */}
           <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: 'var(--text-main)' }}>
               1. Customer Information
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14 }}>
@@ -193,7 +189,7 @@ export const Checkout = ({ navigate }) => {
                   value={formData.name}
                   aria-invalid={!!errors.name}
                   onChange={(e) => updateField('name', e.target.value)}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.name ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.name ? 'var(--error)' : 'var(--border-strong)'}`, color: 'var(--text-main)' }}
                 />
                 {fieldError('name')}
               </div>
@@ -208,7 +204,7 @@ export const Checkout = ({ navigate }) => {
                   value={formData.email}
                   aria-invalid={!!errors.email}
                   onChange={(e) => updateField('email', e.target.value)}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.email ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.email ? 'var(--error)' : 'var(--border-strong)'}`, color: 'var(--text-main)' }}
                 />
                 {fieldError('email')}
               </div>
@@ -223,7 +219,7 @@ export const Checkout = ({ navigate }) => {
                   value={formData.phone}
                   aria-invalid={!!errors.phone}
                   onChange={(e) => updateField('phone', e.target.value)}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.phone ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.phone ? 'var(--error)' : 'var(--border-strong)'}`, color: 'var(--text-main)' }}
                 />
                 {fieldError('phone')}
               </div>
@@ -232,7 +228,7 @@ export const Checkout = ({ navigate }) => {
 
           {/* 2. Shipping Address */}
           <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: 'var(--text-main)' }}>
               2. Shipping Address
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -246,7 +242,7 @@ export const Checkout = ({ navigate }) => {
                   value={formData.address}
                   aria-invalid={!!errors.address}
                   onChange={(e) => updateField('address', e.target.value)}
-                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.address ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
+                  style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.address ? 'var(--error)' : 'var(--border-strong)'}`, color: 'var(--text-main)' }}
                 />
                 {fieldError('address')}
               </div>
@@ -262,7 +258,7 @@ export const Checkout = ({ navigate }) => {
                     value={formData.city}
                     aria-invalid={!!errors.city}
                     onChange={(e) => updateField('city', e.target.value)}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.city ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.city ? 'var(--error)' : 'var(--border-strong)'}`, color: 'var(--text-main)' }}
                   />
                   {fieldError('city')}
                 </div>
@@ -277,7 +273,7 @@ export const Checkout = ({ navigate }) => {
                     value={formData.state}
                     aria-invalid={!!errors.state}
                     onChange={(e) => updateField('state', e.target.value)}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.state ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.state ? 'var(--error)' : 'var(--border-strong)'}`, color: 'var(--text-main)' }}
                   />
                   {fieldError('state')}
                 </div>
@@ -292,7 +288,7 @@ export const Checkout = ({ navigate }) => {
                     value={formData.pincode}
                     aria-invalid={!!errors.pincode}
                     onChange={(e) => updateField('pincode', e.target.value)}
-                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.pincode ? '#ef4444' : '#d1d5db'}`, color: '#09090b' }}
+                    style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: `1px solid ${errors.pincode ? 'var(--error)' : 'var(--border-strong)'}`, color: 'var(--text-main)' }}
                   />
                   {fieldError('pincode')}
                 </div>
@@ -302,7 +298,7 @@ export const Checkout = ({ navigate }) => {
 
           {/* 3. Payment Method */}
           <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, marginBottom: 16, color: 'var(--text-main)' }}>
               3. Payment Method
             </h2>
 
@@ -315,8 +311,8 @@ export const Checkout = ({ navigate }) => {
                 padding: '14px 16px',
                 borderRadius: 10,
                 border: '1px solid',
-                borderColor: paymentMethod === 'UPI' ? '#09090b' : '#e5e7eb',
-                background: paymentMethod === 'UPI' ? '#f4f4f6' : '#ffffff',
+                borderColor: paymentMethod === 'UPI' ? 'var(--primary)' : 'var(--border-subtle)',
+                background: paymentMethod === 'UPI' ? 'var(--bg-muted)' : '#ffffff',
                 cursor: 'pointer'
               }}>
                 <input
@@ -324,11 +320,11 @@ export const Checkout = ({ navigate }) => {
                   name="payment"
                   checked={paymentMethod === 'UPI'}
                   onChange={() => setPaymentMethod('UPI')}
-                  style={{ accentColor: '#09090b' }}
+                  style={{ accentColor: 'var(--primary)' }}
                 />
-                <Smartphone size={20} color="#2563eb" />
+                <Smartphone size={20} color="var(--primary)" />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>UPI / Instant QR</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-main)' }}>UPI / Instant QR</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Google Pay, PhonePe, Paytm, BHIM</div>
                 </div>
               </label>
@@ -347,9 +343,9 @@ export const Checkout = ({ navigate }) => {
                       height: 38,
                       padding: '0 12px',
                       background: '#ffffff',
-                      border: `1px solid ${errors.upiId ? '#ef4444' : '#d1d5db'}`,
+                      border: `1px solid ${errors.upiId ? 'var(--error)' : 'var(--border-strong)'}`,
                       borderRadius: 8,
-                      color: '#09090b',
+                      color: 'var(--text-main)',
                       fontSize: '0.85rem'
                     }}
                   />
@@ -365,8 +361,8 @@ export const Checkout = ({ navigate }) => {
                 padding: '14px 16px',
                 borderRadius: 10,
                 border: '1px solid',
-                borderColor: paymentMethod === 'Card' ? '#09090b' : '#e5e7eb',
-                background: paymentMethod === 'Card' ? '#f4f4f6' : '#ffffff',
+                borderColor: paymentMethod === 'Card' ? 'var(--primary)' : 'var(--border-subtle)',
+                background: paymentMethod === 'Card' ? 'var(--bg-muted)' : '#ffffff',
                 cursor: 'pointer'
               }}>
                 <input
@@ -374,11 +370,11 @@ export const Checkout = ({ navigate }) => {
                   name="payment"
                   checked={paymentMethod === 'Card'}
                   onChange={() => setPaymentMethod('Card')}
-                  style={{ accentColor: '#09090b' }}
+                  style={{ accentColor: 'var(--primary)' }}
                 />
                 <CreditCard size={20} color="#7c3aed" />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Credit / Debit Card</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-main)' }}>Credit / Debit Card</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Visa, Mastercard, RuPay</div>
                 </div>
               </label>
@@ -397,9 +393,9 @@ export const Checkout = ({ navigate }) => {
                       height: 38,
                       padding: '0 12px',
                       background: '#ffffff',
-                      border: `1px solid ${errors.cardNumber ? '#ef4444' : '#d1d5db'}`,
+                      border: `1px solid ${errors.cardNumber ? 'var(--error)' : 'var(--border-strong)'}`,
                       borderRadius: 8,
-                      color: '#09090b',
+                      color: 'var(--text-main)',
                       fontSize: '0.85rem'
                     }}
                   />
@@ -415,8 +411,8 @@ export const Checkout = ({ navigate }) => {
                 padding: '14px 16px',
                 borderRadius: 10,
                 border: '1px solid',
-                borderColor: paymentMethod === 'COD' ? '#09090b' : '#e5e7eb',
-                background: paymentMethod === 'COD' ? '#f4f4f6' : '#ffffff',
+                borderColor: paymentMethod === 'COD' ? 'var(--primary)' : 'var(--border-subtle)',
+                background: paymentMethod === 'COD' ? 'var(--bg-muted)' : '#ffffff',
                 cursor: 'pointer'
               }}>
                 <input
@@ -424,11 +420,11 @@ export const Checkout = ({ navigate }) => {
                   name="payment"
                   checked={paymentMethod === 'COD'}
                   onChange={() => setPaymentMethod('COD')}
-                  style={{ accentColor: '#09090b' }}
+                  style={{ accentColor: 'var(--primary)' }}
                 />
-                <Banknote size={20} color="#059669" />
+                <Banknote size={20} color="var(--success)" />
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Cash on Delivery</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-main)' }}>Cash on Delivery</div>
                   <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Pay upon doorstep arrival</div>
                 </div>
               </label>
@@ -439,7 +435,7 @@ export const Checkout = ({ navigate }) => {
         {/* Right Column: Order Review */}
         <div>
           <div className="clean-card" style={{ padding: '26px', position: 'sticky', top: 96, borderRadius: 16 }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: 18, color: '#09090b' }}>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: 18, color: 'var(--text-main)' }}>
               Items in Order ({cartItems.length})
             </h2>
 
@@ -448,49 +444,49 @@ export const Checkout = ({ navigate }) => {
                 <div key={item.id} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                   <img src={item.image} alt={item.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover' }} />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#09090b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {item.name}
                     </div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                       Qty: {item.quantity} • {formatINR(item.price)}
                     </div>
                   </div>
-                  <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#09090b' }}>
+                  <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--text-main)' }}>
                     {formatINR(item.price * item.quantity)}
                   </div>
                 </div>
               ))}
             </div>
 
-            <div style={{ borderTop: '1px solid #f4f4f6', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
+            <div style={{ borderTop: '1px solid var(--bg-muted)', paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Subtotal</span>
-                <span style={{ color: '#09090b', fontWeight: 700 }}>{formatINR(subtotal)}</span>
+                <span style={{ color: 'var(--text-main)', fontWeight: 700 }}>{formatINR(subtotal)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Delivery</span>
-                <span style={{ color: '#059669', fontWeight: 700 }}>{shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}</span>
+                <span style={{ color: 'var(--success)', fontWeight: 700 }}>{shippingFee === 0 ? 'FREE' : formatINR(shippingFee)}</span>
               </div>
               {discount > 0 && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#059669' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--success)' }}>
                   <span>Discount</span>
                   <span>- {formatINR(discount)}</span>
                 </div>
               )}
-              <div style={{ borderTop: '1px solid #f4f4f6', paddingTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontWeight: 800, fontSize: '1rem', color: '#09090b' }}>Total to Pay</span>
-                <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#09090b' }}>{formatINR(total)}</span>
+              <div style={{ borderTop: '1px solid var(--bg-muted)', paddingTop: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <span style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-main)' }}>Total to Pay</span>
+                <span style={{ fontWeight: 800, fontSize: '1.4rem', color: 'var(--text-main)' }}>{formatINR(total)}</span>
               </div>
             </div>
 
             {orderError && (
-              <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
+              <div role="alert" style={{ color: 'var(--error)', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
                 {orderError}
               </div>
             )}
 
             {Object.keys(errors).length > 0 && (
-              <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
+              <div role="alert" style={{ color: 'var(--error)', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
                 Please fill in: {Object.values(errors).join(', ')}
               </div>
             )}
@@ -498,7 +494,7 @@ export const Checkout = ({ navigate }) => {
             <button
               type="submit"
               disabled={isPlacing}
-              className="btn-primary"
+              className="btn-cta"
               style={{
                 width: '100%',
                 height: 48,

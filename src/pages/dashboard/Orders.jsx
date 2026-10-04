@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  ShoppingCart, 
-  Search, 
-  ChevronDown, 
-  Check, 
-  Eye, 
-  Truck, 
+import {
+  ShoppingCart,
+  Search,
   X,
-  ExternalLink 
+  ExternalLink
 } from 'lucide-react';
 import { storeService } from '../../services/storeService';
 import { orderService } from '../../services/orderService';
@@ -71,11 +67,11 @@ export const Orders = ({ navigate }) => {
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {/* Header */}
       <div>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
           Store Orders
         </h1>
-        <p style={{ color: '#64748b', fontSize: '0.88rem', marginTop: 2 }}>
-          Manage fulfillment stages for customers purchasing from <strong style={{ color: '#09090b' }}>{store?.name}</strong>. Status changes update customer order tracking in real-time.
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginTop: 2 }}>
+          Manage fulfillment stages for customers purchasing from <strong style={{ color: 'var(--text-main)' }}>{store?.name}</strong>. Status changes update customer order tracking in real-time.
         </p>
       </div>
 
@@ -83,7 +79,7 @@ export const Orders = ({ navigate }) => {
       <div className="clean-card" style={{ padding: '20px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <div style={{ position: 'relative', width: 280 }}>
-            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-subtle)' }} />
             <input
               type="text"
               placeholder="Search by ID, customer, item..."
@@ -95,8 +91,8 @@ export const Orders = ({ navigate }) => {
                 paddingLeft: 34,
                 borderRadius: 8,
                 backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                color: '#09090b',
+                border: '1px solid var(--border-subtle)',
+                color: 'var(--text-main)',
                 fontSize: '0.85rem'
               }}
             />
@@ -112,10 +108,10 @@ export const Orders = ({ navigate }) => {
                   borderRadius: 8,
                   fontSize: '0.8rem',
                   fontWeight: 600,
-                  backgroundColor: filterStatus === st ? '#18181b' : '#ffffff',
-                  color: filterStatus === st ? '#ffffff' : '#64748b',
+                  backgroundColor: filterStatus === st ? 'var(--primary-dark)' : '#ffffff',
+                  color: filterStatus === st ? '#ffffff' : 'var(--text-muted)',
                   border: '1px solid',
-                  borderColor: filterStatus === st ? '#18181b' : '#e2e8f0',
+                  borderColor: filterStatus === st ? 'var(--primary-dark)' : 'var(--border-subtle)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
@@ -127,15 +123,15 @@ export const Orders = ({ navigate }) => {
         </div>
 
         {filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b' }}>
+          <div style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-muted)' }}>
             <ShoppingCart size={38} style={{ opacity: 0.35, marginBottom: 12 }} />
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>No orders match your filter</h3>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>No orders match your filter</h3>
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
+                <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)', textAlign: 'left' }}>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Order ID</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Customer</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Items</th>
@@ -147,26 +143,26 @@ export const Orders = ({ navigate }) => {
               </thead>
               <tbody>
                 {filtered.map(o => (
-                  <tr key={o.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '12px 14px', fontWeight: 700, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
+                  <tr key={o.id} style={{ borderBottom: '1px solid var(--bg-muted)' }}>
+                    <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>
                       <button
                         onClick={() => setSelectedOrder(o)}
-                        style={{ color: '#09090b', background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: 700, textDecoration: 'underline' }}
+                        style={{ color: 'var(--text-main)', background: 'transparent', border: 'none', cursor: 'pointer', fontWeight: 700, textDecoration: 'underline' }}
                       >
                         {o.id}
                       </button>
                     </td>
                     <td style={{ padding: '12px 14px' }}>
-                      <div style={{ fontWeight: 600, color: '#09090b' }}>{o.customerName}</div>
-                      <div style={{ fontSize: '0.74rem', color: '#64748b' }}>{o.customerEmail}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{o.customerName}</div>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>{o.customerEmail}</div>
                     </td>
-                    <td style={{ padding: '12px 14px', color: '#475569' }}>
+                    <td style={{ padding: '12px 14px', color: 'var(--text-muted)' }}>
                       {o.items.map(it => `${it.name} (x${it.quantity})`).join(', ')}
                     </td>
-                    <td style={{ padding: '12px 14px', fontWeight: 700, color: '#09090b' }}>
+                    <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-main)' }}>
                       {formatINR(o.totalAmount)}
                     </td>
-                    <td style={{ padding: '12px 14px', color: '#64748b' }}>
+                    <td style={{ padding: '12px 14px', color: 'var(--text-muted)' }}>
                       {o.date}
                     </td>
                     <td style={{ padding: '12px 14px' }}>
@@ -180,10 +176,10 @@ export const Orders = ({ navigate }) => {
                         onChange={(e) => handleStatusChange(o.id, e.target.value)}
                         style={{
                           backgroundColor: '#ffffff',
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid var(--border-subtle)',
                           borderRadius: 8,
                           padding: '6px 10px',
-                          color: '#09090b',
+                          color: 'var(--text-main)',
                           fontSize: '0.8rem',
                           fontWeight: 600,
                           outline: 'none',
@@ -205,7 +201,7 @@ export const Orders = ({ navigate }) => {
 
       {/* Order Detail Slide-over Modal */}
       {selectedOrder && (
-        <div style={{
+        <div className="overlay-in" style={{
           position: 'fixed',
           inset: 0,
           backgroundColor: 'rgba(15, 23, 42, 0.5)',
@@ -216,7 +212,7 @@ export const Orders = ({ navigate }) => {
           zIndex: 100,
           padding: '20px'
         }}>
-          <div className="clean-card animate-fade-in" style={{
+          <div className="clean-card scale-in" style={{
             maxWidth: 580,
             width: '100%',
             backgroundColor: '#ffffff',
@@ -228,46 +224,46 @@ export const Orders = ({ navigate }) => {
           }}>
             <button
               onClick={() => setSelectedOrder(null)}
-              style={{ position: 'absolute', top: 20, right: 20, color: '#94a3b8', background: 'transparent', border: 'none', cursor: 'pointer' }}
+              style={{ position: 'absolute', top: 20, right: 20, color: 'var(--text-subtle)', background: 'transparent', border: 'none', cursor: 'pointer' }}
             >
               <X size={20} />
             </button>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#09090b' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
                 Order #{selectedOrder.id}
               </h2>
               <StatusBadge status={selectedOrder.status} />
             </div>
 
-            <p style={{ fontSize: '0.84rem', color: '#64748b', marginBottom: 20 }}>
+            <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', marginBottom: 20 }}>
               Placed on {selectedOrder.date} by {selectedOrder.customerName}
             </p>
 
-            <div style={{ padding: '14px', borderRadius: 10, backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', marginBottom: 20 }}>
-              <div style={{ fontSize: '0.74rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, marginBottom: 4 }}>
+            <div style={{ padding: '14px', borderRadius: 10, backgroundColor: 'var(--bg-muted)', border: '1px solid var(--border-subtle)', marginBottom: 20 }}>
+              <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: 4 }}>
                 Delivery Address
               </div>
-              <div style={{ fontSize: '0.88rem', color: '#09090b', fontWeight: 500 }}>
+              <div style={{ fontSize: '0.88rem', color: 'var(--text-main)', fontWeight: 500 }}>
                 {selectedOrder.shippingAddress?.address || '124 Indiranagar, 100ft Road'}, {selectedOrder.shippingAddress?.city || 'Bangalore'}, {selectedOrder.shippingAddress?.pincode || '560038'}
               </div>
             </div>
 
             <div style={{ marginBottom: 20 }}>
-              <div style={{ fontSize: '0.78rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: 10 }}>
                 Purchased Items
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {selectedOrder.items.map((it, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 8, border: '1px solid #f1f5f9' }}>
+                  <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--bg-muted)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <img src={it.image} alt={it.name} style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover' }} />
                       <div>
-                        <div style={{ fontWeight: 600, color: '#09090b', fontSize: '0.88rem' }}>{it.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: '#64748b' }}>Qty: {it.quantity}</div>
+                        <div style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '0.88rem' }}>{it.name}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Qty: {it.quantity}</div>
                       </div>
                     </div>
-                    <div style={{ fontWeight: 700, color: '#09090b' }}>
+                    <div style={{ fontWeight: 700, color: 'var(--text-main)' }}>
                       {formatINR(it.price * it.quantity)}
                     </div>
                   </div>
@@ -275,9 +271,9 @@ export const Orders = ({ navigate }) => {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f1f5f9', paddingTop: 16, marginBottom: 20 }}>
-              <span style={{ fontWeight: 700, color: '#09090b' }}>Total Paid</span>
-              <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#09090b' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--bg-muted)', paddingTop: 16, marginBottom: 20 }}>
+              <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>Total Paid</span>
+              <span style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
                 {formatINR(selectedOrder.totalAmount)}
               </span>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, RotateCcw, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, RotateCcw, CheckCircle2 } from 'lucide-react';
 import { returnService } from '../services/returnService';
 
 // Hooks live in ReturnModalContent so the early return never changes the hook order,
@@ -51,7 +51,7 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
   };
 
   return (
-    <div style={{
+    <div className="overlay-in" style={{
       position: 'fixed',
       top: 0,
       left: 0,
@@ -65,11 +65,11 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
       zIndex: 100,
       padding: '20px'
     }}>
-      <div className="animate-fade-in" style={{
+      <div className="scale-in" style={{
         maxWidth: 520,
         width: '100%',
         backgroundColor: '#ffffff',
-        border: '1px solid #e5e7eb',
+        border: '1px solid var(--border-subtle)',
         borderRadius: 18,
         padding: '28px',
         position: 'relative',
@@ -81,12 +81,12 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
             position: 'absolute',
             top: 20,
             right: 20,
-            color: '#71717a',
+            color: 'var(--text-muted)',
             padding: 4,
             borderRadius: 6
           }}
-          onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
-          onMouseLeave={(e) => e.currentTarget.style.color = '#71717a'}
+          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-main)'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
         >
           <X size={18} />
         </button>
@@ -97,17 +97,17 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
               width: 58,
               height: 58,
               borderRadius: '50%',
-              background: '#ecfdf5',
-              color: '#059669',
+              background: 'var(--success-tint)',
+              color: 'var(--success)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 16px',
-              border: '1px solid #a7f3d0'
+              border: '1px solid var(--success-border)'
             }}>
               <CheckCircle2 size={32} />
             </div>
-            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#09090b', marginBottom: 8 }}>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: 8 }}>
               Return Request Submitted
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.5, marginBottom: 24 }}>
@@ -128,17 +128,17 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
                 width: 36,
                 height: 36,
                 borderRadius: 10,
-                background: '#fff1f2',
-                color: '#e11d48',
+                background: 'var(--sale-tint)',
+                color: 'var(--sale)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: '1px solid #fecdd3'
+                border: '1px solid var(--sale-border)'
               }}>
                 <RotateCcw size={18} />
               </div>
               <div>
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#09090b' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)' }}>
                   Request Return / Refund
                 </h2>
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
@@ -162,8 +162,8 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
                       padding: '10px 12px',
                       borderRadius: 10,
                       border: '1px solid',
-                      borderColor: selectedProduct.productId === item.productId ? '#09090b' : '#e5e7eb',
-                      background: selectedProduct.productId === item.productId ? '#f4f4f6' : '#ffffff',
+                      borderColor: selectedProduct.productId === item.productId ? 'var(--primary)' : 'var(--border-subtle)',
+                      background: selectedProduct.productId === item.productId ? 'var(--bg-muted)' : '#ffffff',
                       cursor: 'pointer'
                     }}>
                       <input
@@ -171,10 +171,10 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
                         name="returnItem"
                         checked={selectedProduct.productId === item.productId}
                         onChange={() => setSelectedProduct(item)}
-                        style={{ accentColor: '#09090b' }}
+                        style={{ accentColor: 'var(--primary)' }}
                       />
                       <img src={item.image} alt={item.name} style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover' }} />
-                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#09090b', flex: 1 }}>{item.name}</div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', flex: 1 }}>{item.name}</div>
                     </label>
                   ))}
                 </div>
@@ -195,8 +195,8 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
                   padding: '0 12px',
                   borderRadius: 8,
                   background: '#ffffff',
-                  border: '1px solid #d1d5db',
-                  color: '#09090b',
+                  border: '1px solid var(--border-strong)',
+                  color: 'var(--text-main)',
                   fontSize: '0.88rem',
                   outline: 'none'
                 }}
@@ -222,8 +222,8 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
                   padding: '10px 12px',
                   borderRadius: 8,
                   background: '#ffffff',
-                  border: '1px solid #d1d5db',
-                  color: '#09090b',
+                  border: '1px solid var(--border-strong)',
+                  color: 'var(--text-main)',
                   fontSize: '0.88rem',
                   outline: 'none',
                   resize: 'none'
@@ -232,7 +232,7 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
             </div>
 
             {submitError && (
-              <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 12 }}>{submitError}</div>
+              <div role="alert" style={{ color: 'var(--error)', fontSize: '0.82rem', fontWeight: 600, marginBottom: 12 }}>{submitError}</div>
             )}
 
             <div style={{ display: 'flex', gap: 12 }}>
@@ -248,7 +248,7 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
                 type="submit"
                 disabled={isSubmitting}
                 className="btn-primary"
-                style={{ flex: 1, justifyContent: 'center', background: '#e11d48' }}
+                style={{ flex: 1, justifyContent: 'center', background: 'var(--sale)' }}
               >
                 {isSubmitting ? 'Submitting...' : 'Submit Request'}
               </button>

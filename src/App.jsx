@@ -178,7 +178,9 @@ export default function App() {
       <div className="app-container">
         <Navbar currentPath={currentPath} navigate={navigate} onLogout={handleLogout} />
         <div className="main-content">
-          {pageContent}
+          <div key={currentPath} className="page-enter">
+            {pageContent}
+          </div>
         </div>
         <Footer navigate={navigate} />
 

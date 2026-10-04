@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  CheckCircle2, 
-  Package, 
-  ArrowRight, 
-  Calendar, 
-  MapPin, 
-  ShoppingBag,
-  Store
+import {
+  CheckCircle2,
+  Package,
+  ShoppingBag
 } from 'lucide-react';
 import { orderService } from '../services/orderService';
 
@@ -39,13 +35,13 @@ export const OrderSuccess = ({ orderId, navigate }) => {
           width: 72,
           height: 72,
           borderRadius: '50%',
-          background: '#ecfdf5',
-          color: '#059669',
+          background: 'var(--success-tint)',
+          color: 'var(--success)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           margin: '0 auto 20px',
-          border: '1px solid #a7f3d0'
+          border: '1px solid var(--success-border)'
         }}>
           <CheckCircle2 size={42} />
         </div>
@@ -54,7 +50,7 @@ export const OrderSuccess = ({ orderId, navigate }) => {
           Order Confirmed
         </span>
 
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em', marginBottom: 8 }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em', marginBottom: 8 }}>
           Order placed successfully!
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', maxWidth: 480, margin: '0 auto 24px' }}>
@@ -68,34 +64,34 @@ export const OrderSuccess = ({ orderId, navigate }) => {
         ) : (
           <>
             {orders.length > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14, fontSize: '0.92rem', color: '#09090b' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14, fontSize: '0.92rem', color: 'var(--text-main)' }}>
                 <span style={{ fontWeight: 600 }}>{orders.length} orders, one per store</span>
                 <span style={{ fontWeight: 800 }}>Total paid: {formatINR(grandTotal)}</span>
               </div>
             )}
             {orders.map(order => (
               <div key={order.id} style={{
-                background: '#f8fafc',
-                border: '1px solid #e5e7eb',
+                background: 'var(--bg-muted)',
+                border: '1px solid var(--border-subtle)',
                 borderRadius: 14,
                 padding: '24px',
                 textAlign: 'left',
                 marginBottom: 28
               }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: 14, marginBottom: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', paddingBottom: 14, marginBottom: 16 }}>
                   <div>
-                    <div style={{ fontSize: '0.74rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
                       Order ID
                     </div>
-                    <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
+                    <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>
                       {order.id}
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.74rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+                    <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
                       Total Amount
                     </div>
-                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#09090b' }}>
+                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-main)' }}>
                       {formatINR(order.totalAmount)}
                     </div>
                   </div>
@@ -103,26 +99,26 @@ export const OrderSuccess = ({ orderId, navigate }) => {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, fontSize: '0.85rem' }}>
                   <div>
-                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Store</span>
-                    <span style={{ fontWeight: 700, color: '#09090b' }}>{order.storeName}</span>
+                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>Store</span>
+                    <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{order.storeName}</span>
                   </div>
                   <div>
-                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Estimated Delivery</span>
-                    <span style={{ fontWeight: 700, color: '#059669' }}>{order.expectedDelivery}</span>
+                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>Estimated Delivery</span>
+                    <span style={{ fontWeight: 700, color: 'var(--success)' }}>{order.expectedDelivery}</span>
                   </div>
                   <div>
-                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Delivery Destination</span>
-                    <span style={{ fontWeight: 700, color: '#09090b' }}>{order.shippingAddress?.city}, {order.shippingAddress?.state}</span>
+                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>Delivery Destination</span>
+                    <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{order.shippingAddress?.city}, {order.shippingAddress?.state}</span>
                   </div>
                   <div>
-                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Payment Method</span>
-                    <span style={{ fontWeight: 700, color: '#09090b' }}>{order.paymentMethod}</span>
+                    <span style={{ color: 'var(--text-muted)', display: 'block', fontSize: '0.75rem' }}>Payment Method</span>
+                    <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{order.paymentMethod}</span>
                   </div>
                 </div>
 
                 {/* Items list */}
-                <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 14, marginTop: 14 }}>
-                  <div style={{ fontSize: '0.78rem', color: '#71717a', marginBottom: 8, fontWeight: 700 }}>
+                <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 14, marginTop: 14 }}>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: 8, fontWeight: 700 }}>
                     Ordered Items ({order.items.length})
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -130,9 +126,9 @@ export const OrderSuccess = ({ orderId, navigate }) => {
                       <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.85rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <img src={it.image} alt={it.name} style={{ width: 34, height: 34, borderRadius: 6, objectFit: 'cover' }} />
-                          <span style={{ color: '#09090b', fontWeight: 600 }}>{it.name} × {it.quantity}</span>
+                          <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{it.name} × {it.quantity}</span>
                         </div>
-                        <span style={{ fontWeight: 700, color: '#09090b' }}>{formatINR(it.price * it.quantity)}</span>
+                        <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{formatINR(it.price * it.quantity)}</span>
                       </div>
                     ))}
                   </div>

@@ -1,15 +1,13 @@
 import React from 'react';
-import { 
-  Store, 
-  Sparkles, 
-  ArrowRight, 
-  CheckCircle2, 
-  TrendingUp, 
-  ShieldCheck, 
-  Globe, 
-  BarChart3, 
-  Layers, 
-  Users 
+import {
+  Sparkles,
+  ArrowRight,
+  TrendingUp,
+  ShieldCheck,
+  Globe,
+  BarChart3,
+  Layers,
+  Users
 } from 'lucide-react';
 import { authService } from '../services/authService';
 
@@ -22,25 +20,25 @@ export const SellLanding = ({ navigate }) => {
       icon: Globe,
       title: "Reach More Customers",
       desc: "Instant exposure to shoppers looking for verified independent labels and artisanal creators.",
-      color: "#09090b"
+      color: "var(--text-main)"
     },
     {
       icon: Layers,
       title: "Manage Your Products",
       desc: "Easily publish items, set discounted INR pricing, upload high-res imagery and manage catalogs.",
-      color: "#2563eb"
+      color: "var(--primary)"
     },
     {
       icon: BarChart3,
       title: "Track Orders & Velocity",
       desc: "Real-time updates across fulfillment stages: Confirmed, Packed, Shipped, to Delivery.",
-      color: "#059669"
+      color: "var(--success)"
     },
     {
       icon: Users,
       title: "Manage Inventory & Stock",
       desc: "Never oversell. Automated low-stock thresholds and one-click restock controls.",
-      color: "#d97706"
+      color: "var(--warning)"
     },
     {
       icon: TrendingUp,
@@ -52,7 +50,7 @@ export const SellLanding = ({ navigate }) => {
       icon: ShieldCheck,
       title: "Automated Return Handling",
       desc: "Streamlined inspection workflow to approve, reject, or schedule pickups for customer returns.",
-      color: "#e11d48"
+      color: "var(--sale)"
     }
   ];
 
@@ -71,13 +69,13 @@ export const SellLanding = ({ navigate }) => {
             alignItems: 'center',
             gap: 8,
             padding: '5px 15px',
-            background: '#f4f4f5',
-            border: '1px solid #e4e4e7',
+            background: 'var(--bg-muted)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 'var(--radius-full)',
             marginBottom: 24
           }}>
-            <Sparkles size={14} color="#2563eb" />
-            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#09090b' }}>
+            <Sparkles size={14} color="var(--primary)" />
+            <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
               ShopAI Merchant Platform
             </span>
           </div>
@@ -88,7 +86,7 @@ export const SellLanding = ({ navigate }) => {
             lineHeight: 1.12,
             letterSpacing: '-0.03em',
             marginBottom: 20,
-            color: '#09090b',
+            color: 'var(--text-main)',
             fontFamily: 'var(--font-display)'
           }}>
             Start selling on ShopAI.
@@ -135,7 +133,7 @@ export const SellLanding = ({ navigate }) => {
       {/* Value Pillars */}
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px 70px' }}>
         <div style={{ textAlign: 'center', marginBottom: 48 }}>
-          <h2 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#09090b' }}>
+          <h2 style={{ fontSize: '1.85rem', fontWeight: 800, color: 'var(--text-main)' }}>
             Everything You Need to Power Your Online Business
           </h2>
           <p style={{ fontSize: '0.92rem', color: 'var(--text-muted)', marginTop: 6 }}>
@@ -160,7 +158,7 @@ export const SellLanding = ({ navigate }) => {
                   width: 46,
                   height: 46,
                   borderRadius: 12,
-                  backgroundColor: '#f4f4f6',
+                  backgroundColor: 'var(--bg-muted)',
                   color: b.color,
                   display: 'flex',
                   alignItems: 'center',
@@ -170,7 +168,7 @@ export const SellLanding = ({ navigate }) => {
                   <Icon size={22} />
                 </div>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b', marginBottom: 6 }}>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: 6 }}>
                     {b.title}
                   </h3>
                   <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.55 }}>
@@ -186,7 +184,7 @@ export const SellLanding = ({ navigate }) => {
       {/* Onboarding Flow Preview */}
       <section style={{ maxWidth: 900, margin: '0 auto', padding: '0 24px' }}>
         <div className="clean-card" style={{ padding: '36px', textAlign: 'center', borderRadius: 16 }}>
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#09090b', marginBottom: 10 }}>
+          <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: 10 }}>
             How It Works in 5 Easy Steps
           </h3>
           <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: 28 }}>
@@ -201,11 +199,11 @@ export const SellLanding = ({ navigate }) => {
               { num: "04", label: "Handle & URL" },
               { num: "05", label: "Instant Launch" }
             ].map(step => (
-              <div key={step.num} style={{ background: '#f8fafc', padding: '16px 12px', borderRadius: 12, border: '1px solid #e5e7eb' }}>
-                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
+              <div key={step.num} style={{ background: 'var(--bg-muted)', padding: '16px 12px', borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
+                <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>
                   {step.num}
                 </div>
-                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#52525b', marginTop: 4 }}>
+                <div style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-muted)', marginTop: 4 }}>
                   {step.label}
                 </div>
               </div>

@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Star, 
-  MapPin, 
-  Mail, 
-  Phone, 
-  ShieldCheck, 
-  Package, 
-  Calendar, 
-  Share2, 
-  Heart,
-  Store as StoreIcon,
-  MessageSquare,
-  Sparkles,
-  CheckCircle2
+import {
+  Star,
+  MapPin,
+  Package,
+  Share2
 } from 'lucide-react';
 import { storeService } from '../services/storeService';
 import { productService } from '../services/productService';
@@ -67,7 +58,7 @@ export const Storefront = ({ storeId, navigate }) => {
       <div style={{
         height: 240,
         position: 'relative',
-        backgroundColor: '#f1f5f9',
+        backgroundColor: 'var(--bg-muted)',
         overflow: 'hidden'
       }}>
         <img
@@ -102,7 +93,7 @@ export const Storefront = ({ storeId, navigate }) => {
 
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+                  <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
                     {store.name}
                   </h1>
                   <span className="badge badge-neutral">{store.category}</span>
@@ -111,17 +102,17 @@ export const Storefront = ({ storeId, navigate }) => {
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginTop: 4 }}>
                   {store.tagline || store.description}
                 </p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 8, fontSize: '0.82rem', color: '#71717a' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 8, fontSize: '0.82rem', color: 'var(--text-muted)' }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <MapPin size={13} color="#9ca3af" /> {store.location.city}, {store.location.state}
+                    <MapPin size={13} color="var(--text-subtle)" /> {store.location.city}, {store.location.state}
                   </span>
                   <span>•</span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Star size={13} fill="#b45309" color="#b45309" strokeWidth={0} /> {store.rating} ({store.reviewsCount} reviews)
+                    <Star size={13} fill="var(--star)" color="var(--star)" strokeWidth={0} /> {store.rating} ({store.reviewsCount} reviews)
                   </span>
                   <span>•</span>
                   <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <Package size={13} color="#9ca3af" /> {products.length} Products
+                    <Package size={13} color="var(--text-subtle)" /> {products.length} Products
                   </span>
                 </div>
               </div>
@@ -148,7 +139,7 @@ export const Storefront = ({ storeId, navigate }) => {
             display: 'flex',
             gap: 28,
             marginTop: 24,
-            borderTop: '1px solid #f4f4f6',
+            borderTop: '1px solid var(--bg-muted)',
             paddingTop: 16
           }}>
             {[
@@ -162,7 +153,7 @@ export const Storefront = ({ storeId, navigate }) => {
                 style={{
                   fontSize: '0.92rem',
                   fontWeight: activeTab === tab.id ? 700 : 500,
-                  color: activeTab === tab.id ? '#09090b' : '#52525b',
+                  color: activeTab === tab.id ? 'var(--text-main)' : 'var(--text-muted)',
                   paddingBottom: 6,
                   position: 'relative',
                   transition: 'color 0.15s ease'
@@ -176,7 +167,7 @@ export const Storefront = ({ storeId, navigate }) => {
                     left: 0,
                     right: 0,
                     height: 2,
-                    background: '#09090b',
+                    background: 'var(--primary)',
                     borderRadius: 2
                   }} />
                 )}
@@ -191,7 +182,7 @@ export const Storefront = ({ storeId, navigate }) => {
         {activeTab === 'products' && (
           <div>
             <div style={{ marginBottom: 20 }}>
-              <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: '#09090b' }}>
+              <h2 style={{ fontSize: '1.35rem', fontWeight: 800, color: 'var(--text-main)' }}>
                 Catalog from {store.name}
               </h2>
               <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
@@ -202,10 +193,10 @@ export const Storefront = ({ storeId, navigate }) => {
             {products.length === 0 ? (
               <div className="clean-card" style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--text-muted)' }}>
                 <Package size={40} style={{ opacity: 0.3, marginBottom: 12, margin: '0 auto' }} />
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: '#09090b' }}>No products listed yet</h3>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)' }}>No products listed yet</h3>
               </div>
             ) : (
-              <div style={{
+              <div className="stagger" style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
                 gap: 22
@@ -220,19 +211,19 @@ export const Storefront = ({ storeId, navigate }) => {
 
         {activeTab === 'about' && (
           <div className="clean-card" style={{ padding: '32px', maxWidth: 860, borderRadius: 16 }}>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#09090b', marginBottom: 14 }}>
+            <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: 14 }}>
               About {store.name}
             </h2>
             <p style={{ color: 'var(--text-muted)', lineHeight: 1.7, fontSize: '0.96rem', marginBottom: 24 }}>
               {store.description}
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, borderTop: '1px solid #f4f4f6', paddingTop: 24 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, borderTop: '1px solid var(--bg-muted)', paddingTop: 24 }}>
               <div>
-                <div style={{ fontSize: '0.76rem', color: '#9ca3af', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-subtle)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
                   Merchant Representative
                 </div>
-                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: '#09090b', marginTop: 4 }}>
+                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: 'var(--text-main)', marginTop: 4 }}>
                   {store.owner.name}
                 </div>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: 2 }}>
@@ -241,10 +232,10 @@ export const Storefront = ({ storeId, navigate }) => {
               </div>
 
               <div>
-                <div style={{ fontSize: '0.76rem', color: '#9ca3af', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-subtle)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
                   Registered Studio / Workshop
                 </div>
-                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: '#09090b', marginTop: 4 }}>
+                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: 'var(--text-main)', marginTop: 4 }}>
                   {store.location.address}
                 </div>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: 2 }}>
@@ -253,10 +244,10 @@ export const Storefront = ({ storeId, navigate }) => {
               </div>
 
               <div>
-                <div style={{ fontSize: '0.76rem', color: '#9ca3af', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
+                <div style={{ fontSize: '0.76rem', color: 'var(--text-subtle)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
                   ShopAI Onboarding Date
                 </div>
-                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: '#09090b', marginTop: 4 }}>
+                <div style={{ fontWeight: 700, fontSize: '0.96rem', color: 'var(--text-main)', marginTop: 4 }}>
                   {store.createdAt}
                 </div>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: 2 }}>
@@ -271,9 +262,9 @@ export const Storefront = ({ storeId, navigate }) => {
           <div style={{ maxWidth: 860 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
               <div style={{
-                background: '#fffbeb',
-                color: '#b45309',
-                border: '1px solid #fef3c7',
+                background: 'var(--warning-tint)',
+                color: 'var(--warning-text)',
+                border: '1px solid var(--warning-tint)',
                 padding: '12px 20px',
                 borderRadius: 12,
                 display: 'flex',
@@ -282,11 +273,11 @@ export const Storefront = ({ storeId, navigate }) => {
                 fontSize: '1.4rem',
                 fontWeight: 800
               }}>
-                <Star size={24} fill="#b45309" strokeWidth={0} />
+                <Star size={24} fill="var(--star)" strokeWidth={0} />
                 <span>{store.rating} / 5.0</span>
               </div>
               <div>
-                <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#09090b' }}>Verified Customer Reviews</div>
+                <div style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--text-main)' }}>Verified Customer Reviews</div>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Feedback from verified orders fulfilled on ShopAI</div>
               </div>
             </div>
@@ -296,17 +287,17 @@ export const Storefront = ({ storeId, navigate }) => {
                 reviews.map((rev) => (
                   <div key={rev.id} className="clean-card" style={{ padding: '18px 20px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                      <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#09090b' }}>{rev.author}</div>
+                      <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)' }}>{rev.author}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                         {[...Array(rev.rating)].map((_, i) => (
-                          <Star key={i} size={13} fill="#b45309" color="#b45309" />
+                          <Star key={i} size={13} fill="var(--star)" color="var(--star)" />
                         ))}
                       </div>
                     </div>
-                    <p style={{ fontSize: '0.9rem', color: '#52525b', lineHeight: 1.5 }}>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
                       "{rev.comment}"
                     </p>
-                    <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: 8 }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', marginTop: 8 }}>
                       Verified Purchase • {rev.date}
                     </div>
                   </div>
@@ -315,13 +306,13 @@ export const Storefront = ({ storeId, navigate }) => {
                 <div className="clean-card" style={{ padding: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 3, marginBottom: 8 }}>
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={14} fill="#b45309" color="#b45309" />
+                      <Star key={i} size={14} fill="var(--star)" color="var(--star)" />
                     ))}
                   </div>
-                  <p style={{ fontSize: '0.9rem', color: '#52525b' }}>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                     "Outstanding customer service and fast shipping. The build quality exceeds expectations!"
                   </p>
-                  <div style={{ fontSize: '0.75rem', color: '#9ca3af', marginTop: 6 }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', marginTop: 6 }}>
                     Verified ShopAI Customer • 2 days ago
                   </div>
                 </div>

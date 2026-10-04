@@ -7,7 +7,8 @@ ShopAI's data and business logic run on AWS. The browser keeps only the cart, th
 | **Amazon DynamoDB** | All persistent data: users, stores (with their reviews), products, orders, returns |
 | **AWS Lambda** | One function (`backend/src/index.mjs`) with a small router for every route |
 | **Amazon API Gateway** | HTTP API, a single `ANY /{proxy+}` route to the Lambda; CORS and throttling (10 req/s, burst 20) |
-| **Amazon S3** | Product images, uploaded straight from the browser with presigned URLs |
+| **Amazon S3** | Product images, uploaded straight from the browser with presigned URLs; the built website |
+| **Amazon CloudFront** | Serves the website over HTTPS from the private site bucket, once enabled (`CloudFrontEnabled=true`) |
 | **Azure OpenAI** | The shopping assistant (`POST /assistant`), called from the same Lambda |
 
 Everything is defined in `backend/template.yaml` (AWS SAM), region `ap-south-1`.
@@ -32,10 +33,15 @@ Then put the `ApiUrl` stack output in the frontend's `.env.local` as `VITE_API_B
 
 Later deploys need only `sam build && sam deploy`. `samconfig.toml` and `.aws-sam/` are git-ignored.
 
+**Website.** After `sam deploy`, publish the frontend from the repo root with `npm run deploy:web` (same `AWS_PROFILE`). The script reads the stack outputs, builds with that stack's `ApiUrl`, syncs `dist/` to the site bucket (hashed assets cached for a year, `index.html` re-checked on every visit) and invalidates CloudFront. It prints the `SiteUrl`. Unknown paths return `index.html`, so routes like `/orders/ORD-10452` work on reload.
+
+New AWS accounts can't create CloudFront until AWS Support verifies them (`Your account must be verified before you can add new CloudFront resources`). So `CloudFrontEnabled` defaults to `false`, and the site is served by S3 website hosting over plain HTTP (`http://<bucket>.s3-website.ap-south-1.amazonaws.com`). After verification, run `sam deploy --parameter-overrides CloudFrontEnabled=true` and then `npm run deploy:web` again. The bucket becomes private and the site moves to an HTTPS `*.cloudfront.net` URL.
+
 | Parameter | Value |
 |---|---|
 | `JwtSecret` | Any random string of 32+ characters. Changing it signs everyone out. |
-| `AllowedOrigin` | `http://localhost:5173`, later the real site URL (used for API and S3 CORS) |
+| `AllowedOrigin` | `http://localhost:5173`: an extra origin for local development. The site URL (S3 website or CloudFront) is always allowed (API and S3 CORS). |
+| `CloudFrontEnabled` | `false` until AWS verifies the account for CloudFront, then `true` |
 | `AzureOpenAiEndpoint` / `AzureOpenAiKey` / `AzureOpenAiDeployment` | The Azure OpenAI resource (`shopai-openai-6962`, deployment `gpt-4.1-mini`). Leave empty to disable the assistant (it returns 503). |
 
 **Seeding** copies `src/services/initialData.js` into the tables. The admin is the Users item with key `admin`, so you sign in with username `admin` and `ADMIN_PASSWORD`. Each seeded customer (for example `rohan.kapoor@example.com`) signs in with `DEMO_PASSWORD`. Re-running the seed resets those seed items.
@@ -86,11 +92,12 @@ Errors come back as `{ "message": "..." }` with a matching status (400, 401, 403
 - **Checkout is atomic.** `POST /orders` reads the products, re-prices the cart from the database (client prices are ignored), applies shipping (₹99 at ₹1,500 or less) and the 10% discount (above ₹3,000), and splits both across the per-store orders. It then runs one `TransactWriteItems`: every order Put, every stock update (condition `stock = <value read>`), and every store's `metrics` `ADD`. If stock changed meanwhile, it retries up to 3 times. Real shortages return 409 with "X: only N left".
 - **Status changes.** Order and return updates are saved with a condition that the status is still the one that was read. Only then do they restock or adjust metrics, so a double click can't apply side effects twice.
 - **Returns.** These are allowed only on your own Delivered orders, one open return per item. The refund amount comes from the order.
-- **Images.** The presigned PUT expires after 5 minutes and accepts only JPEG, PNG, WebP or GIF. Objects under `products/` are publicly readable.
+- **Images.** The presigned PUT expires after 5 minutes and accepts only JPEG, PNG, WebP or GIF up to 5 MB. The type and exact size are part of the signature, so S3 rejects any other file. Objects under `products/` are publicly readable.
+- **Cancellations and returns** put the stock back and lower the product's `sales` count; store `metrics` are reversed once.
 
 ## Not done yet
 
-- Frontend hosting (S3 + CloudFront, or Amplify). After hosting, set `AllowedOrigin` to the site URL.
 - Secrets are plain Lambda environment variables. Move them to Secrets Manager or SSM for a real deployment.
-- Upload size isn't capped (a presigned POST with `content-length-range` would fix that). Store logo and banner still use URLs.
+- Store logo and banner still use URLs (only product images upload to S3).
+- No custom domain on CloudFront yet (it uses the `*.cloudfront.net` URL).
 - Payments are simulated.

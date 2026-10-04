@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  RotateCcw, 
-  Search, 
-  Check, 
-  X, 
-  Truck, 
-  DollarSign, 
-  AlertCircle 
+import {
+  RotateCcw,
+  Search
 } from 'lucide-react';
 import { storeService } from '../../services/storeService';
 import { returnService } from '../../services/returnService';
@@ -65,10 +60,10 @@ export const Returns = () => {
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
       {/* Header */}
       <div>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
           Customer Returns & Claims
         </h1>
-        <p style={{ color: '#64748b', fontSize: '0.88rem', marginTop: 2 }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginTop: 2 }}>
           Inspect return claims, approve doorstep pickups, and issue refunds for {store?.name}
         </p>
       </div>
@@ -76,7 +71,7 @@ export const Returns = () => {
       <div className="clean-card" style={{ padding: '20px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <div style={{ position: 'relative', width: 280 }}>
-            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-subtle)' }} />
             <input
               type="text"
               placeholder="Search return by ID, order, item..."
@@ -88,8 +83,8 @@ export const Returns = () => {
                 paddingLeft: 34,
                 borderRadius: 8,
                 backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                color: '#09090b',
+                border: '1px solid var(--border-subtle)',
+                color: 'var(--text-main)',
                 fontSize: '0.85rem'
               }}
             />
@@ -105,10 +100,10 @@ export const Returns = () => {
                   borderRadius: 8,
                   fontSize: '0.8rem',
                   fontWeight: 600,
-                  backgroundColor: filterStatus === st ? '#18181b' : '#ffffff',
-                  color: filterStatus === st ? '#ffffff' : '#64748b',
+                  backgroundColor: filterStatus === st ? 'var(--primary-dark)' : '#ffffff',
+                  color: filterStatus === st ? '#ffffff' : 'var(--text-muted)',
                   border: '1px solid',
-                  borderColor: filterStatus === st ? '#18181b' : '#e2e8f0',
+                  borderColor: filterStatus === st ? 'var(--primary-dark)' : 'var(--border-subtle)',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
@@ -120,16 +115,16 @@ export const Returns = () => {
         </div>
 
         {filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b' }}>
+          <div style={{ textAlign: 'center', padding: '50px 20px', color: 'var(--text-muted)' }}>
             <RotateCcw size={38} style={{ opacity: 0.35, marginBottom: 12 }} />
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>No return claims found</h3>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>No return claims found</h3>
             <p style={{ fontSize: '0.85rem', marginTop: 4 }}>Customers can request returns from their customer order tracking page.</p>
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
+                <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)', textAlign: 'left' }}>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Return ID</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Order</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Customer</th>
@@ -141,29 +136,29 @@ export const Returns = () => {
               </thead>
               <tbody>
                 {filtered.map(ret => (
-                  <tr key={ret.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '12px 14px', fontWeight: 700, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
+                  <tr key={ret.id} style={{ borderBottom: '1px solid var(--bg-muted)' }}>
+                    <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>
                       {ret.id}
                     </td>
-                    <td style={{ padding: '12px 14px', color: '#64748b', fontFamily: 'var(--font-mono)' }}>
+                    <td style={{ padding: '12px 14px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
                       {ret.orderId}
                     </td>
                     <td style={{ padding: '12px 14px' }}>
-                      <div style={{ fontWeight: 600, color: '#09090b' }}>{ret.customerName}</div>
-                      <div style={{ fontSize: '0.74rem', color: '#64748b' }}>{ret.customerEmail}</div>
+                      <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{ret.customerName}</div>
+                      <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>{ret.customerEmail}</div>
                     </td>
                     <td style={{ padding: '12px 14px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <img src={ret.productImage} alt={ret.productName} style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover', border: '1px solid #e2e8f0' }} />
+                        <img src={ret.productImage} alt={ret.productName} style={{ width: 36, height: 36, borderRadius: 6, objectFit: 'cover', border: '1px solid var(--border-subtle)' }} />
                         <div>
-                          <div style={{ fontWeight: 600, color: '#09090b' }}>{ret.productName}</div>
-                          <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{formatINR(ret.amount)}</div>
+                          <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{ret.productName}</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{formatINR(ret.amount)}</div>
                         </div>
                       </div>
                     </td>
                     <td style={{ padding: '12px 14px' }}>
-                      <div style={{ fontWeight: 600, color: '#09090b' }}>{ret.reason}</div>
-                      {ret.notes && <div style={{ fontSize: '0.75rem', color: '#64748b' }}>"{ret.notes}"</div>}
+                      <div style={{ fontWeight: 600, color: 'var(--text-main)' }}>{ret.reason}</div>
+                      {ret.notes && <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>"{ret.notes}"</div>}
                     </td>
                     <td style={{ padding: '12px 14px' }}>
                       <StatusBadge status={ret.status} />
@@ -174,10 +169,10 @@ export const Returns = () => {
                         onChange={(e) => handleUpdateStatus(ret.id, e.target.value)}
                         style={{
                           backgroundColor: '#ffffff',
-                          border: '1px solid #e2e8f0',
+                          border: '1px solid var(--border-subtle)',
                           borderRadius: 8,
                           padding: '6px 10px',
-                          color: '#09090b',
+                          color: 'var(--text-main)',
                           fontSize: '0.8rem',
                           fontWeight: 600,
                           outline: 'none',

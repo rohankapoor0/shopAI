@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  TrendingUp, 
-  ShoppingCart, 
-  Package, 
-  Users, 
-  ArrowUpRight, 
-  Sparkles, 
-  Clock,
-  CheckCircle2,
+import {
+  TrendingUp,
+  ShoppingCart,
+  Package,
+  Users,
+  ArrowUpRight,
   ChevronRight,
   Plus
 } from 'lucide-react';
@@ -48,8 +45,8 @@ export const Overview = ({ navigate }) => {
     maximumFractionDigits: 0
   }).format(val || 0);
 
-  if (loading) return <div style={{ padding: 40, color: '#64748b' }}>Loading dashboard...</div>;
-  if (!store) return <div style={{ padding: 40, color: '#64748b' }}>Store not found.</div>;
+  if (loading) return <div style={{ padding: 40, color: 'var(--text-muted)' }}>Loading dashboard...</div>;
+  if (!store) return <div style={{ padding: 40, color: 'var(--text-muted)' }}>Store not found.</div>;
 
   // store.metrics is the lifetime running total; orderService/returnService keep it in sync with each order
   const totalSales = store.metrics?.totalSales ?? orders.reduce((sum, o) => sum + o.totalAmount, 0);
@@ -71,11 +68,11 @@ export const Overview = ({ navigate }) => {
       {/* Top Welcome */}
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
         <div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             Store Overview
           </h1>
-          <p style={{ color: '#64748b', fontSize: '0.88rem', marginTop: 2 }}>
-            Here is what is happening with <strong style={{ color: '#09090b' }}>{store.name}</strong> today.
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginTop: 2 }}>
+            Here is what is happening with <strong style={{ color: 'var(--text-main)' }}>{store.name}</strong> today.
           </p>
         </div>
 
@@ -98,15 +95,15 @@ export const Overview = ({ navigate }) => {
         {/* Total Sales */}
         <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Total Revenue</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#eff6ff', color: '#2563eb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Total Revenue</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'var(--primary-tint)', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <TrendingUp size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             {formatINR(totalSales)}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: 'var(--success)', fontWeight: 600 }}>
             <ArrowUpRight size={14} />
             <span>+14.8% from last week</span>
           </div>
@@ -115,15 +112,15 @@ export const Overview = ({ navigate }) => {
         {/* Orders */}
         <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Total Orders</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Total Orders</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'var(--success-tint)', color: 'var(--success)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <ShoppingCart size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             {totalOrdersCount}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: 'var(--success)', fontWeight: 600 }}>
             <ArrowUpRight size={14} />
             <span>+8 new this week</span>
           </div>
@@ -132,15 +129,15 @@ export const Overview = ({ navigate }) => {
         {/* Active Products */}
         <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Active Products</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#f5f3ff', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Active Products</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'var(--primary-tint)', color: '#7c3aed', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Package size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             {products.length}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#64748b' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
             <span>Across {store.category} catalog</span>
           </div>
         </div>
@@ -148,15 +145,15 @@ export const Overview = ({ navigate }) => {
         {/* Customers */}
         <div className="clean-card" style={{ padding: '20px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-            <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 600 }}>Total Customers</span>
-            <div style={{ width: 34, height: 34, borderRadius: 8, background: '#fffbeb', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: 600 }}>Total Customers</span>
+            <div style={{ width: 34, height: 34, borderRadius: 8, background: 'var(--warning-tint)', color: 'var(--warning)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Users size={18} />
             </div>
           </div>
-          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
+          <div style={{ fontSize: '1.65rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em' }}>
             {customers.length}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: 'var(--success)', fontWeight: 600 }}>
             <ArrowUpRight size={14} />
             <span>92% positive reviews</span>
           </div>
@@ -169,8 +166,8 @@ export const Overview = ({ navigate }) => {
         <div className="clean-card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>Sales Over Time</h3>
-              <div style={{ fontSize: '0.78rem', color: '#64748b' }}>Daily revenue volume this week</div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>Sales Over Time</h3>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Daily revenue volume this week</div>
             </div>
             <span className="badge badge-blue">7 Days</span>
           </div>
@@ -180,18 +177,18 @@ export const Overview = ({ navigate }) => {
             {chartData.map((d, idx) => (
               <div key={idx} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%', justifyContent: 'flex-end' }}>
                 <div
+                  className="chart-bar"
                   style={{
                     width: '100%',
                     maxWidth: 36,
                     height: `${d.height}%`,
-                    background: '#18181b',
-                    borderRadius: '4px 4px 0 0',
-                    transition: 'all 0.3s ease',
-                    position: 'relative'
+                    borderRadius: '6px 6px 0 0',
+                    position: 'relative',
+                    animationDelay: `${idx * 60}ms`
                   }}
                   title={`₹${d.sales.toLocaleString('en-IN')}`}
                 />
-                <span style={{ fontSize: '0.72rem', color: '#64748b', marginTop: 8, fontWeight: 500 }}>{d.day}</span>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 8, fontWeight: 500 }}>{d.day}</span>
               </div>
             ))}
           </div>
@@ -201,8 +198,8 @@ export const Overview = ({ navigate }) => {
         <div className="clean-card" style={{ padding: '24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
             <div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>Fulfillment Efficiency</h3>
-              <div style={{ fontSize: '0.78rem', color: '#64748b' }}>Order lifecycle completion rate</div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>Fulfillment Efficiency</h3>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Order lifecycle completion rate</div>
             </div>
             <span className="badge badge-emerald">98.4% On-time</span>
           </div>
@@ -210,31 +207,31 @@ export const Overview = ({ navigate }) => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 6 }}>
-                <span style={{ color: '#475569', fontWeight: 500 }}>Orders Delivered</span>
-                <span style={{ fontWeight: 700, color: '#09090b' }}>78%</span>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Orders Delivered</span>
+                <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>78%</span>
               </div>
-              <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{ width: '78%', height: '100%', background: '#10b981' }} />
-              </div>
-            </div>
-
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 6 }}>
-                <span style={{ color: '#475569', fontWeight: 500 }}>In-Transit / Out for Delivery</span>
-                <span style={{ fontWeight: 700, color: '#09090b' }}>18%</span>
-              </div>
-              <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{ width: '18%', height: '100%', background: '#2563eb' }} />
+              <div style={{ height: 8, background: 'var(--bg-muted)', borderRadius: 4, overflow: 'hidden' }}>
+                <div className="progress-fill" style={{ width: '78%', height: '100%', background: 'var(--success)' }} />
               </div>
             </div>
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 6 }}>
-                <span style={{ color: '#475569', fontWeight: 500 }}>Returns & Claims</span>
-                <span style={{ fontWeight: 700, color: '#09090b' }}>4%</span>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>In-Transit / Out for Delivery</span>
+                <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>18%</span>
               </div>
-              <div style={{ height: 8, background: '#f1f5f9', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{ width: '4%', height: '100%', background: '#f43f5e' }} />
+              <div style={{ height: 8, background: 'var(--bg-muted)', borderRadius: 4, overflow: 'hidden' }}>
+                <div className="progress-fill" style={{ width: '18%', height: '100%', background: 'var(--primary)' }} />
+              </div>
+            </div>
+
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.82rem', marginBottom: 6 }}>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>Returns & Claims</span>
+                <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>4%</span>
+              </div>
+              <div style={{ height: 8, background: 'var(--bg-muted)', borderRadius: 4, overflow: 'hidden' }}>
+                <div className="progress-fill" style={{ width: '4%', height: '100%', background: 'var(--sale)' }} />
               </div>
             </div>
           </div>
@@ -244,12 +241,12 @@ export const Overview = ({ navigate }) => {
       {/* Recent Orders Table */}
       <div className="clean-card" style={{ padding: '24px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>
             Recent Store Orders
           </h3>
           <button
             onClick={() => navigate('/dashboard/orders')}
-            style={{ fontSize: '0.82rem', color: '#18181b', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4, background: 'transparent', border: 'none', cursor: 'pointer' }}
+            style={{ fontSize: '0.82rem', color: 'var(--text-main)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4, background: 'transparent', border: 'none', cursor: 'pointer' }}
           >
             <span>Manage all</span>
             <ChevronRight size={14} />
@@ -257,14 +254,14 @@ export const Overview = ({ navigate }) => {
         </div>
 
         {orders.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '36px', color: '#64748b', fontSize: '0.88rem' }}>
+          <div style={{ textAlign: 'center', padding: '36px', color: 'var(--text-muted)', fontSize: '0.88rem' }}>
             No customer orders placed for this store yet.
           </div>
         ) : (
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
               <thead>
-                <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', textAlign: 'left' }}>
+                <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)', textAlign: 'left' }}>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Order ID</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Customer</th>
                   <th style={{ padding: '10px 14px', fontWeight: 600 }}>Date</th>
@@ -274,10 +271,10 @@ export const Overview = ({ navigate }) => {
               </thead>
               <tbody>
                 {orders.slice(0, 5).map(o => (
-                  <tr key={o.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                    <td style={{ padding: '12px 14px', fontWeight: 700, color: '#09090b', fontFamily: 'var(--font-mono)' }}>{o.id}</td>
-                    <td style={{ padding: '12px 14px', color: '#09090b', fontWeight: 500 }}>{o.customerName}</td>
-                    <td style={{ padding: '12px 14px', color: '#64748b' }}>{o.date}</td>
+                  <tr key={o.id} style={{ borderBottom: '1px solid var(--bg-muted)' }}>
+                    <td style={{ padding: '12px 14px', fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>{o.id}</td>
+                    <td style={{ padding: '12px 14px', color: 'var(--text-main)', fontWeight: 500 }}>{o.customerName}</td>
+                    <td style={{ padding: '12px 14px', color: 'var(--text-muted)' }}>{o.date}</td>
                     <td style={{ padding: '12px 14px', fontWeight: 700 }}>{formatINR(o.totalAmount)}</td>
                     <td style={{ padding: '12px 14px' }}>
                       <StatusBadge status={o.status} />

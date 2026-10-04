@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Package, 
-  Store, 
-  Calendar, 
-  ArrowRight, 
-  RotateCcw, 
-  CheckCircle2, 
-  Clock,
-  ChevronRight,
-  Sparkles
+import {
+  Package,
+  Store,
+  RotateCcw,
+  ChevronRight
 } from 'lucide-react';
 import { orderService } from '../services/orderService';
 import { customerService } from '../services/customerService';
@@ -36,7 +31,7 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
   return (
     <div className="animate-fade-in" style={{ maxWidth: 1000, margin: '0 auto', padding: '40px 24px 80px' }}>
       <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
           My Orders
         </h1>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginTop: 4 }}>
@@ -51,7 +46,7 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
       ) : orders.length === 0 ? (
         <div className="clean-card" style={{ padding: '60px 30px', textAlign: 'center', borderRadius: 16 }}>
           <Package size={40} style={{ opacity: 0.3, marginBottom: 14, margin: '0 auto' }} />
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#09090b' }}>No orders placed yet</h3>
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>No orders placed yet</h3>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: 6, marginBottom: 20 }}>
             Start browsing the marketplace and support independent stores.
           </p>
@@ -71,14 +66,14 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
                 justifyContent: 'space-between',
                 gap: 12,
                 paddingBottom: 16,
-                borderBottom: '1px solid #f4f4f6',
+                borderBottom: '1px solid var(--bg-muted)',
                 marginBottom: 16
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>
                     {order.id}
                   </span>
-                  <span style={{ color: '#d1d5db' }}>•</span>
+                  <span style={{ color: 'var(--border-strong)' }}>•</span>
                   <div
                     onClick={() => navigate(`/store/${order.storeId}`)}
                     style={{
@@ -87,11 +82,11 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
                       gap: 4,
                       fontSize: '0.85rem',
                       fontWeight: 600,
-                      color: '#2563eb',
+                      color: 'var(--primary)',
                       cursor: 'pointer'
                     }}
                   >
-                    <Store size={13} color="#2563eb" />
+                    <Store size={13} color="var(--primary)" />
                     <span>{order.storeName}</span>
                   </div>
                 </div>
@@ -109,9 +104,9 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
                 {order.items.map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                      <img src={item.image} alt={item.name} style={{ width: 56, height: 56, borderRadius: 10, objectFit: 'cover', backgroundColor: '#f4f4f6' }} />
+                      <img src={item.image} alt={item.name} style={{ width: 56, height: 56, borderRadius: 10, objectFit: 'cover', backgroundColor: 'var(--bg-muted)' }} />
                       <div>
-                        <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#09090b' }}>
+                        <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)' }}>
                           {item.name}
                         </div>
                         <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
@@ -119,7 +114,7 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ fontWeight: 800, fontSize: '1.05rem', color: '#09090b' }}>
+                    <div style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--text-main)' }}>
                       {formatINR(item.price * item.quantity)}
                     </div>
                   </div>
@@ -133,12 +128,12 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 paddingTop: 16,
-                borderTop: '1px solid #f4f4f6',
+                borderTop: '1px solid var(--bg-muted)',
                 gap: 12
               }}>
                 <div style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
-                  Total: <strong style={{ color: '#09090b', fontSize: '1.05rem' }}>{formatINR(order.totalAmount)}</strong>
-                  <span style={{ marginLeft: 8, color: '#71717a' }}>({order.paymentMethod})</span>
+                  Total: <strong style={{ color: 'var(--text-main)', fontSize: '1.05rem' }}>{formatINR(order.totalAmount)}</strong>
+                  <span style={{ marginLeft: 8, color: 'var(--text-muted)' }}>({order.paymentMethod})</span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -151,9 +146,9 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
                         borderRadius: 8,
                         fontSize: '0.82rem',
                         fontWeight: 600,
-                        background: '#fff1f2',
-                        color: '#e11d48',
-                        border: '1px solid #fecdd3',
+                        background: 'var(--sale-tint)',
+                        color: 'var(--sale)',
+                        border: '1px solid var(--sale-border)',
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: 6

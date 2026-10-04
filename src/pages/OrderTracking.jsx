@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Check, 
-  Clock, 
-  Truck, 
-  MapPin, 
-  Store, 
-  RotateCcw, 
-  ArrowLeft, 
-  Package,
-  Calendar,
-  AlertCircle
+import {
+  Check,
+  MapPin,
+  Store,
+  RotateCcw,
+  ArrowLeft
 } from 'lucide-react';
 import { orderService } from '../services/orderService';
 import { StatusBadge } from '../components/StatusBadge';
@@ -82,7 +77,7 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
           marginBottom: 24,
           fontWeight: 600
         }}
-        onMouseEnter={(e) => e.currentTarget.style.color = '#09090b'}
+        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-main)'}
         onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
       >
         <ArrowLeft size={16} />
@@ -94,19 +89,19 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
+              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>
                 {order.id}
               </h1>
               <StatusBadge status={order.status} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 6, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              <span onClick={() => navigate(`/store/${order.storeId}`)} style={{ color: '#2563eb', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
+              <span onClick={() => navigate(`/store/${order.storeId}`)} style={{ color: 'var(--primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
                 <Store size={14} /> {order.storeName}
               </span>
               <span>•</span>
               <span>Placed: {order.date}</span>
               <span>•</span>
-              <span style={{ color: '#059669', fontWeight: 600 }}>Est: {order.expectedDelivery}</span>
+              <span style={{ color: 'var(--success)', fontWeight: 600 }}>Est: {order.expectedDelivery}</span>
             </div>
           </div>
 
@@ -118,9 +113,9 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
                 borderRadius: 8,
                 fontSize: '0.84rem',
                 fontWeight: 600,
-                background: '#fff1f2',
-                color: '#e11d48',
-                border: '1px solid #fecdd3',
+                background: 'var(--sale-tint)',
+                color: 'var(--sale)',
+                border: '1px solid var(--sale-border)',
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 6
@@ -135,11 +130,11 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
 
       {/* Visual Tracking Stepper */}
       <div className="clean-card" style={{ padding: '36px 28px', marginBottom: 28, borderRadius: 16 }}>
-        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: isCancelled ? 16 : 32, color: '#09090b' }}>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: isCancelled ? 16 : 32, color: 'var(--text-main)' }}>
           Fulfillment Timeline
         </h2>
         {isCancelled && (
-          <div role="status" style={{ marginBottom: 28, padding: '10px 14px', borderRadius: 10, background: '#fff1f2', border: '1px solid #fecdd3', color: '#be123c', fontSize: '0.88rem', fontWeight: 600 }}>
+          <div role="status" style={{ marginBottom: 28, padding: '10px 14px', borderRadius: 10, background: 'var(--sale-tint)', border: '1px solid var(--sale-border)', color: '#be123c', fontSize: '0.88rem', fontWeight: 600 }}>
             This order was cancelled. Any payment will be refunded to the original method.
           </div>
         )}
@@ -153,13 +148,13 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
             left: 24,
             right: 24,
             height: 3,
-            background: '#e5e7eb',
+            background: 'var(--border-subtle)',
             zIndex: 1
           }}>
             <div style={{
               height: '100%',
               width: `${(Math.max(0, effectiveIndex) / (stages.length - 1)) * 100}%`,
-              background: '#09090b',
+              background: 'var(--primary)',
               transition: 'width 0.4s ease'
             }} />
           </div>
@@ -189,20 +184,20 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  background: isCompleted ? (isCurrent ? '#09090b' : '#059669') : '#ffffff',
-                  border: isCompleted ? 'none' : '2px solid #d1d5db',
-                  color: isCompleted ? '#ffffff' : '#9ca3af',
+                  background: isCompleted ? (isCurrent ? 'var(--primary)' : 'var(--success)') : '#ffffff',
+                  border: isCompleted ? 'none' : '2px solid var(--border-strong)',
+                  color: isCompleted ? '#ffffff' : 'var(--text-subtle)',
                   boxShadow: isCurrent ? '0 0 12px rgba(0, 0, 0, 0.2)' : 'none',
                   transition: 'all 0.3s ease',
                   marginBottom: 10
                 }}>
-                  {isCompleted ? <Check size={17} strokeWidth={2.5} /> : <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#d1d5db' }} />}
+                  {isCompleted ? <Check size={17} strokeWidth={2.5} /> : <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--border-strong)' }} />}
                 </div>
 
                 <div style={{
                   fontSize: '0.78rem',
                   fontWeight: isCurrent ? 800 : (isCompleted ? 700 : 500),
-                  color: isCompleted ? '#09090b' : '#71717a',
+                  color: isCompleted ? 'var(--text-main)' : 'var(--text-muted)',
                   lineHeight: 1.3
                 }}>
                   {stage.title}
@@ -220,54 +215,54 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
         {/* Products in this shipment */}
         <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: 16, color: '#09090b' }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: 16, color: 'var(--text-main)' }}>
             Package Contents ({order.items.length})
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {order.items.map((it, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <img src={it.image} alt={it.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover', backgroundColor: '#f4f4f6' }} />
+                  <img src={it.image} alt={it.name} style={{ width: 44, height: 44, borderRadius: 8, objectFit: 'cover', backgroundColor: 'var(--bg-muted)' }} />
                   <div>
-                    <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#09090b' }}>{it.name}</div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>{it.name}</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Qty: {it.quantity}</div>
                   </div>
                 </div>
-                <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#09090b' }}>
+                <div style={{ fontWeight: 800, fontSize: '0.92rem', color: 'var(--text-main)' }}>
                   {formatINR(it.price * it.quantity)}
                 </div>
               </div>
             ))}
           </div>
 
-          <div style={{ borderTop: '1px solid #f4f4f6', paddingTop: 14, marginTop: 16, display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ borderTop: '1px solid var(--bg-muted)', paddingTop: 14, marginTop: 16, display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Order Total:</span>
-            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#09090b' }}>{formatINR(order.totalAmount)}</span>
+            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)' }}>{formatINR(order.totalAmount)}</span>
           </div>
         </div>
 
         {/* Shipping Address */}
         <div className="clean-card" style={{ padding: '24px', borderRadius: 14 }}>
-          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, color: '#09090b' }}>
-            <MapPin size={16} color="#2563eb" />
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, color: 'var(--text-main)' }}>
+            <MapPin size={16} color="var(--primary)" />
             <span>Delivery Destination</span>
           </h3>
           <div style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-            <div style={{ fontWeight: 700, color: '#09090b', marginBottom: 2 }}>
+            <div style={{ fontWeight: 700, color: 'var(--text-main)', marginBottom: 2 }}>
               {order.customerName}
             </div>
             <div>{order.shippingAddress?.address}</div>
             <div>{order.shippingAddress?.city}, {order.shippingAddress?.state} - {order.shippingAddress?.pincode}</div>
-            <div style={{ marginTop: 8, color: '#71717a', fontSize: '0.8rem' }}>
+            <div style={{ marginTop: 8, color: 'var(--text-muted)', fontSize: '0.8rem' }}>
               Contact: {order.customerPhone}
             </div>
           </div>
 
-          <div style={{ marginTop: 24, padding: '14px', borderRadius: 10, background: '#f8fafc', border: '1px solid #e5e7eb' }}>
-            <div style={{ fontSize: '0.76rem', color: '#9ca3af', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+          <div style={{ marginTop: 24, padding: '14px', borderRadius: 10, background: 'var(--bg-muted)', border: '1px solid var(--border-subtle)' }}>
+            <div style={{ fontSize: '0.76rem', color: 'var(--text-subtle)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
               Payment Method
             </div>
-            <div style={{ fontWeight: 700, fontSize: '0.9rem', marginTop: 2, color: '#09090b' }}>
+            <div style={{ fontWeight: 700, fontSize: '0.9rem', marginTop: 2, color: 'var(--text-main)' }}>
               {order.paymentMethod}
             </div>
           </div>

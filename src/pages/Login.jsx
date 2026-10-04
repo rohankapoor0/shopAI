@@ -46,16 +46,16 @@ export const Login = ({ navigate, onLogin }) => {
       />
 
       {error && (
-        <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600 }}>{error}</div>
+        <div role="alert" style={{ color: 'var(--error)', fontSize: '0.82rem', fontWeight: 600 }}>{error}</div>
       )}
 
       <button type="submit" disabled={submitting} className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 4 }}>
         {submitting ? 'Signing in...' : 'Sign in'}
       </button>
 
-      <div style={{ fontSize: '0.82rem', color: '#64748b', textAlign: 'center' }}>
+      <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', textAlign: 'center' }}>
         New to ShopAI?{' '}
-        <button type="button" onClick={() => navigate('/register')} style={{ color: '#09090b', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+        <button type="button" onClick={() => navigate('/register')} style={{ color: 'var(--text-main)', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
           Create an account
         </button>
       </div>

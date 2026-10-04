@@ -5,7 +5,8 @@ How the frontend is built today. For the AWS backend (deploy, tables, routes) se
 ## Stack
 
 - React 19, Vite 8, `lucide-react` icons, `canvas-confetti`
-- Plain CSS (`src/index.css`, `src/App.css`) plus inline styles; shared classes such as `clean-card`, `btn-primary` and `btn-secondary`
+- Plain CSS (`src/index.css`) plus inline styles. Colors are CSS variables on `:root` (brand blue `--primary`, orange `--accent` for purchase buttons only, status colors); inline styles use `var(--…)`, not hex values. Shared classes: `clean-card`, `lift` (hover lift, with `zoom-img`), `btn-primary`, `btn-cta` (orange: Add to cart, Buy now, Checkout, Place order), `btn-secondary`, `badge-*`.
+- Motion: `page-enter` (route change, keyed by path in `App.jsx`), `stagger` (grid children rise in), `reveal` (scroll-driven fade on Home), `scale-in` / `overlay-in` (modals), `pop` (cart badge), `skeleton` (loading). All of it is switched off under `prefers-reduced-motion`. Entrance animations use `backwards` fill so no transform stays on the element afterwards (a leftover transform would break `position: fixed` children).
 - No router library, no state library. Backend: AWS Lambda + API Gateway + DynamoDB + S3 (`backend/`)
 
 ## Layers

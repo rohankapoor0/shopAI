@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, ShieldCheck, Truck, RefreshCw, Sparkles, Heart } from 'lucide-react';
+import { ShoppingBag, ShieldCheck, Truck, RefreshCw, Sparkles } from 'lucide-react';
 
 export const Footer = ({ navigate }) => {
   return (
@@ -28,17 +28,17 @@ export const Footer = ({ navigate }) => {
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: '#f4f4f5',
-              color: '#09090b',
+              background: 'var(--bg-muted)',
+              color: 'var(--text-main)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid #e4e4e7'
+              border: '1px solid var(--border-subtle)'
             }}>
               <Truck size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Free Direct Dispatch</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-main)' }}>Free Direct Dispatch</div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>On all orders above ₹1,500</div>
             </div>
           </div>
@@ -48,17 +48,17 @@ export const Footer = ({ navigate }) => {
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: '#ecfdf5',
-              color: '#059669',
+              background: 'var(--success-tint)',
+              color: 'var(--success)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid #a7f3d0'
+              border: '1px solid var(--success-border)'
             }}>
               <ShieldCheck size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>100% Verified Stores</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-main)' }}>100% Verified Stores</div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Authentic independent labels</div>
             </div>
           </div>
@@ -68,17 +68,17 @@ export const Footer = ({ navigate }) => {
               width: 44,
               height: 44,
               borderRadius: 12,
-              background: '#eff6ff',
-              color: '#2563eb',
+              background: 'var(--primary-tint)',
+              color: 'var(--primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              border: '1px solid #bfdbfe'
+              border: '1px solid var(--primary-border)'
             }}>
               <RefreshCw size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Hassle-Free Returns</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-main)' }}>Hassle-Free Returns</div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>7-day doorstep pickup guarantee</div>
             </div>
           </div>
@@ -98,8 +98,8 @@ export const Footer = ({ navigate }) => {
               <Sparkles size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#09090b' }}>Shopify-Grade Architecture</div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Multi-vendor local performance</div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: 'var(--text-main)' }}>Secure Checkout</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Signed-in accounts, server-verified orders</div>
             </div>
           </div>
         </div>
@@ -118,14 +118,14 @@ export const Footer = ({ navigate }) => {
                 width: 28,
                 height: 28,
                 borderRadius: 8,
-                background: '#09090b',
+                background: 'var(--primary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
               }}>
                 <ShoppingBag size={15} color="#ffffff" />
               </div>
-              <span style={{ fontWeight: 800, fontSize: '1.15rem', color: '#09090b' }}>ShopAI</span>
+              <span style={{ fontWeight: 800, fontSize: '1.15rem', color: 'var(--text-main)' }}>ShopAI</span>
             </div>
             <p style={{ fontSize: '0.86rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
               The multi-vendor commerce marketplace connecting discerning shoppers with independent brands and studios across India.
@@ -150,7 +150,7 @@ export const Footer = ({ navigate }) => {
               For Merchants
             </h4>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-              <li><button onClick={() => navigate('/sell')} style={{ color: '#09090b', fontWeight: 700 }}>Sell on ShopAI</button></li>
+              <li><button onClick={() => navigate('/sell')} style={{ color: 'var(--text-main)', fontWeight: 700 }}>Sell on ShopAI</button></li>
               <li><button onClick={() => navigate('/sell/create')} style={{ transition: 'color 0.15s' }}>Store Registration</button></li>
               <li><button onClick={() => navigate('/dashboard')} style={{ transition: 'color 0.15s' }}>Store Dashboard</button></li>
               <li><button onClick={() => navigate('/dashboard/products')} style={{ transition: 'color 0.15s' }}>Catalog Management</button></li>
@@ -187,11 +187,11 @@ export const Footer = ({ navigate }) => {
             © {new Date().getFullYear()} ShopAI Marketplace Technologies Inc. All rights reserved.
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <span>Clean Architecture</span>
+            <span>Made in India</span>
             <span>•</span>
-            <span>Zero External Cloud Lock-in</span>
+            <span>Powered by AWS</span>
             <span>•</span>
-            <span>Local State Multi-Vendor</span>
+            <span>Prices in INR</span>
           </div>
         </div>
       </div>

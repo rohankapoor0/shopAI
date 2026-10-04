@@ -27,16 +27,16 @@ const buildTrackingUpdates = (currentStatus, cancelledAt) => {
   return isCancelled ? [...updates, { stage: 'Cancelled', date: now, completed: true, current: true }] : updates;
 };
 
-// Puts stock back (cancellations, returns). A product deleted meanwhile is skipped.
+// Puts stock back and un-counts the sale (cancellations, returns). A product deleted meanwhile is skipped.
 const restock = async (productId, quantity) => {
   try {
     const { Attributes } = await db.update({
       TableName: TABLES.products,
       Key: { id: productId },
-      UpdateExpression: 'ADD #stock :q',
+      UpdateExpression: 'ADD #stock :q, #sales :unsold',
       ConditionExpression: 'attribute_exists(#id)',
-      ExpressionAttributeNames: { '#stock': 'stock', '#id': 'id' },
-      ExpressionAttributeValues: { ':q': quantity },
+      ExpressionAttributeNames: { '#stock': 'stock', '#sales': 'sales', '#id': 'id' },
+      ExpressionAttributeValues: { ':q': quantity, ':unsold': -quantity },
       ReturnValues: 'ALL_NEW'
     });
     await db.update({

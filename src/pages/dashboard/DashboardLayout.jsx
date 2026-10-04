@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  LayoutDashboard, 
-  Package, 
-  ShoppingCart, 
-  Boxes, 
-  Users, 
-  RotateCcw, 
-  Settings, 
-  Store, 
-  ExternalLink, 
-  ChevronDown, 
-  Menu, 
+import {
+  LayoutDashboard,
+  Package,
+  ShoppingCart,
+  Boxes,
+  Users,
+  RotateCcw,
+  Settings,
+  Store,
+  ExternalLink,
+  ChevronDown,
+  Menu,
   X,
-  Sparkles,
   ArrowLeft,
   ShoppingBag,
   LogOut
@@ -82,7 +81,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
 
   if (status !== 'ready') {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, backgroundColor: '#f8fafc', color: '#64748b' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, backgroundColor: 'var(--bg-muted)', color: 'var(--text-muted)' }}>
         {status === 'loading' && <div>Loading stores...</div>}
         {status === 'error' && (
           <>
@@ -101,7 +100,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-muted)' }}>
       {/* Backdrop for mobile drawer */}
       {sidebarOpen && (
         <div
@@ -122,7 +121,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
         style={{
           width: 260,
           backgroundColor: '#ffffff',
-          borderRight: '1px solid #e2e8f0',
+          borderRight: '1px solid var(--border-subtle)',
           display: 'flex',
           flexDirection: 'column',
           flexShrink: 0,
@@ -136,7 +135,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
         {/* Logo / ShopAI Merchant Header */}
         <div style={{
           padding: '18px 20px',
-          borderBottom: '1px solid #f1f5f9',
+          borderBottom: '1px solid var(--bg-muted)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between'
@@ -157,7 +156,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               width: 32,
               height: 32,
               borderRadius: 9,
-              background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+              background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)',
               color: '#ffffff',
               display: 'flex',
               alignItems: 'center',
@@ -167,13 +166,13 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               <ShoppingBag size={16} />
             </div>
             <div>
-              <div style={{ fontSize: '0.96rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ fontSize: '0.96rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 4 }}>
                 ShopAI
-                <span style={{ fontSize: '0.62rem', background: '#e0e7ff', color: '#4338ca', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>
+                <span style={{ fontSize: '0.62rem', background: 'var(--primary-tint)', color: 'var(--primary-dark)', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>
                   MERCHANT
                 </span>
               </div>
-              <div style={{ fontSize: '0.7rem', color: '#64748b' }}>
+              <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
                 Multi-Vendor Portal
               </div>
             </div>
@@ -186,7 +185,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
             style={{
               display: 'none',
               padding: 6,
-              color: '#64748b',
+              color: 'var(--text-muted)',
               background: 'transparent',
               border: 'none',
               cursor: 'pointer',
@@ -200,7 +199,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
         {/* Store Switcher Card */}
         <div style={{
           padding: '14px 16px',
-          borderBottom: '1px solid #f1f5f9',
+          borderBottom: '1px solid var(--bg-muted)',
           position: 'relative'
         }}>
           <button
@@ -212,8 +211,8 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               justifyContent: 'space-between',
               padding: '8px 10px',
               borderRadius: 10,
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
+              backgroundColor: 'var(--bg-muted)',
+              border: '1px solid var(--border-subtle)',
               cursor: 'pointer',
               transition: 'all 0.15s ease'
             }}
@@ -222,19 +221,19 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               <img
                 src={currentStore.logo}
                 alt={currentStore.name}
-                style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                style={{ width: 32, height: 32, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border-subtle)' }}
               />
               <div style={{ textAlign: 'left', minWidth: 0 }}>
-                <div style={{ fontSize: '0.86rem', fontWeight: 700, color: '#09090b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <div style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-main)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {currentStore.name}
                 </div>
-                <div style={{ fontSize: '0.7rem', color: '#059669', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10b981', display: 'inline-block' }} />
+                <div style={{ fontSize: '0.7rem', color: 'var(--success)', display: 'flex', alignItems: 'center', gap: 4, fontWeight: 600 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: 'var(--success)', display: 'inline-block' }} />
                   Live Storefront
                 </div>
               </div>
             </div>
-            <ChevronDown size={15} color="#64748b" />
+            <ChevronDown size={15} color="var(--text-muted)" />
           </button>
 
           {/* Switcher Dropdown */}
@@ -245,7 +244,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               left: 16,
               right: 16,
               backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
+              border: '1px solid var(--border-subtle)',
               borderRadius: 12,
               boxShadow: '0 12px 30px rgba(15, 23, 42, 0.12)',
               zIndex: 60,
@@ -253,7 +252,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               maxHeight: 260,
               overflowY: 'auto'
             }}>
-              <div style={{ padding: '6px 14px', fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+              <div style={{ padding: '6px 14px', fontSize: '0.68rem', color: 'var(--text-subtle)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
                 Select Storefront
               </div>
               {stores.map(s => (
@@ -268,8 +267,8 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
                     gap: 10,
                     textAlign: 'left',
                     fontSize: '0.84rem',
-                    color: s.id === currentStore.id ? '#0f172a' : '#475569',
-                    backgroundColor: s.id === currentStore.id ? '#f1f5f9' : 'transparent',
+                    color: s.id === currentStore.id ? 'var(--text-main)' : 'var(--text-muted)',
+                    backgroundColor: s.id === currentStore.id ? 'var(--bg-muted)' : 'transparent',
                     border: 'none',
                     cursor: 'pointer',
                     transition: 'background 0.15s ease'
@@ -285,7 +284,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
 
         {/* Sidebar Navigation Items */}
         <div style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: 3, overflowY: 'auto' }}>
-          <div style={{ padding: '0 10px 8px', fontSize: '0.68rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <div style={{ padding: '0 10px 8px', fontSize: '0.68rem', fontWeight: 700, color: 'var(--text-subtle)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Store Management
           </div>
           {navItems.map(item => {
@@ -306,15 +305,15 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
                   borderRadius: 8,
                   fontSize: '0.88rem',
                   fontWeight: isActive ? 700 : 500,
-                  color: isActive ? '#09090b' : '#64748b',
-                  backgroundColor: isActive ? '#f1f5f9' : 'transparent',
+                  color: isActive ? 'var(--primary-dark)' : 'var(--text-muted)',
+                  backgroundColor: isActive ? 'var(--primary-tint)' : 'transparent',
                   border: 'none',
                   textAlign: 'left',
                   cursor: 'pointer',
                   transition: 'all 0.15s ease'
                 }}
               >
-                <Icon size={18} color={isActive ? '#0f172a' : '#94a3b8'} strokeWidth={isActive ? 2.3 : 1.8} />
+                <Icon size={18} color={isActive ? 'var(--primary)' : 'var(--text-subtle)'} strokeWidth={isActive ? 2.3 : 1.8} />
                 <span>{item.label}</span>
               </button>
             );
@@ -324,11 +323,11 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
         {/* Sidebar Footer Link */}
         <div style={{
           padding: '14px 16px',
-          borderTop: '1px solid #f1f5f9',
+          borderTop: '1px solid var(--bg-muted)',
           display: 'flex',
           flexDirection: 'column',
           gap: 8,
-          backgroundColor: '#fafaf9'
+          backgroundColor: 'var(--bg-muted)'
         }}>
           <button
             onClick={() => navigate(`/store/${currentStore.id}`)}
@@ -339,8 +338,8 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               padding: '9px 12px',
               borderRadius: 8,
               backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              color: '#09090b',
+              border: '1px solid var(--border-subtle)',
+              color: 'var(--text-main)',
               fontSize: '0.82rem',
               fontWeight: 600,
               cursor: 'pointer',
@@ -348,10 +347,10 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
             }}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <Store size={15} color="#475569" />
+              <Store size={15} color="var(--text-muted)" />
               <span>View Public Store</span>
             </span>
-            <ExternalLink size={13} color="#94a3b8" />
+            <ExternalLink size={13} color="var(--text-subtle)" />
           </button>
 
           <button
@@ -361,7 +360,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               alignItems: 'center',
               gap: 8,
               padding: '8px 12px',
-              color: '#64748b',
+              color: 'var(--text-muted)',
               fontSize: '0.82rem',
               textAlign: 'left',
               background: 'transparent',
@@ -381,7 +380,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               alignItems: 'center',
               gap: 8,
               padding: '8px 12px',
-              color: '#64748b',
+              color: 'var(--text-muted)',
               fontSize: '0.82rem',
               textAlign: 'left',
               background: 'transparent',
@@ -402,7 +401,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
         <header style={{
           height: 60,
           backgroundColor: '#ffffff',
-          borderBottom: '1px solid #e2e8f0',
+          borderBottom: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -418,7 +417,7 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
               className="dashboard-menu-btn"
               style={{
                 display: 'none',
-                color: '#09090b',
+                color: 'var(--text-main)',
                 padding: 6,
                 background: 'transparent',
                 border: 'none',
@@ -429,10 +428,10 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
             </button>
 
             <div>
-              <div style={{ fontSize: '0.98rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.01em' }}>
+              <div style={{ fontSize: '0.98rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
                 {currentStore.name}
               </div>
-              <div style={{ fontSize: '0.72rem', color: '#64748b' }}>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
                 {currentStore.category} • {currentStore.location?.city || 'India'}
               </div>
             </div>

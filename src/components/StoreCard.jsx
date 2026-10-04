@@ -15,26 +15,26 @@ export const StoreCard = ({ store, navigate }) => {
         position: 'relative',
         borderRadius: 14,
         background: '#ffffff',
-        border: '1px solid #e5e7eb',
+        border: '1px solid var(--border-subtle)',
         boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease'
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-3px)';
         e.currentTarget.style.boxShadow = '0 8px 20px -4px rgba(0,0,0,0.08)';
-        e.currentTarget.style.borderColor = '#cbd5e1';
+        e.currentTarget.style.borderColor = 'var(--border-strong)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
         e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)';
-        e.currentTarget.style.borderColor = '#e5e7eb';
+        e.currentTarget.style.borderColor = 'var(--border-subtle)';
       }}
     >
       {/* Mini Banner Header */}
       <div style={{
         height: 104,
         position: 'relative',
-        backgroundColor: '#f1f5f9',
+        backgroundColor: 'var(--bg-muted)',
         overflow: 'hidden'
       }}>
         <img
@@ -59,7 +59,7 @@ export const StoreCard = ({ store, navigate }) => {
           background: 'rgba(255, 255, 255, 0.9)',
           backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.6)',
-          color: '#09090b',
+          color: 'var(--text-main)',
           fontSize: '0.72rem',
           fontWeight: 700,
           padding: '2px 9px',
@@ -101,10 +101,10 @@ export const StoreCard = ({ store, navigate }) => {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#09090b' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>
               {store.name}
             </h3>
-            <ArrowUpRight size={17} color="#9ca3af" />
+            <ArrowUpRight size={17} color="var(--text-subtle)" />
           </div>
 
           <p style={{
@@ -120,8 +120,8 @@ export const StoreCard = ({ store, navigate }) => {
             {store.tagline || store.description}
           </p>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 8, fontSize: '0.78rem', color: '#71717a' }}>
-            <MapPin size={13} color="#9ca3af" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 8, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+            <MapPin size={13} color="var(--text-subtle)" />
             <span>{store.location.city}, {store.location.state}</span>
           </div>
         </div>
@@ -133,20 +133,20 @@ export const StoreCard = ({ store, navigate }) => {
           justifyContent: 'space-between',
           paddingTop: 12,
           marginTop: 14,
-          borderTop: '1px solid #f4f4f6'
+          borderTop: '1px solid var(--bg-muted)'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-            <Star size={13} fill="#b45309" color="#b45309" strokeWidth={0} />
-            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#09090b' }}>
+            <Star size={13} fill="var(--star)" color="var(--star)" strokeWidth={0} />
+            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)' }}>
               {store.rating}
             </span>
-            <span style={{ fontSize: '0.74rem', color: '#71717a' }}>
+            <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)' }}>
               ({store.reviewsCount})
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.8rem', color: '#52525b', fontWeight: 500 }}>
-            <Package size={13} color="#9ca3af" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+            <Package size={13} color="var(--text-subtle)" />
             <span>{store.productsCount} products</span>
           </div>
         </div>

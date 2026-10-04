@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { 
   ShoppingBag, 
-  Store, 
   Search, 
   User, 
   ShoppingCart, 
@@ -9,7 +8,6 @@ import {
   Menu, 
   X, 
   LayoutDashboard,
-  ArrowRight,
   LogOut
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -72,11 +70,11 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
             width: 38,
             height: 38,
             borderRadius: 10,
-            background: '#09090b',
+            background: 'var(--primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+            boxShadow: 'var(--shadow-primary)'
           }}>
             <ShoppingBag size={20} color="#ffffff" />
           </div>
@@ -85,19 +83,19 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
               fontSize: '1.3rem', 
               fontWeight: 800, 
               letterSpacing: '-0.03em',
-              color: '#09090b',
+              color: 'var(--text-main)',
               fontFamily: 'var(--font-display)'
             }}>
               ShopAI
             </span>
-            <span style={{
+            <span className="brand-tag" style={{
               fontSize: '0.66rem',
               fontWeight: 700,
               padding: '2px 7px',
               borderRadius: 20,
-              background: '#f4f4f5',
-              color: '#52525b',
-              border: '1px solid #e4e4e7',
+              background: 'var(--primary-tint)',
+              color: 'var(--primary-dark)',
+              border: '1px solid var(--primary-border)',
               letterSpacing: '0.04em',
               textTransform: 'uppercase'
             }}>
@@ -119,32 +117,10 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
               <button
                 key={link.path}
                 onClick={() => navigate(link.path)}
-                style={{
-                  fontSize: '0.92rem',
-                  fontWeight: isActive ? 700 : 500,
-                  color: isActive ? '#09090b' : '#52525b',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  padding: '6px 0',
-                  position: 'relative',
-                  transition: 'color 0.15s ease'
-                }}
-                onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.color = '#09090b'; }}
-                onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.color = '#52525b'; }}
+                className={isActive ? 'nav-link active' : 'nav-link'}
+                aria-current={isActive ? 'page' : undefined}
               >
                 {link.label}
-                {isActive && (
-                  <span style={{
-                    position: 'absolute',
-                    bottom: -2,
-                    left: 0,
-                    right: 0,
-                    height: 2,
-                    borderRadius: 2,
-                    background: '#09090b'
-                  }} />
-                )}
               </button>
             );
           })}
@@ -175,53 +151,30 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
               height: 38,
               paddingLeft: 40,
               paddingRight: 16,
-              background: '#f4f4f6',
+              background: 'var(--bg-muted)',
               border: '1px solid transparent',
               borderRadius: 'var(--radius-full)',
-              color: '#09090b',
+              color: 'var(--text-main)',
               fontSize: '0.86rem',
               outline: 'none',
               transition: 'all 0.15s ease'
             }}
-            onFocus={(e) => {
-              e.target.style.borderColor = '#d1d5db';
-              e.target.style.background = '#ffffff';
-              e.target.style.boxShadow = '0 0 0 3px rgba(0, 0, 0, 0.04)';
-            }}
-            onBlur={(e) => {
-              e.target.style.borderColor = 'transparent';
-              e.target.style.background = '#f4f4f6';
-              e.target.style.boxShadow = 'none';
-            }}
+            className="nav-search"
           />
         </form>
 
         {/* Right Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          {/* Sell on ShopAI or Dashboard CTA */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Sell on ShopAI or Dashboard CTA (desktop; the mobile drawer has both) */}
           {isAdmin ? (
-            <button
-              onClick={() => navigate('/dashboard')}
-              style={{
-                background: '#09090b',
-                color: '#ffffff',
-                padding: '7px 15px',
-                borderRadius: 'var(--radius-full)',
-                fontSize: '0.84rem',
-                fontWeight: 600,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)'
-              }}
-            >
+            <button onClick={() => navigate('/dashboard')} className="btn-sell desktop-only">
               <LayoutDashboard size={14} />
               <span>Dashboard</span>
             </button>
           ) : (
             <button
               onClick={() => navigate('/sell')}
-              className="btn-sell"
+              className="btn-sell desktop-only"
             >
               <Sparkles size={14} />
               <span>Sell on ShopAI</span>
@@ -231,28 +184,10 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
           {/* User Profile / Customer Orders */}
           <button
             onClick={() => navigate('/profile')}
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#ffffff',
-              border: '1px solid var(--border-subtle)',
-              color: '#52525b',
-              boxShadow: 'var(--shadow-xs)',
-              transition: 'all 0.15s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#cbd5e1';
-              e.currentTarget.style.color = '#09090b';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-subtle)';
-              e.currentTarget.style.color = '#52525b';
-            }}
+            className={currentPath === '/profile' ? 'icon-btn active' : 'icon-btn'}
+            style={{ borderRadius: '50%' }}
             title="Customer Profile & Orders"
+            aria-label="Profile and orders"
           >
             <User size={18} />
           </button>
@@ -260,35 +195,19 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
           {/* Cart Icon with Real Count */}
           <button
             onClick={() => navigate('/cart')}
-            style={{
-              position: 'relative',
-              width: 38,
-              height: 38,
-              borderRadius: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#ffffff',
-              border: '1px solid var(--border-subtle)',
-              color: '#09090b',
-              boxShadow: 'var(--shadow-xs)',
-              transition: 'all 0.15s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#cbd5e1';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-subtle)';
-            }}
+            className={currentPath === '/cart' ? 'icon-btn active' : 'icon-btn'}
+            style={{ position: 'relative', color: 'var(--text-main)' }}
             title="Shopping Cart"
+            aria-label={`Cart, ${totalCount} items`}
           >
             <ShoppingCart size={18} />
             {totalCount > 0 && (
-              <span style={{
+              // Re-keyed on every count change so the badge pops when something is added
+              <span key={totalCount} className="pop" style={{
                 position: 'absolute',
                 top: -5,
                 right: -5,
-                background: '#09090b',
+                background: 'var(--primary)',
                 color: '#ffffff',
                 fontSize: '0.68rem',
                 fontWeight: 700,
@@ -298,7 +217,7 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.2)'
+                boxShadow: '0 0 0 2px #ffffff'
               }}>
                 {totalCount}
               </span>
@@ -308,27 +227,8 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
           {/* Log out (desktop; the mobile drawer has its own) */}
           <button
             onClick={onLogout}
-            className="desktop-logout"
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 10,
-              display: 'none',
-              alignItems: 'center',
-              justifyContent: 'center',
-              background: '#ffffff',
-              border: '1px solid var(--border-subtle)',
-              color: '#52525b',
-              boxShadow: 'var(--shadow-xs)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#fecdd3';
-              e.currentTarget.style.color = '#e11d48';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border-subtle)';
-              e.currentTarget.style.color = '#52525b';
-            }}
+            className="icon-btn icon-btn-danger desktop-logout"
+            style={{ display: 'none' }}
             title="Log out"
             aria-label="Log out"
           >
@@ -358,7 +258,7 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div style={{
+        <div className="animate-fade-in" style={{
           padding: '16px 20px 24px',
           backgroundColor: '#ffffff',
           borderBottom: '1px solid var(--border-subtle)',
@@ -384,10 +284,10 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
                 width: '100%',
                 height: 40,
                 paddingLeft: 40,
-                background: '#f4f4f6',
+                background: 'var(--bg-muted)',
                 border: '1px solid var(--border-subtle)',
                 borderRadius: 10,
-                color: '#09090b',
+                color: 'var(--text-main)',
                 fontSize: '0.9rem'
               }}
             />
@@ -407,13 +307,35 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
                   textAlign: 'left',
                   fontSize: '0.92rem',
                   fontWeight: currentPath === link.path ? 700 : 500,
-                  backgroundColor: currentPath === link.path ? '#f4f4f6' : 'transparent',
-                  color: currentPath === link.path ? '#09090b' : '#52525b'
+                  backgroundColor: currentPath === link.path ? 'var(--primary-tint)' : 'transparent',
+                  color: currentPath === link.path ? 'var(--primary-dark)' : 'var(--text-muted)'
                 }}
               >
                 {link.label}
               </button>
             ))}
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  navigate('/dashboard');
+                  setMobileMenuOpen(false);
+                }}
+                style={{
+                  padding: '10px 12px',
+                  borderRadius: 8,
+                  textAlign: 'left',
+                  fontSize: '0.92rem',
+                  color: 'var(--primary)',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8
+                }}
+              >
+                <LayoutDashboard size={16} />
+                Store Dashboard
+              </button>
+            )}
             <button
               onClick={() => {
                 navigate('/orders');
@@ -424,7 +346,7 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
                 borderRadius: 8,
                 textAlign: 'left',
                 fontSize: '0.92rem',
-                color: '#52525b'
+                color: 'var(--text-muted)'
               }}
             >
               My Orders & Returns
@@ -439,7 +361,7 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
                 borderRadius: 8,
                 textAlign: 'left',
                 fontSize: '0.92rem',
-                color: '#09090b',
+                color: 'var(--primary)',
                 fontWeight: 700
               }}
             >
@@ -455,7 +377,7 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
                 borderRadius: 8,
                 textAlign: 'left',
                 fontSize: '0.92rem',
-                color: '#e11d48',
+                color: 'var(--error)',
                 fontWeight: 600,
                 display: 'flex',
                 alignItems: 'center',
@@ -471,6 +393,12 @@ export const Navbar = ({ currentPath, navigate, onLogout }) => {
 
       {/* Media helpers */}
       <style>{`
+        @media (max-width: 767px) {
+          .desktop-only { display: none !important; }
+        }
+        @media (max-width: 420px) {
+          .brand-tag { display: none !important; }
+        }
         @media (min-width: 768px) {
           .desktop-nav { display: flex !important; }
           .desktop-search { display: block !important; }

@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Store, 
-  ArrowRight, 
-  ArrowLeft, 
-  Check, 
-  Sparkles, 
-  Upload, 
-  Building2, 
-  User, 
-  MapPin, 
-  Globe, 
-  CheckCircle2 
+import {
+  Store,
+  ArrowRight,
+  ArrowLeft,
+  Check,
+  Sparkles,
+  CheckCircle2
 } from 'lucide-react';
 import { storeService } from '../services/storeService';
 import { authService } from '../services/authService';
@@ -87,13 +82,13 @@ export const StoreRegister = ({ navigate }) => {
             width: 76,
             height: 76,
             borderRadius: '50%',
-            background: '#ecfdf5',
-            color: '#059669',
+            background: 'var(--success-tint)',
+            color: 'var(--success)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 20px',
-            border: '1px solid #a7f3d0'
+            border: '1px solid var(--success-border)'
           }}>
             <CheckCircle2 size={44} />
           </div>
@@ -102,7 +97,7 @@ export const StoreRegister = ({ navigate }) => {
             Store Registered Successfully
           </span>
 
-          <h1 style={{ fontSize: '2.3rem', fontWeight: 800, color: '#09090b', marginBottom: 10 }}>
+          <h1 style={{ fontSize: '2.3rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: 10 }}>
             Your store is live!
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '1rem', maxWidth: 520, margin: '0 auto 28px' }}>
@@ -110,25 +105,25 @@ export const StoreRegister = ({ navigate }) => {
           </p>
 
           <div style={{
-            background: '#f8fafc',
-            border: '1px solid #e5e7eb',
+            background: 'var(--bg-muted)',
+            border: '1px solid var(--border-subtle)',
             borderRadius: 14,
             padding: '20px 24px',
             maxWidth: 460,
             margin: '0 auto 32px',
             textAlign: 'left'
           }}>
-            <div style={{ fontSize: '0.76rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+            <div style={{ fontSize: '0.76rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
               Store Identifier
             </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)', marginTop: 2 }}>
+            <div style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-main)', fontFamily: 'var(--font-mono)', marginTop: 2 }}>
               {createdStore.id}
             </div>
 
-            <div style={{ marginTop: 14, fontSize: '0.76rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+            <div style={{ marginTop: 14, fontSize: '0.76rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
               Live Storefront URL
             </div>
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#059669', marginTop: 2 }}>
+            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--success)', marginTop: 2 }}>
               shopai.com/store/{createdStore.handle}
             </div>
           </div>
@@ -162,7 +157,7 @@ export const StoreRegister = ({ navigate }) => {
             <span className="badge badge-neutral" style={{ marginBottom: 10 }}>
               Merchant Onboarding Wizard
             </span>
-            <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
+            <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
               Create Your Store on ShopAI
             </h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginTop: 4 }}>
@@ -188,9 +183,9 @@ export const StoreRegister = ({ navigate }) => {
                     width: 36,
                     height: 36,
                     borderRadius: '50%',
-                    background: isCurrent ? '#09090b' : (isPassed ? '#059669' : '#f4f4f6'),
-                    color: isCurrent || isPassed ? '#ffffff' : '#71717a',
-                    border: isCurrent || isPassed ? 'none' : '1px solid #d1d5db',
+                    background: isCurrent ? 'var(--primary)' : (isPassed ? 'var(--success)' : 'var(--bg-muted)'),
+                    color: isCurrent || isPassed ? '#ffffff' : 'var(--text-muted)',
+                    border: isCurrent || isPassed ? 'none' : '1px solid var(--border-strong)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -205,7 +200,7 @@ export const StoreRegister = ({ navigate }) => {
                   <div style={{
                     fontSize: '0.75rem',
                     fontWeight: isCurrent ? 800 : 600,
-                    color: isCurrent ? '#09090b' : '#71717a'
+                    color: isCurrent ? 'var(--text-main)' : 'var(--text-muted)'
                   }}>
                     {s.title}
                   </div>
@@ -219,7 +214,7 @@ export const StoreRegister = ({ navigate }) => {
             {/* STEP 1: Store Information */}
             {step === 1 && (
               <div className="animate-fade-in">
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: '#09090b' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: 'var(--text-main)' }}>
                   STEP 1 — Store Information
                 </h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 24 }}>
@@ -242,7 +237,7 @@ export const StoreRegister = ({ navigate }) => {
                           handle: val.toLowerCase().replace(/[^a-z0-9]/g, '')
                         });
                       }}
-                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                     />
                   </div>
 
@@ -253,7 +248,7 @@ export const StoreRegister = ({ navigate }) => {
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b', outline: 'none' }}
+                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)', outline: 'none' }}
                     >
                       {categories.map(c => (
                         <option key={c} value={c}>{c}</option>
@@ -270,7 +265,7 @@ export const StoreRegister = ({ navigate }) => {
                       value={formData.tagline}
                       onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
                       placeholder="e.g. Modern handcrafted aesthetic living essentials"
-                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                     />
                   </div>
 
@@ -282,7 +277,7 @@ export const StoreRegister = ({ navigate }) => {
                       rows={3}
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      style={{ width: '100%', padding: '12px 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b', resize: 'none' }}
+                      style={{ width: '100%', padding: '12px 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)', resize: 'none' }}
                     />
                   </div>
 
@@ -295,7 +290,7 @@ export const StoreRegister = ({ navigate }) => {
                         type="text"
                         value={formData.logo}
                         onChange={(e) => setFormData({ ...formData, logo: e.target.value })}
-                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                       />
                     </div>
                     <div>
@@ -306,7 +301,7 @@ export const StoreRegister = ({ navigate }) => {
                         type="text"
                         value={formData.banner}
                         onChange={(e) => setFormData({ ...formData, banner: e.target.value })}
-                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                       />
                     </div>
                   </div>
@@ -317,7 +312,7 @@ export const StoreRegister = ({ navigate }) => {
             {/* STEP 2: Owner Information */}
             {step === 2 && (
               <div className="animate-fade-in">
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: '#09090b' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: 'var(--text-main)' }}>
                   STEP 2 — Owner Information
                 </h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 24 }}>
@@ -333,7 +328,7 @@ export const StoreRegister = ({ navigate }) => {
                       type="text"
                       value={formData.ownerName}
                       onChange={(e) => setFormData({ ...formData, ownerName: e.target.value })}
-                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                     />
                   </div>
 
@@ -345,7 +340,7 @@ export const StoreRegister = ({ navigate }) => {
                       type="email"
                       value={formData.ownerEmail}
                       onChange={(e) => setFormData({ ...formData, ownerEmail: e.target.value })}
-                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                     />
                   </div>
 
@@ -357,7 +352,7 @@ export const StoreRegister = ({ navigate }) => {
                       type="tel"
                       value={formData.ownerPhone}
                       onChange={(e) => setFormData({ ...formData, ownerPhone: e.target.value })}
-                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                     />
                   </div>
                 </div>
@@ -367,7 +362,7 @@ export const StoreRegister = ({ navigate }) => {
             {/* STEP 3: Store Location */}
             {step === 3 && (
               <div className="animate-fade-in">
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: '#09090b' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: 'var(--text-main)' }}>
                   STEP 3 — Store Location
                 </h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 24 }}>
@@ -383,7 +378,7 @@ export const StoreRegister = ({ navigate }) => {
                       type="text"
                       value={formData.address}
                       onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                      style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                     />
                   </div>
 
@@ -396,7 +391,7 @@ export const StoreRegister = ({ navigate }) => {
                         type="text"
                         value={formData.city}
                         onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                       />
                     </div>
                     <div>
@@ -407,7 +402,7 @@ export const StoreRegister = ({ navigate }) => {
                         type="text"
                         value={formData.state}
                         onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                       />
                     </div>
                     <div>
@@ -418,7 +413,7 @@ export const StoreRegister = ({ navigate }) => {
                         type="text"
                         value={formData.pincode}
                         onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid #d1d5db', color: '#09090b' }}
+                        style={{ width: '100%', height: 44, padding: '0 14px', borderRadius: 8, background: '#ffffff', border: '1px solid var(--border-strong)', color: 'var(--text-main)' }}
                       />
                     </div>
                   </div>
@@ -429,7 +424,7 @@ export const StoreRegister = ({ navigate }) => {
             {/* STEP 4: Store Setup & Handle URL */}
             {step === 4 && (
               <div className="animate-fade-in">
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: '#09090b' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: 'var(--text-main)' }}>
                   STEP 4 — Store Setup & Handle
                 </h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 24 }}>
@@ -447,11 +442,11 @@ export const StoreRegister = ({ navigate }) => {
                         height: 44,
                         display: 'flex',
                         alignItems: 'center',
-                        background: '#f4f4f6',
-                        border: '1px solid #d1d5db',
+                        background: 'var(--bg-muted)',
+                        border: '1px solid var(--border-strong)',
                         borderRight: 'none',
                         borderRadius: '8px 0 0 8px',
-                        color: '#71717a',
+                        color: 'var(--text-muted)',
                         fontSize: '0.88rem',
                         fontFamily: 'var(--font-mono)'
                       }}>
@@ -467,8 +462,8 @@ export const StoreRegister = ({ navigate }) => {
                           padding: '0 14px',
                           borderRadius: '0 8px 8px 0',
                           background: '#ffffff',
-                          border: '1px solid #d1d5db',
-                          color: '#09090b',
+                          border: '1px solid var(--border-strong)',
+                          color: 'var(--text-main)',
                           fontFamily: 'var(--font-mono)'
                         }}
                       />
@@ -480,13 +475,13 @@ export const StoreRegister = ({ navigate }) => {
                     marginTop: 10,
                     padding: '16px 20px',
                     borderRadius: 12,
-                    background: '#eff6ff',
-                    border: '1px solid #bfdbfe'
+                    background: 'var(--primary-tint)',
+                    border: '1px solid var(--primary-border)'
                   }}>
-                    <div style={{ fontSize: '0.76rem', color: '#2563eb', fontWeight: 700, textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: '0.76rem', color: 'var(--primary)', fontWeight: 700, textTransform: 'uppercase' }}>
                       Live Storefront Route
                     </div>
-                    <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#09090b', marginTop: 4, fontFamily: 'var(--font-mono)' }}>
+                    <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-main)', marginTop: 4, fontFamily: 'var(--font-mono)' }}>
                       shopai.com/store/{formData.handle || 'yourstore'}
                     </div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 4 }}>
@@ -500,7 +495,7 @@ export const StoreRegister = ({ navigate }) => {
             {/* STEP 5: Review */}
             {step === 5 && (
               <div className="animate-fade-in">
-                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: '#09090b' }}>
+                <h2 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: 6, color: 'var(--text-main)' }}>
                   STEP 5 — Review & Launch
                 </h2>
                 <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: 24 }}>
@@ -508,29 +503,29 @@ export const StoreRegister = ({ navigate }) => {
                 </p>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20, marginBottom: 24 }}>
-                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: 12, border: '1px solid #e5e7eb' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700 }}>Store Information</div>
-                    <div style={{ fontWeight: 700, fontSize: '1rem', color: '#09090b', marginTop: 4 }}>{formData.name}</div>
-                    <div style={{ fontSize: '0.82rem', color: '#2563eb', fontWeight: 600 }}>Category: {formData.category}</div>
+                  <div style={{ background: 'var(--bg-muted)', padding: '16px', borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Store Information</div>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)', marginTop: 4 }}>{formData.name}</div>
+                    <div style={{ fontSize: '0.82rem', color: 'var(--primary)', fontWeight: 600 }}>Category: {formData.category}</div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 4 }}>{formData.tagline}</div>
                   </div>
 
-                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: 12, border: '1px solid #e5e7eb' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700 }}>Owner Details</div>
-                    <div style={{ fontWeight: 700, fontSize: '1rem', color: '#09090b', marginTop: 4 }}>{formData.ownerName}</div>
+                  <div style={{ background: 'var(--bg-muted)', padding: '16px', borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Owner Details</div>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--text-main)', marginTop: 4 }}>{formData.ownerName}</div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{formData.ownerEmail}</div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{formData.ownerPhone}</div>
                   </div>
 
-                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: 12, border: '1px solid #e5e7eb' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700 }}>Dispatch Origin</div>
-                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#09090b', marginTop: 4 }}>{formData.address}</div>
+                  <div style={{ background: 'var(--bg-muted)', padding: '16px', borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Dispatch Origin</div>
+                    <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)', marginTop: 4 }}>{formData.address}</div>
                     <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{formData.city}, {formData.state} - {formData.pincode}</div>
                   </div>
 
-                  <div style={{ background: '#f8fafc', padding: '16px', borderRadius: 12, border: '1px solid #e5e7eb' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700 }}>Storefront Route</div>
-                    <div style={{ fontWeight: 800, fontSize: '0.95rem', color: '#059669', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
+                  <div style={{ background: 'var(--bg-muted)', padding: '16px', borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700 }}>Storefront Route</div>
+                    <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--success)', fontFamily: 'var(--font-mono)', marginTop: 4 }}>
                       /store/{formData.handle}
                     </div>
                   </div>
@@ -545,7 +540,7 @@ export const StoreRegister = ({ navigate }) => {
               alignItems: 'center',
               marginTop: 32,
               paddingTop: 24,
-              borderTop: '1px solid #f4f4f6'
+              borderTop: '1px solid var(--bg-muted)'
             }}>
               {step > 1 ? (
                 <button

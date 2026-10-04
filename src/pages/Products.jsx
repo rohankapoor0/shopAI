@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { 
-  Search, 
-  SlidersHorizontal, 
-  Filter, 
-  X, 
-  Check, 
-  Sparkles,
-  ShoppingBag,
-  Star
+import {
+  Search,
+  Filter,
+  Check,
+  ShoppingBag
 } from 'lucide-react';
 import { productService } from '../services/productService';
 import { ProductCard } from '../components/ProductCard';
@@ -53,11 +49,11 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
       {/* Header */}
       <div style={{ marginBottom: 30, display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16 }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#2563eb', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>
             <ShoppingBag size={15} />
             <span>Curated Marketplace Catalog</span>
           </div>
-          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#09090b' }}>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
             Browse All Products
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '0.92rem', marginTop: 4 }}>
@@ -82,13 +78,13 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
         <aside className={`filters-sidebar${mobileFilterOpen ? ' open' : ''}`} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div className="clean-card" style={{ padding: '22px', borderRadius: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
-              <div style={{ fontWeight: 700, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: 6, color: '#09090b' }}>
-                <Filter size={15} color="#09090b" />
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: 6, color: 'var(--text-main)' }}>
+                <Filter size={15} color="var(--text-main)" />
                 <span>Refine Search</span>
               </div>
               <button
                 onClick={resetFilters}
-                style={{ fontSize: '0.78rem', color: '#2563eb', fontWeight: 600 }}
+                style={{ fontSize: '0.78rem', color: 'var(--primary)', fontWeight: 600 }}
               >
                 Reset All
               </button>
@@ -100,7 +96,7 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
                 Search Keyword
               </label>
               <div style={{ position: 'relative' }}>
-                <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-subtle)' }} />
                 <input
                   type="text"
                   placeholder="Hoodie, Keyboard..."
@@ -111,10 +107,10 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
                     height: 38,
                     paddingLeft: 34,
                     paddingRight: 12,
-                    background: '#f4f4f6',
+                    background: 'var(--bg-muted)',
                     border: '1px solid transparent',
                     borderRadius: 8,
-                    color: '#09090b',
+                    color: 'var(--text-main)',
                     fontSize: '0.85rem'
                   }}
                 />
@@ -138,8 +134,8 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
                       padding: '7px 10px',
                       borderRadius: 6,
                       fontSize: '0.86rem',
-                      background: selectedCategory === cat ? '#09090b' : 'transparent',
-                      color: selectedCategory === cat ? '#ffffff' : '#52525b',
+                      background: selectedCategory === cat ? 'var(--primary)' : 'transparent',
+                      color: selectedCategory === cat ? '#ffffff' : 'var(--text-muted)',
                       fontWeight: selectedCategory === cat ? 600 : 400,
                       textAlign: 'left',
                       transition: 'all 0.15s ease'
@@ -156,7 +152,7 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
             <div style={{ marginBottom: 22 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: '0.82rem' }}>
                 <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Max Price</span>
-                <span style={{ fontWeight: 700, color: '#09090b' }}>₹{Number(maxPrice).toLocaleString('en-IN')}</span>
+                <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>₹{Number(maxPrice).toLocaleString('en-IN')}</span>
               </div>
               <input
                 type="range"
@@ -165,9 +161,9 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
                 step="500"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                style={{ width: '100%', accentColor: '#09090b', cursor: 'pointer' }}
+                style={{ width: '100%', accentColor: 'var(--primary)', cursor: 'pointer' }}
               />
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#9ca3af', marginTop: 4 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-subtle)', marginTop: 4 }}>
                 <span>₹500</span>
                 <span>₹15,000</span>
               </div>
@@ -190,9 +186,9 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
                       fontSize: '0.78rem',
                       fontWeight: 600,
                       border: '1px solid',
-                      borderColor: minRating === r ? '#09090b' : '#e5e7eb',
-                      background: minRating === r ? '#09090b' : '#f4f4f6',
-                      color: minRating === r ? '#ffffff' : '#52525b'
+                      borderColor: minRating === r ? 'var(--primary)' : 'var(--border-subtle)',
+                      background: minRating === r ? 'var(--primary)' : 'var(--bg-muted)',
+                      color: minRating === r ? '#ffffff' : 'var(--text-muted)'
                     }}
                   >
                     {r === 0 ? 'All' : `${r}★`}
@@ -208,7 +204,7 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
           {/* Top Sort & Summary */}
           <div className="clean-card" style={{ padding: '12px 18px', marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderRadius: 12 }}>
             <div style={{ fontSize: '0.86rem', color: 'var(--text-muted)' }}>
-              Showing <strong style={{ color: '#09090b' }}>{products.length}</strong> results
+              Showing <strong style={{ color: 'var(--text-main)' }}>{products.length}</strong> results
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -218,11 +214,11 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
                 onChange={(e) => setSortBy(e.target.value)}
                 style={{
                   background: '#ffffff',
-                  border: '1px solid #d1d5db',
+                  border: '1px solid var(--border-strong)',
                   borderRadius: 8,
                   padding: '6px 12px',
                   fontSize: '0.84rem',
-                  color: '#09090b',
+                  color: 'var(--text-main)',
                   outline: 'none'
                 }}
               >
@@ -234,11 +230,15 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
             </div>
           </div>
 
-          {/* Product Grid */}
-          {products.length === 0 ? (
+          {/* Product Grid (skeletons on first load instead of a flash of "no products") */}
+          {loading && products.length === 0 ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 20 }}>
+              {Array.from({ length: 6 }, (_, i) => <div key={i} className="skeleton" style={{ height: 360, borderRadius: 14 }} />)}
+            </div>
+          ) : products.length === 0 ? (
             <div style={{ textAlign: 'center', padding: '70px 20px', color: 'var(--text-muted)' }} className="clean-card">
               <ShoppingBag size={42} style={{ opacity: 0.3, marginBottom: 12, margin: '0 auto' }} />
-              <h3 style={{ fontSize: '1.2rem', color: '#09090b', fontWeight: 700 }}>No matching products found</h3>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-main)', fontWeight: 700 }}>No matching products found</h3>
               <p style={{ fontSize: '0.88rem', marginTop: 4, marginBottom: 18 }}>
                 Try relaxing your price filters or searching for another term.
               </p>
@@ -247,7 +247,7 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
               </button>
             </div>
           ) : (
-            <div style={{
+            <div className="stagger" style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
               gap: 20

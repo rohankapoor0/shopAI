@@ -83,6 +83,23 @@ test('checkout splits a two-store cart and refuses short stock', async () => {
   assert.deepEqual(short, { status: 409, body: { message: 'Mug: only 1 left' } });
 });
 
+test('cancelling an order restocks, un-counts the sale and reverses store metrics once', async () => {
+  const { db } = await import('../src/lib.mjs');
+  const order = { id: 'ORD-1', storeId: 'S1', status: 'Placed', totalAmount: 598, items: [{ productId: 'A', quantity: 2 }] };
+  const updates = [];
+  db.get = async () => ({ Item: { ...order } });
+  db.put = async () => {};
+  db.update = async (params) => { updates.push(params); return { Attributes: { stock: 7 } }; };
+
+  const admin = signToken({ sub: 'ADMIN', role: 'admin' });
+  const res = await call('PATCH', '/orders/ORD-1/status', { token: admin, body: { status: 'Cancelled' } });
+  assert.equal(res.status, 200);
+  const restock = updates.find(u => u.UpdateExpression.includes('#stock'));
+  assert.deepEqual(restock.ExpressionAttributeValues, { ':q': 2, ':unsold': -2 });
+  const metrics = updates.find(u => u.TableName.endsWith('stores'));
+  assert.deepEqual(metrics.ExpressionAttributeValues, { ':s': -598, ':o': -1 });
+});
+
 test('input validation runs before any database access', async () => {
   const customer = signToken({ sub: 'CUST-1', role: 'customer' });
   const reg = await call('POST', '/auth/register', { body: { name: 'A', email: 'not-an-email', password: '12345678' } });
