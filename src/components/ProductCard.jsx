@@ -7,8 +7,11 @@ export const ProductCard = ({ product, navigate }) => {
   const { addToCart } = useCart();
   const [added, setAdded] = useState(false);
 
+  const isOutOfStock = product.stock <= 0;
+
   const handleAddToCart = (e) => {
     e.stopPropagation();
+    if (isOutOfStock) return;
     addToCart(product, 1);
     setAdded(true);
     setTimeout(() => setAdded(false), 1600);
@@ -211,6 +214,7 @@ export const ProductCard = ({ product, navigate }) => {
 
           <button
             onClick={handleAddToCart}
+            disabled={isOutOfStock}
             style={{
               width: 36,
               height: 36,
@@ -218,18 +222,20 @@ export const ProductCard = ({ product, navigate }) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              opacity: isOutOfStock ? 0.4 : 1,
+              cursor: isOutOfStock ? 'not-allowed' : 'pointer',
               background: added ? '#059669' : '#09090b',
               color: '#ffffff',
               boxShadow: '0 2px 6px rgba(0, 0, 0, 0.12)',
               transition: 'all 0.15s ease'
             }}
             onMouseEnter={(e) => {
-              if (!added) e.currentTarget.style.background = '#27272a';
+              if (!added && !isOutOfStock) e.currentTarget.style.background = '#27272a';
             }}
             onMouseLeave={(e) => {
               if (!added) e.currentTarget.style.background = '#09090b';
             }}
-            title="Add to Cart"
+            title={isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
           >
             {added ? <Check size={17} /> : <ShoppingCart size={16} />}
           </button>

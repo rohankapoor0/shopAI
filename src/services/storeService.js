@@ -1,5 +1,19 @@
 import { getFromStorage, saveToStorage, STORAGE_KEYS } from './db';
 
+// Dispatched after store data changes so long-lived views (the dashboard sidebar) can reload.
+export const STORES_CHANGED_EVENT = 'shopai:stores-changed';
+const notifyStoresChanged = () => window.dispatchEvent(new Event(STORES_CHANGED_EVENT));
+
+const toHandle = (value) => String(value ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// Handles are store URLs (/store/<handle>), so they must be unique; append a number on collision.
+const uniqueHandle = (base, stores) => {
+  const taken = new Set(stores.flatMap(s => [s.handle, s.id.toLowerCase()]));
+  let handle = base || 'store';
+  for (let n = 2; taken.has(handle); n++) handle = `${base || 'store'}${n}`;
+  return handle;
+};
+
 export const storeService = {
   getStores: async () => {
     return getFromStorage(STORAGE_KEYS.STORES);
@@ -15,7 +29,7 @@ export const storeService = {
     const newStoreId = `STORE-${1000 + stores.length + 1}`;
     const newStore = {
       id: newStoreId,
-      handle: storeData.handle || storeData.name.toLowerCase().replace(/[^a-z0-9]/g, ''),
+      handle: uniqueHandle(toHandle(storeData.handle) || toHandle(storeData.name), stores),
       name: storeData.name,
       category: storeData.category || 'Other',
       tagline: storeData.tagline || `${storeData.name} Official Store`,
@@ -49,18 +63,34 @@ export const storeService = {
     const updated = [newStore, ...stores];
     saveToStorage(STORAGE_KEYS.STORES, updated);
     localStorage.setItem(STORAGE_KEYS.ACTIVE_STORE_ID, newStore.id);
+    notifyStoresChanged();
     return newStore;
   },
 
+  // Throws with a user-facing message when the name or handle is invalid.
   updateStore: async (storeId, updates) => {
     const stores = getFromStorage(STORAGE_KEYS.STORES);
     const index = stores.findIndex(s => s.id === storeId);
-    if (index !== -1) {
-      stores[index] = { ...stores[index], ...updates };
-      saveToStorage(STORAGE_KEYS.STORES, stores);
-      return stores[index];
+    if (index === -1) return null;
+
+    const next = { ...stores[index], ...updates };
+    if (!String(next.name ?? '').trim()) throw new Error('Store name is required');
+    next.name = next.name.trim();
+    next.handle = toHandle(next.handle);
+    if (!next.handle) throw new Error('Store handle is required');
+    const clash = stores.some(s => s.id !== storeId && (s.handle === next.handle || s.id.toLowerCase() === next.handle));
+    if (clash) throw new Error(`The handle "${next.handle}" is already used by another store`);
+
+    // Products carry a copy of the store name
+    if (next.name !== stores[index].name) {
+      const products = getFromStorage(STORAGE_KEYS.PRODUCTS);
+      saveToStorage(STORAGE_KEYS.PRODUCTS, products.map(p => p.storeId === storeId ? { ...p, storeName: next.name } : p));
     }
-    return null;
+
+    stores[index] = next;
+    saveToStorage(STORAGE_KEYS.STORES, stores);
+    notifyStoresChanged();
+    return next;
   },
 
   getActiveStoreId: () => {

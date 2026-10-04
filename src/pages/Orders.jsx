@@ -11,6 +11,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { orderService } from '../services/orderService';
+import { customerService } from '../services/customerService';
 import { StatusBadge } from '../components/StatusBadge';
 
 export const Orders = ({ navigate, onOpenReturnModal }) => {
@@ -19,7 +20,7 @@ export const Orders = ({ navigate, onOpenReturnModal }) => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const customerOrders = await orderService.getCustomerOrders("CUST-1");
+      const customerOrders = await orderService.getCustomerOrders(customerService.getCurrentUser().id);
       setOrders(customerOrders);
       setLoading(false);
     };

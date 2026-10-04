@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { initDB } from './services/db';
 import { authService } from './services/authService';
 import { CartProvider } from './context/CartContext';
 import { Navbar } from './components/Navbar';
@@ -36,16 +35,17 @@ import { Settings as DashboardSettings } from './pages/dashboard/Settings';
 
 export default function App() {
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
+  // Query string is state too, so /products?search=a -> /products?search=b re-renders
+  const [currentSearch, setCurrentSearch] = useState(window.location.search);
   const [activeReturnOrder, setActiveReturnOrder] = useState(null);
   const [isReturnModalOpen, setIsReturnModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(authService.getCurrentUser());
   const isAdmin = authService.isAdmin(currentUser);
 
   useEffect(() => {
-    initDB();
-
     const handlePopState = () => {
       setCurrentPath(window.location.pathname);
+      setCurrentSearch(window.location.search);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -53,7 +53,8 @@ export default function App() {
 
   const navigate = (path) => {
     window.history.pushState({}, '', path);
-    setCurrentPath(path.split('?')[0]);
+    setCurrentPath(window.location.pathname);
+    setCurrentSearch(window.location.search);
     window.scrollTo(0, 0);
   };
 
@@ -74,10 +75,7 @@ export default function App() {
   };
 
   // Extract Route and Params
-  const getQueryParam = (param) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-  };
+  const getQueryParam = (param) => new URLSearchParams(currentSearch).get(param);
 
   // Route Dispatcher
   const renderRoute = () => {
@@ -139,14 +137,14 @@ export default function App() {
       pageContent = <Stores navigate={navigate} />;
     } else if (currentPath.startsWith('/store/')) {
       const storeId = currentPath.replace('/store/', '');
-      pageContent = <Storefront storeId={storeId} navigate={navigate} />;
+      pageContent = <Storefront key={storeId} storeId={storeId} navigate={navigate} />;
     } else if (currentPath === '/products') {
       const categoryParam = getQueryParam('category') || 'All';
       const searchParam = getQueryParam('search') || '';
-      pageContent = <Products initialCategory={categoryParam} initialSearch={searchParam} navigate={navigate} />;
+      pageContent = <Products key={currentSearch} initialCategory={categoryParam} initialSearch={searchParam} navigate={navigate} />;
     } else if (currentPath.startsWith('/product/')) {
       const productId = currentPath.replace('/product/', '');
-      pageContent = <ProductDetails productId={productId} navigate={navigate} />;
+      pageContent = <ProductDetails key={productId} productId={productId} navigate={navigate} />;
     } else if (currentPath === '/cart') {
       pageContent = <Cart navigate={navigate} />;
     } else if (currentPath === '/checkout') {
@@ -158,7 +156,7 @@ export default function App() {
       pageContent = <Orders navigate={navigate} onOpenReturnModal={openReturnModal} />;
     } else if (currentPath.startsWith('/orders/')) {
       const orderId = currentPath.replace('/orders/', '');
-      pageContent = <OrderTracking orderId={orderId} navigate={navigate} onOpenReturnModal={openReturnModal} />;
+      pageContent = <OrderTracking key={orderId} orderId={orderId} navigate={navigate} onOpenReturnModal={openReturnModal} />;
     } else if (currentPath === '/profile') {
       pageContent = <Profile navigate={navigate} onOpenReturnModal={openReturnModal} />;
     } else if (currentPath === '/sell') {

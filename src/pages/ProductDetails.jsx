@@ -46,15 +46,17 @@ export const ProductDetails = ({ productId, navigate }) => {
     loadDetails();
   }, [productId]);
 
+  const isOutOfStock = !product || product.stock <= 0;
+
   const handleAddToCart = () => {
-    if (!product) return;
+    if (isOutOfStock) return;
     addToCart(product, quantity);
     setAddedMessage(true);
     setTimeout(() => setAddedMessage(false), 2000);
   };
 
   const handleBuyNow = () => {
-    if (!product) return;
+    if (isOutOfStock) return;
     addToCart(product, quantity);
     navigate('/checkout');
   };
@@ -268,7 +270,7 @@ export const ProductDetails = ({ productId, navigate }) => {
                 {quantity}
               </span>
               <button
-                onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                onClick={() => setQuantity(Math.max(1, Math.min(product.stock, quantity + 1)))}
                 style={{ width: 40, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090b' }}
               >
                 <Plus size={15} />
@@ -277,6 +279,7 @@ export const ProductDetails = ({ productId, navigate }) => {
 
             <button
               onClick={handleAddToCart}
+              disabled={isOutOfStock}
               className="btn-secondary"
               style={{
                 flex: '1 1 170px',
@@ -287,11 +290,12 @@ export const ProductDetails = ({ productId, navigate }) => {
               }}
             >
               <ShoppingCart size={17} />
-              <span>{addedMessage ? 'Added to Cart ✓' : 'Add to Cart'}</span>
+              <span>{isOutOfStock ? 'Out of Stock' : addedMessage ? 'Added to Cart ✓' : 'Add to Cart'}</span>
             </button>
 
             <button
               onClick={handleBuyNow}
+              disabled={isOutOfStock}
               className="btn-primary"
               style={{
                 flex: '1 1 170px',

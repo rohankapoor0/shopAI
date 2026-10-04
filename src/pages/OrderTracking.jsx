@@ -63,8 +63,11 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
     { title: "Delivered", desc: "Delivered to doorstep" }
   ];
 
-  const currentStageIndex = stages.findIndex(s => s.title.toLowerCase() === order.status.toLowerCase());
-  const effectiveIndex = currentStageIndex === -1 ? (order.status === 'Cancelled' ? -1 : 0) : currentStageIndex;
+  // Cancelled orders keep the progress they had reached (cancelledAt); "Placed" maps to "Order Placed" (index 0)
+  const isCancelled = order.status === 'Cancelled';
+  const progressStatus = isCancelled ? (order.cancelledAt ?? 'Placed') : order.status;
+  const currentStageIndex = stages.findIndex(s => s.title.toLowerCase() === progressStatus.toLowerCase());
+  const effectiveIndex = currentStageIndex === -1 ? 0 : currentStageIndex;
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: 960, margin: '0 auto', padding: '36px 24px 80px' }}>
@@ -132,9 +135,14 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
 
       {/* Visual Tracking Stepper */}
       <div className="clean-card" style={{ padding: '36px 28px', marginBottom: 28, borderRadius: 16 }}>
-        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: 32, color: '#09090b' }}>
+        <h2 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: isCancelled ? 16 : 32, color: '#09090b' }}>
           Fulfillment Timeline
         </h2>
+        {isCancelled && (
+          <div role="status" style={{ marginBottom: 28, padding: '10px 14px', borderRadius: 10, background: '#fff1f2', border: '1px solid #fecdd3', color: '#be123c', fontSize: '0.88rem', fontWeight: 600 }}>
+            This order was cancelled. Any payment will be refunded to the original method.
+          </div>
+        )}
 
         {/* Stepper Progress Horizontal Container */}
         <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -159,7 +167,7 @@ export const OrderTracking = ({ orderId, navigate, onOpenReturnModal }) => {
           {/* Stepper Nodes */}
           {stages.map((stage, idx) => {
             const isCompleted = idx <= effectiveIndex;
-            const isCurrent = idx === effectiveIndex;
+            const isCurrent = !isCancelled && idx === effectiveIndex;
 
             return (
               <div

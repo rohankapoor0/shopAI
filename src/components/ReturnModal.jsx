@@ -2,9 +2,14 @@ import React, { useState } from 'react';
 import { X, RotateCcw, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { returnService } from '../services/returnService';
 
+// Hooks live in ReturnModalContent so the early return never changes the hook order,
+// and keying by order id resets the form for each order.
 export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
   if (!isOpen || !order) return null;
+  return <ReturnModalContent key={order.id} order={order} onClose={onClose} onSuccess={onSuccess} />;
+};
 
+const ReturnModalContent = ({ order, onClose, onSuccess }) => {
   const [selectedProduct, setSelectedProduct] = useState(order.items[0]);
   const [reason, setReason] = useState('Size issue');
   const [notes, setNotes] = useState('');
@@ -35,6 +40,7 @@ export const ReturnModal = ({ order, isOpen, onClose, onSuccess }) => {
         productId: selectedProduct.productId,
         productName: selectedProduct.name,
         productImage: selectedProduct.image,
+        quantity: selectedProduct.quantity,
         amount: selectedProduct.price * selectedProduct.quantity,
         reason: reason,
         notes: notes

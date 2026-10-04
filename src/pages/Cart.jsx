@@ -174,7 +174,9 @@ export const Cart = ({ navigate }) => {
                     </span>
                     <button
                       onClick={() => updateQuantity(item.id, 1)}
-                      style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090b' }}
+                      disabled={item.stock !== undefined && item.quantity >= item.stock}
+                      title={item.stock !== undefined && item.quantity >= item.stock ? 'No more stock available' : undefined}
+                      style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090b', opacity: item.stock !== undefined && item.quantity >= item.stock ? 0.35 : 1 }}
                     >
                       <Plus size={13} />
                     </button>

@@ -96,7 +96,7 @@ export const Returns = () => {
           </div>
 
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {['All', 'Requested', 'Approved', 'Pickup Scheduled', 'Refunded', 'Rejected'].map(st => (
+            {['All', ...returnStatuses].map(st => (
               <button
                 key={st}
                 onClick={() => setFilterStatus(st)}

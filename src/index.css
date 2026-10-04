@@ -254,6 +254,14 @@ input:focus, select:focus, textarea:focus {
   color: var(--text-main);
 }
 
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-sell {
   background: #09090b;
   color: #ffffff;

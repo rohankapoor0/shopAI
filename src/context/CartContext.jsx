@@ -10,25 +10,29 @@ export const CartProvider = ({ children }) => {
     saveToStorage(STORAGE_KEYS.CART, cartItems);
   }, [cartItems]);
 
+  // Updaters must stay pure (StrictMode runs them twice), so items are copied, never mutated.
+  // Quantities are capped at the product's stock when it is known.
   const addToCart = (product, quantity = 1) => {
+    if (product.stock !== undefined && product.stock <= 0) return;
     setCartItems(prev => {
-      const existingIdx = prev.findIndex(item => item.id === product.id);
-      if (existingIdx !== -1) {
-        const updated = [...prev];
-        updated[existingIdx].quantity += quantity;
-        return updated;
-      } else {
-        return [...prev, {
-          id: product.id,
-          storeId: product.storeId,
-          storeName: product.storeName,
-          name: product.name,
-          price: product.price,
-          originalPrice: product.originalPrice,
-          image: product.image,
-          quantity: quantity
-        }];
+      const existing = prev.find(item => item.id === product.id);
+      const maxQty = product.stock ?? Infinity;
+      if (existing) {
+        return prev.map(item => item.id === product.id
+          ? { ...item, stock: product.stock, quantity: Math.min(maxQty, item.quantity + quantity) }
+          : item);
       }
+      return [...prev, {
+        id: product.id,
+        storeId: product.storeId,
+        storeName: product.storeName,
+        name: product.name,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        image: product.image,
+        stock: product.stock,
+        quantity: Math.min(maxQty, quantity)
+      }];
     });
   };
 
@@ -37,7 +41,7 @@ export const CartProvider = ({ children }) => {
       return prev
         .map(item => {
           if (item.id === productId) {
-            const newQty = item.quantity + delta;
+            const newQty = Math.min(item.stock ?? Infinity, item.quantity + delta);
             return newQty > 0 ? { ...item, quantity: newQty } : null;
           }
           return item;

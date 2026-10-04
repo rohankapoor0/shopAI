@@ -1,4 +1,4 @@
-import { getFromStorage, saveToStorage, STORAGE_KEYS } from './db';
+import { getFromStorage, saveToStorage, generateUniqueId, STORAGE_KEYS } from './db';
 
 export const productService = {
   getProducts: async (filters = {}) => {
@@ -54,7 +54,9 @@ export const productService = {
 
   addProduct: async (productData) => {
     const products = getFromStorage(STORAGE_KEYS.PRODUCTS);
-    const newId = `PROD-${Math.floor(100 + Math.random() * 900)}`;
+    const newId = generateUniqueId('PROD', products, 100, 1000);
+    const parsedStock = Number(productData.stock);
+    const stock = productData.stock !== '' && productData.stock !== undefined && Number.isFinite(parsedStock) ? Math.max(0, Math.floor(parsedStock)) : 10;
     const newProduct = {
       id: newId,
       storeId: productData.storeId,
@@ -66,8 +68,8 @@ export const productService = {
       discount: productData.discount || '20% OFF',
       rating: 5.0,
       reviewsCount: 1,
-      stock: Number(productData.stock) || 10,
-      status: Number(productData.stock) > 5 ? 'In Stock' : (Number(productData.stock) > 0 ? 'Low Stock' : 'Out of Stock'),
+      stock,
+      status: stock > 5 ? 'In Stock' : (stock > 0 ? 'Low Stock' : 'Out of Stock'),
       sales: 0,
       image: productData.image || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&auto=format&fit=crop&q=80',
       description: productData.description || 'Premium quality verified item crafted for lasting durability.',

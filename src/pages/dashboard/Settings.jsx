@@ -14,6 +14,7 @@ import { storeService } from '../../services/storeService';
 export const Settings = ({ navigate }) => {
   const [store, setStore] = useState(null);
   const [savedMessage, setSavedMessage] = useState(false);
+  const [saveError, setSaveError] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,9 +30,14 @@ export const Settings = ({ navigate }) => {
   const handleSave = async (e) => {
     e.preventDefault();
     if (!store) return;
-    await storeService.updateStore(store.id, store);
-    setSavedMessage(true);
-    setTimeout(() => setSavedMessage(false), 2500);
+    try {
+      setStore(await storeService.updateStore(store.id, store));
+      setSaveError('');
+      setSavedMessage(true);
+      setTimeout(() => setSavedMessage(false), 2500);
+    } catch (err) {
+      setSaveError(err.message);
+    }
   };
 
   if (loading) return <div style={{ padding: 40, color: '#64748b' }}>Loading settings...</div>;
@@ -241,6 +247,11 @@ export const Settings = ({ navigate }) => {
             <span style={{ color: '#059669', fontSize: '0.88rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
               <Check size={16} />
               <span>Settings updated successfully!</span>
+            </span>
+          )}
+          {saveError && (
+            <span role="alert" style={{ color: '#dc2626', fontSize: '0.88rem', fontWeight: 600 }}>
+              {saveError}
             </span>
           )}
         </div>

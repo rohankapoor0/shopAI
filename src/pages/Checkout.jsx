@@ -12,27 +12,33 @@ import {
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { orderService } from '../services/orderService';
+import { customerService } from '../services/customerService';
 import confetti from 'canvas-confetti';
 
 export const Checkout = ({ navigate }) => {
   const { cartItems, subtotal, shippingFee, discount, total, clearCart } = useCart();
 
-  // Pre-fill synthetic customer data
-  const [formData, setFormData] = useState({
-    name: "Rohan Kapoor",
-    email: "rohan.kapoor@example.com",
-    phone: "+91 98190 44321",
-    address: "Flat 402, Magnolia Enclave, 12th Main Road, Indiranagar",
-    city: "Bengaluru",
-    state: "Karnataka",
-    pincode: "560038"
+  // Pre-fill from the signed-in shopper and their default saved address
+  const [customer] = useState(() => customerService.getCurrentUser());
+  const [formData, setFormData] = useState(() => {
+    const addr = customer.addresses?.find(a => a.isDefault) ?? customer.addresses?.[0] ?? {};
+    return {
+      name: customer.name ?? '',
+      email: customer.email ?? '',
+      phone: customer.phone ?? '',
+      address: addr.address ?? '',
+      city: addr.city ?? '',
+      state: addr.state ?? '',
+      pincode: addr.pincode ?? ''
+    };
   });
 
   const [paymentMethod, setPaymentMethod] = useState("UPI");
-  const [upiId, setUpiId] = useState("rohan.kapoor@okhdfcbank");
-  const [cardNumber, setCardNumber] = useState("4532 •••• •••• 8921");
+  const [upiId, setUpiId] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
   const [isPlacing, setIsPlacing] = useState(false);
   const [errors, setErrors] = useState({});
+  const [stockError, setStockError] = useState('');
 
   const REQUIRED_FIELDS = {
     name: 'Full Name',
@@ -74,6 +80,7 @@ export const Checkout = ({ navigate }) => {
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
+    if (isPlacing) return;
     if (cartItems.length === 0) {
       alert("Your cart is empty.");
       navigate('/products');
@@ -87,18 +94,35 @@ export const Checkout = ({ navigate }) => {
     }
 
     setIsPlacing(true);
+    setStockError('');
 
     try {
-      // One order per store; cart-level shipping and discount go on the first order
+      // Re-check stock first so no order is created when any line can't be fulfilled
+      const shortfalls = await orderService.getStockShortfalls(cartItems.map(item => ({ productId: item.id, name: item.name, quantity: item.quantity })));
+      if (shortfalls.length > 0) {
+        setStockError(shortfalls.map(s => s.available > 0 ? `${s.name}: only ${s.available} left` : `${s.name}: out of stock`).join(' • '));
+        setIsPlacing(false);
+        return;
+      }
+
+      // One order per store. Cart-level shipping and discount are split by each store's share of the
+      // subtotal (the last order takes the rounding remainder), so every order total stays non-negative.
       const storeGroups = Object.values(Object.groupBy(cartItems, item => item.storeId));
       const newOrders = [];
+      let shippingLeft = shippingFee;
+      let discountLeft = discount;
 
       for (const [idx, group] of storeGroups.entries()) {
         const groupSubtotal = group.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const isLast = idx === storeGroups.length - 1;
+        const groupShipping = isLast ? shippingLeft : Math.round(shippingFee * groupSubtotal / subtotal);
+        const groupDiscount = isLast ? discountLeft : Math.round(discount * groupSubtotal / subtotal);
+        shippingLeft -= groupShipping;
+        discountLeft -= groupDiscount;
         newOrders.push(await orderService.createOrder({
           storeId: group[0].storeId,
           storeName: group[0].storeName,
-          customerId: "CUST-1",
+          customerId: customer.id,
           customerName: formData.name,
           customerEmail: formData.email,
           customerPhone: formData.phone,
@@ -110,7 +134,9 @@ export const Checkout = ({ navigate }) => {
             image: item.image
           })),
           amount: groupSubtotal,
-          totalAmount: idx === 0 ? groupSubtotal + total - subtotal : groupSubtotal,
+          shippingFee: groupShipping,
+          discount: groupDiscount,
+          totalAmount: groupSubtotal + groupShipping - groupDiscount,
           paymentMethod: paymentMethod === 'UPI' ? `UPI (${upiId})` : paymentMethod === 'Card' ? `Card (•••• ${cardNumber.replace(/\D/g, '').slice(-4)})` : 'Cash on Delivery',
           shippingAddress: {
             address: formData.address,
@@ -120,8 +146,6 @@ export const Checkout = ({ navigate }) => {
           }
         }));
       }
-      const newOrder = newOrders[0];
-
       // Trigger celebration confetti
       try {
         confetti({
@@ -131,9 +155,10 @@ export const Checkout = ({ navigate }) => {
         });
       } catch (err) {}
 
-      clearCart();
+      // Navigate before clearing the cart so the empty-cart screen never flashes
       setTimeout(() => {
-        navigate(`/order-success?orderId=${newOrder.id}`);
+        navigate(`/order-success?orderId=${newOrders.map(o => o.id).join(',')}`);
+        clearCart();
       }, 700);
     } catch (err) {
       console.error(err);
@@ -399,6 +424,7 @@ export const Checkout = ({ navigate }) => {
                     aria-invalid={!!errors.cardNumber}
                     value={cardNumber}
                     onChange={(e) => { setCardNumber(e.target.value); clearError('cardNumber'); }}
+                    placeholder="Card number (simulated)"
                     style={{
                       width: '100%',
                       height: 38,
@@ -489,6 +515,12 @@ export const Checkout = ({ navigate }) => {
                 <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#09090b' }}>{formatINR(total)}</span>
               </div>
             </div>
+
+            {stockError && (
+              <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
+                Not enough stock: {stockError}. Update your cart to continue.
+              </div>
+            )}
 
             {Object.keys(errors).length > 0 && (
               <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
