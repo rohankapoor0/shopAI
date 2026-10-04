@@ -1,0 +1,146 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: ShopAI backend - one Lambda behind an HTTP API, DynamoDB tables and an S3 bucket for product images.
+
+Parameters:
+  AllowedOrigin:
+    Type: String
+    Default: http://localhost:5173
+    Description: Frontend origin allowed by CORS (change to the real site URL when it is hosted).
+  JwtSecret:
+    Type: String
+    NoEcho: true
+    MinLength: 32
+    Description: Secret used to sign session tokens (any long random string).
+  AzureOpenAiEndpoint:
+    Type: String
+    Default: ''
+    Description: e.g. https://shopai-openai-6962.openai.azure.com (leave empty to disable the assistant).
+  AzureOpenAiKey:
+    Type: String
+    NoEcho: true
+    Default: ''
+  AzureOpenAiDeployment:
+    Type: String
+    Default: gpt-4.1-mini
+
+Resources:
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-users
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{ AttributeName: email, AttributeType: S }]
+      KeySchema: [{ AttributeName: email, KeyType: HASH }]
+
+  StoresTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-stores
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{ AttributeName: id, AttributeType: S }]
+      KeySchema: [{ AttributeName: id, KeyType: HASH }]
+
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-products
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{ AttributeName: id, AttributeType: S }]
+      KeySchema: [{ AttributeName: id, KeyType: HASH }]
+
+  OrdersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-orders
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{ AttributeName: id, AttributeType: S }]
+      KeySchema: [{ AttributeName: id, KeyType: HASH }]
+
+  ReturnsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub ${AWS::StackName}-returns
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{ AttributeName: id, AttributeType: S }]
+      KeySchema: [{ AttributeName: id, KeyType: HASH }]
+
+  # ponytail: product images are public-read under products/; switch to a private bucket + CloudFront if needed.
+  ImagesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
+      CorsConfiguration:
+        CorsRules:
+          - AllowedMethods: [PUT]
+            AllowedOrigins: [!Ref AllowedOrigin]
+            AllowedHeaders: [content-type]
+            MaxAge: 600
+
+  ImagesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref ImagesBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action: s3:GetObject
+            Resource: !Sub ${ImagesBucket.Arn}/products/*
+
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins: [!Ref AllowedOrigin]
+        AllowMethods: [GET, POST, PATCH, DELETE, OPTIONS]
+        AllowHeaders: [content-type, authorization]
+        MaxAge: 600
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 20
+        ThrottlingRateLimit: 10
+
+  # ponytail: secrets are plain Lambda env vars; move them to Secrets Manager for a real deployment.
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: src/index.handler
+      Runtime: nodejs22.x
+      Architectures: [arm64]
+      MemorySize: 512
+      Timeout: 25
+      Environment:
+        Variables:
+          TABLE_PREFIX: !Ref AWS::StackName
+          BUCKET_NAME: !Ref ImagesBucket
+          JWT_SECRET: !Ref JwtSecret
+          AZURE_OPENAI_ENDPOINT: !Ref AzureOpenAiEndpoint
+          AZURE_OPENAI_API_KEY: !Ref AzureOpenAiKey
+          AZURE_OPENAI_DEPLOYMENT: !Ref AzureOpenAiDeployment
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref UsersTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref StoresTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref ProductsTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref OrdersTable }
+        - DynamoDBCrudPolicy: { TableName: !Ref ReturnsTable }
+        - S3WritePolicy: { BucketName: !Ref ImagesBucket }
+      Events:
+        Proxy:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /{proxy+}
+            Method: ANY
+
+Outputs:
+  ApiUrl:
+    Description: Put this in the frontend .env.local as VITE_API_BASE_URL
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com
+  ImagesBucketName:
+    Value: !Ref ImagesBucket

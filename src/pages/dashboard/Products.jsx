@@ -22,6 +22,8 @@ export const Products = ({ navigate }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -74,6 +76,22 @@ export const Products = ({ navigate }) => {
       description: prod.description || ''
     });
     setModalOpen(true);
+  };
+
+  // Uploads to S3 through a presigned URL, then uses the returned public URL as the product image
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadError('');
+    try {
+      const url = await productService.uploadImage(file);
+      setFormData(prev => ({ ...prev, image: url }));
+    } catch (err) {
+      setUploadError(err.message);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -374,6 +392,18 @@ export const Products = ({ navigate }) => {
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                   style={{ width: '100%', height: 42, padding: '0 14px', borderRadius: 8, border: '1px solid #e2e8f0', color: '#09090b' }}
                 />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8, fontSize: '0.8rem', color: '#64748b' }}>
+                  <span>or upload:</span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    disabled={uploading}
+                    onChange={handleImageUpload}
+                    style={{ fontSize: '0.8rem', border: 'none', padding: 0 }}
+                  />
+                  {uploading && <span>Uploading...</span>}
+                </div>
+                {uploadError && <div style={{ color: '#dc2626', fontSize: '0.75rem', fontWeight: 600, marginTop: 4 }}>{uploadError}</div>}
               </div>
 
               <div>
@@ -399,6 +429,7 @@ export const Products = ({ navigate }) => {
                 </button>
                 <button
                   type="submit"
+                  disabled={uploading}
                   className="btn-primary"
                   style={{ padding: '9px 22px' }}
                 >

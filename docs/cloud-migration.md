@@ -1,134 +1,96 @@
-# ShopAI — Cloud Migration Plan
+# ShopAI — Cloud Backend (AWS)
 
-How to move ShopAI from `localStorage` to AWS, following the target architecture in the sketch in this folder:
+ShopAI's data and business logic run on AWS. The browser keeps only the cart, the session token and the dashboard's selected store.
 
 | Service | Role in ShopAI |
 |---|---|
-| **Amazon S3** | Product images and other uploads |
-| **AWS Lambda** | Backend logic: auth, stores, products, orders, returns, customers |
-| **Amazon API Gateway** | HTTP API the React app calls |
-| **Amazon DynamoDB** | All persistent data |
-| **Azure OpenAI** | One AI feature (shopping assistant or recommendations), called from Lambda |
+| **Amazon DynamoDB** | All persistent data: users, stores (with their reviews), products, orders, returns |
+| **AWS Lambda** | One function (`backend/src/index.mjs`) with a small router for every route |
+| **Amazon API Gateway** | HTTP API, a single `ANY /{proxy+}` route to the Lambda; CORS and throttling (10 req/s, burst 20) |
+| **Amazon S3** | Product images, uploaded straight from the browser with presigned URLs |
+| **Azure OpenAI** | The shopping assistant (`POST /assistant`), called from the same Lambda |
 
-The frontend does not need a rewrite. Every function in `src/services/` is already `async` and maps to one API route below. Replace each function body with an API call, one service at a time.
+Everything is defined in `backend/template.yaml` (AWS SAM), region `ap-south-1`.
 
-## 1. Frontend switch-over pattern
+## Deploy
 
-The client already exists in `src/services/api.js` (it is used by the AI assistant):
+Needs the AWS CLI v2, the AWS SAM CLI and Node 22. Run these from `backend/`:
 
-```js
-const BASE_URL = import.meta.env.VITE_API_BASE_URL; // e.g. https://abc123.execute-api.ap-south-1.amazonaws.com
-
-export const isApiConfigured = Boolean(BASE_URL);
-
-export const apiFetch = async (path, { method = 'GET', body, token } = {}) => {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` })
-    },
-    body: body && JSON.stringify(body)
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || `Request failed (${res.status})`);
-  return data;
-};
+```bash
+aws configure sso             # once: IAM Identity Center sign-in, profile "shopai", region ap-south-1
+aws sso login --profile shopai   # whenever the session expires (about every 8 h)
+export AWS_PROFILE=shopai     # PowerShell: $env:AWS_PROFILE = "shopai"
+npm install
+sam build
+sam deploy --guided           # first time: stack name "shopai", region ap-south-1, enter the parameters below
+TABLE_PREFIX=shopai AWS_REGION=ap-south-1 ADMIN_PASSWORD='...' DEMO_PASSWORD='...' node seed.mjs
 ```
 
-To migrate a service, replace its body with an `apiFetch` call. For example, in `userService.js`:
+SSO setup (once, in the AWS console as the account owner): IAM Identity Center → Enable. Under Users, add yourself and accept the email invite. Under Permission sets, create one from `AdministratorAccess`. Under AWS accounts, assign your user to this account with that permission set. Copy the AWS access portal URL for `aws configure sso`.
 
-```js
-register: (data) => apiFetch('/auth/register', { method: 'POST', body: data }),
-```
+Then put the `ApiUrl` stack output in the frontend's `.env.local` as `VITE_API_BASE_URL=...` and restart `npm run dev`.
 
-Callers such as `Register.jsx` already `await` these methods and show `err.message`, so they keep working unchanged.
+Later deploys need only `sam build && sam deploy`. `samconfig.toml` and `.aws-sam/` are git-ignored.
 
-## 2. DynamoDB tables
+| Parameter | Value |
+|---|---|
+| `JwtSecret` | Any random string of 32+ characters. Changing it signs everyone out. |
+| `AllowedOrigin` | `http://localhost:5173`, later the real site URL (used for API and S3 CORS) |
+| `AzureOpenAiEndpoint` / `AzureOpenAiKey` / `AzureOpenAiDeployment` | The Azure OpenAI resource (`shopai-openai-6962`, deployment `gpt-4.1-mini`). Leave empty to disable the assistant (it returns 503). |
 
-Use one table per entity; it is simpler to reason about than a single-table design at this size. Billing mode: on-demand. Region: `ap-south-1` (Mumbai), since users and prices are in India.
+**Seeding** copies `src/services/initialData.js` into the tables. The admin is the Users item with key `admin`, so you sign in with username `admin` and `ADMIN_PASSWORD`. Each seeded customer (for example `rohan.kapoor@example.com`) signs in with `DEMO_PASSWORD`. Re-running the seed resets those seed items.
 
-| Table | Partition key | Sort key | GSIs (partition / sort) | Serves |
-|---|---|---|---|---|
-| `ShopAI_Users` | `email` (S) | none | `UserIdIndex`: `id` | register, login, profile |
-| `ShopAI_Stores` | `id` (S) | none | `HandleIndex`: `handle` | store directory, storefront by id or handle, dashboard |
-| `ShopAI_Products` | `id` (S) | none | `StoreIndex`: `storeId` | catalog, product page, store catalog, inventory |
-| `ShopAI_Orders` | `id` (S) | none | `StoreIndex`: `storeId` / `date`; `CustomerIndex`: `customerId` / `date` | checkout, tracking, customer history, merchant orders |
-| `ShopAI_Returns` | `id` (S) | none | `StoreIndex`: `storeId`; `CustomerIndex`: `customerId` | return requests, merchant review |
-| `ShopAI_Reviews` | `storeId` (S) | `id` (S) | none | storefront reviews |
+**Tests:** `cd backend && npm test` covers tokens, password hashing, routing, auth checks and input validation. None of these tests need AWS.
 
-Notes:
+## DynamoDB tables
 
-- **Users.** Item shape matches what `userService.register()` stores today: `{ email, id, name, phone, role, createdAt, salt, passwordHash }`. Create the item with `PutItem` plus `ConditionExpression: attribute_not_exists(email)`, which is the server-side version of the "email already exists" check. Seeded customers (`shopai_customers_v1`) can become Users items with role `customer`, with `addresses` as a list attribute.
-- **Products "search"** (category, price, rating, keyword) is currently done in memory. For the prototype, `Query StoreIndex` or `Scan` plus filtering in Lambda is fine for about 100 products. If the catalog grows, add OpenSearch.
-- **Checkout must be atomic.** Create all per-store orders and decrement stock in one `TransactWriteItems`, with `ConditionExpression: stock >= :qty` on each product, so two shoppers cannot buy the last item. The browser version cannot guarantee this.
-- **Store metrics** (`totalSales`, `totalOrders`): update them with `UpdateExpression: ADD` in the same transaction.
-- **Cart** stays in the browser; it does not need a table.
-- **Seeding:** a one-off script that reads `src/services/initialData.js` and `BatchWriteItem`s it into each table.
+All tables are on-demand and named `<stack>-<name>`.
 
-## 3. API Gateway routes to Lambda to existing service methods
+| Table | Key | Notes |
+|---|---|---|
+| `users` | `email` | `{ email, id, name, phone, role, addresses, salt, passwordHash }`. Register uses `attribute_not_exists(email)`. |
+| `stores` | `id` | Includes `metrics` (`totalSales`, `totalOrders`) and `reviews` (seed reviews, read-only). |
+| `products` | `id` | `stock`, `status` (derived from stock) and `sales` are updated by checkout, cancellations and returns. |
+| `orders` | `id` | One order per store per checkout. `customerId` is the user id. |
+| `returns` | `id` | Has `restocked` and `refunded` flags, so stock and sales change only once. |
 
-HTTP API, JSON in and out. The "Auth" column says who may call each route.
+Lookups by store or customer use a `Scan` plus a filter in the Lambda (see the `ponytail:` note in `lib.mjs`). Add `StoreIndex` and `CustomerIndex` GSIs if the tables grow past a few thousand items.
 
-| Method + path | Replaces | Auth |
+## Routes
+
+The Lambda checks the `Authorization: Bearer <token>` header itself. The "Auth" column says who may call each route.
+
+| Method + path | Frontend caller | Auth |
 |---|---|---|
 | `POST /auth/register` | `userService.register` | public |
-| `POST /auth/login` (returns `{ token, user }`) | `authService.login` / `userService.verifyCredentials` | public |
-| `GET /me` | `authService.getCurrentUser` | signed in |
+| `POST /auth/login` → `{ token, user }` | `authService.login` | public |
 | `GET /stores` · `GET /stores/{idOrHandle}` | `storeService.getStores` / `getStoreById` | signed in |
-| `POST /stores` · `PATCH /stores/{id}` | `storeService.createStore` / `updateStore` | admin |
-| `GET /products?category&search&storeId` · `GET /products/{id}` | `productService.getProducts` / `getProductById` / `getProductsByStore` | signed in |
-| `POST /products` · `PATCH /products/{id}` · `DELETE /products/{id}` | `productService.addProduct` / `updateProduct` / `deleteProduct` | admin |
-| `POST /orders` (whole cart; Lambda splits it per store) | `orderService.createOrder` (loop in `Checkout.jsx`) | signed in |
-| `GET /orders/{id}` · `GET /orders?customerId=me` | `orderService.getOrderById` / `getCustomerOrders` | owner or admin |
-| `GET /orders?storeId=` · `PATCH /orders/{id}/status` | `orderService.getStoreOrders` / `updateOrderStatus` | admin |
-| `POST /returns` · `GET /returns?customerId=me` | `returnService.createReturn` / `getCustomerReturns` | signed in |
-| `GET /returns?storeId=` · `PATCH /returns/{id}/status` | `returnService.getStoreReturns` / `updateReturnStatus` | admin |
+| `POST /stores` | `storeService.createStore` (Sell → Create Store) | signed in |
+| `PATCH /stores/{id}` | `storeService.updateStore` | admin |
 | `GET /stores/{id}/customers` | `customerService.getStoreCustomers` | admin |
-| `POST /uploads/product-image` (returns presigned URL) | new | admin |
-| `POST /assistant` | new (Azure OpenAI) | signed in |
+| `GET /products?storeId&category&search&minPrice&maxPrice&minRating&sortBy` · `GET /products/{id}` | `productService` | signed in |
+| `POST /products` · `PATCH /products/{id}` · `DELETE /products/{id}` | `productService` | admin |
+| `POST /uploads/product-image` → `{ uploadUrl, url }` | `productService.uploadImage` | admin |
+| `POST /orders` (whole cart) → `{ orders }` | `orderService.createOrders` | signed in |
+| `GET /orders` (mine) · `GET /orders/{id}` | `orderService.getCustomerOrders` / `getOrderById` | owner or admin |
+| `GET /orders?storeId=` · `PATCH /orders/{id}/status` | `orderService.getStoreOrders` / `updateOrderStatus` | admin |
+| `POST /returns` · `GET /returns` (mine) | `returnService.createReturn` / `getCustomerReturns` | signed in |
+| `GET /returns?storeId=` · `PATCH /returns/{id}/status` | `returnService.getStoreReturns` / `updateReturnStatus` | admin |
+| `POST /assistant` | `assistantService.sendMessage` | signed in |
 
-The dashboard's "active store" stays a frontend concern; tabs pass the `storeId` to these routes.
+Errors come back as `{ "message": "..." }` with a matching status (400, 401, 403, 404, 409 and so on). `apiFetch` throws them as `Error` objects with `err.status`. A 401 on a signed-in call clears the session and shows the login screen.
 
-## 4. Auth on the backend
+## How the important parts work
 
-- **Move** `validateRegistration` and `hashPassword` from `userService.js` into the register and login Lambdas. Web Crypto (`crypto.subtle`) exists in Node 18+, so the code copies over as-is. Compare hashes with `crypto.timingSafeEqual` there.
-- **Sessions:** the login Lambda returns a signed JWT (short expiry) containing `sub` (user id) and `role`. The frontend stores the token in place of today's `shopai_session_v2` user object and sends it as `Authorization: Bearer …`.
-- **Protect routes** with an API Gateway Lambda authorizer (or a JWT authorizer). Admin routes check `role === 'admin'` on the server, because the frontend's `isAdmin` check is only for UI.
-- **Admin:** delete the hardcoded `admin`/`admin`. Create the admin as a Users item with `role: 'admin'` and a strong password.
-- **Alternative:** Amazon Cognito user pools replace all of the above (sign-up, login, JWTs, admin group). This is more setup but no password code to own.
+- **Auth.** Passwords use PBKDF2-SHA256 (100,000 iterations, 16-byte salt), compared with `timingSafeEqual`. Login returns an HS256 JWT valid for 12 h, holding `sub` (user id), `role`, `email` and `name`, signed with `node:crypto`. Admin routes check `role === 'admin'` on the server. The frontend's `isAdmin` only decides what to show.
+- **Checkout is atomic.** `POST /orders` reads the products, re-prices the cart from the database (client prices are ignored), applies shipping (₹99 at ₹1,500 or less) and the 10% discount (above ₹3,000), and splits both across the per-store orders. It then runs one `TransactWriteItems`: every order Put, every stock update (condition `stock = <value read>`), and every store's `metrics` `ADD`. If stock changed meanwhile, it retries up to 3 times. Real shortages return 409 with "X: only N left".
+- **Status changes.** Order and return updates are saved with a condition that the status is still the one that was read. Only then do they restock or adjust metrics, so a double click can't apply side effects twice.
+- **Returns.** These are allowed only on your own Delivered orders, one open return per item. The refund amount comes from the order.
+- **Images.** The presigned PUT expires after 5 minutes and accepts only JPEG, PNG, WebP or GIF. Objects under `products/` are publicly readable.
 
-## 5. S3 for images
+## Not done yet
 
-1. The admin selects a file in the Add or Edit Product modal.
-2. The frontend calls `POST /uploads/product-image` with `{ fileName, contentType }`. Lambda returns a presigned `PUT` URL plus the final object URL.
-3. The browser `PUT`s the file straight to S3, then saves the object URL as `product.image`.
-
-The bucket stays private and is served through CloudFront. Allow only `image/*` content types and limit the size in the presign policy.
-
-## 6. Azure OpenAI (one feature)
-
-The shopping assistant **UI is already built** (`ChatWidget` plus `assistantService`). It needs one Lambda behind `POST /assistant` that calls Azure OpenAI and returns `{ reply, productIds }`. The full contract, a Lambda sketch, configuration and security notes are in **[ai-assistant.md](ai-assistant.md)**.
-
-- **Keep the key server-side.** It lives in the `/assistant` Lambda's environment (or Secrets Manager); never ship it to the browser.
-- **Guardrails:** rate-limit in API Gateway and cap `max_tokens`.
-
-## 7. Suggested order
-
-1. Create the DynamoDB tables and seed them.
-2. Build the auth Lambdas and API (`/auth/register`, `/auth/login`, `/me`); switch `userService` and `authService`.
-3. Build read-only store and product routes; switch those services.
-4. Build orders (transactional checkout) and returns.
-5. Add the admin write routes and the authorizer role checks.
-6. Add S3 uploads.
-7. Deploy the Azure OpenAI assistant Lambda ([ai-assistant.md](ai-assistant.md)). This step can be done any time, even first, because it does not depend on the other routes.
-
-After each step the app keeps working: services not yet migrated still use `localStorage`.
-
-## Environment variables (frontend)
-
-| Name | Example | Used by |
-|---|---|---|
-| `VITE_API_BASE_URL` | `https://abc123.execute-api.ap-south-1.amazonaws.com` | `src/services/api.js` (currently only `assistantService`) |
-
-Put it in `.env.local`, which git already ignores through `*.local`.
+- Frontend hosting (S3 + CloudFront, or Amplify). After hosting, set `AllowedOrigin` to the site URL.
+- Secrets are plain Lambda environment variables. Move them to Secrets Manager or SSM for a real deployment.
+- Upload size isn't capped (a presigned POST with `content-length-range` would fix that). Store logo and banner still use URLs.
+- Payments are simulated.

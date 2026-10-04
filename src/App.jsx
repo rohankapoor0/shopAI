@@ -176,46 +176,13 @@ export default function App() {
 
     return (
       <div className="app-container">
-        {/* Prototype Demo Banner Switcher Helper */}
-        <div style={{
-          backgroundColor: '#09090b',
-          borderBottom: '1px solid #27272a',
-          padding: '6px 20px',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          fontSize: '0.76rem',
-          color: '#a1a1aa',
-          gap: 10,
-          zIndex: 60,
-          position: 'relative'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ background: '#27272a', color: '#ffffff', padding: '2px 7px', borderRadius: 4, fontWeight: 700, letterSpacing: '0.02em', fontSize: '0.7rem' }}>
-              ShopAI Prototype
-            </span>
-            <span style={{ color: '#71717a' }}>• Multi-Vendor Local Demo</span>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
-            <span style={{ color: '#71717a', fontWeight: 500 }}>Quick Nav:</span>
-            <button onClick={() => navigate('/store/STORE-1001')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Urban Threads</button>
-            <button onClick={() => navigate('/store/STORE-1002')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>TechHub</button>
-            <button onClick={() => navigate('/orders/ORD-10452')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Track Order</button>
-            <button onClick={() => navigate('/sell/create')} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 600 }}>+ Create Store</button>
-            {isAdmin && <button onClick={() => navigate('/dashboard')} style={{ color: '#10b981', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 700 }}>Merchant Dashboard →</button>}
-            <button onClick={handleLogout} style={{ color: '#e4e4e7', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Log out</button>
-          </div>
-        </div>
-
-        <Navbar currentPath={currentPath} navigate={navigate} />
+        <Navbar currentPath={currentPath} navigate={navigate} onLogout={handleLogout} />
         <div className="main-content">
           {pageContent}
         </div>
         <Footer navigate={navigate} />
 
-        {/* AI shopping assistant (UI only until the Azure OpenAI backend is connected) */}
+        {/* AI shopping assistant (POST /assistant on the Lambda -> Azure OpenAI) */}
         <ChatWidget navigate={navigate} />
 
         {/* Global Return / Refund Modal */}

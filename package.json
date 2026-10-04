@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview",
-    "server": "node --env-file-if-exists=server/.env.local server/assistant.mjs"
+    "preview": "vite preview"
   },
   "dependencies": {
     "canvas-confetti": "^1.9.4",

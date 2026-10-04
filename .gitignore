@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# AWS SAM build output and deploy settings (samconfig.toml can hold parameter values)
+.aws-sam
+samconfig.toml
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

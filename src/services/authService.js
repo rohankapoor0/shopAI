@@ -1,26 +1,26 @@
-import { getFromStorage, STORAGE_KEYS } from './db';
-import { userService } from './userService';
+import { getFromStorage, saveToStorage, STORAGE_KEYS } from './db';
+import { apiFetch } from './api';
 
-// ponytail: hardcoded built-in admin, prototype only; replace with real auth (e.g. Cognito) later
-const ADMIN_USER = { id: 'ADMIN', name: 'Admin', username: 'admin', role: 'admin' };
-const ADMIN_PASSWORD = 'admin';
-
+// Session in localStorage: { token, user }. The token is a signed JWT checked by the Lambda on every call.
 export const authService = {
-  // Accepts the admin username or a registered user's email. Returns the signed-in user, or null.
+  // Accepts "admin" or a registered user's email. Returns the signed-in user, or null for wrong credentials.
   login: async (identifier, password) => {
-    const id = identifier.trim();
-    const user = id === ADMIN_USER.username
-      ? (password === ADMIN_PASSWORD ? ADMIN_USER : null)
-      : await userService.verifyCredentials(id, password);
-    if (user) localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify(user));
-    return user;
+    try {
+      const { token, user } = await apiFetch('/auth/login', { method: 'POST', body: { identifier: identifier.trim(), password } });
+      saveToStorage(STORAGE_KEYS.SESSION, { token, user });
+      return user;
+    } catch (err) {
+      if (err.status === 401) return null;
+      throw err;
+    }
   },
 
   logout: () => {
     localStorage.removeItem(STORAGE_KEYS.SESSION);
   },
 
-  getCurrentUser: () => getFromStorage(STORAGE_KEYS.SESSION, null),
+  getCurrentUser: () => getFromStorage(STORAGE_KEYS.SESSION, null)?.user ?? null,
 
+  // UI only; the Lambda enforces admin routes itself
   isAdmin: (user) => user?.role === 'admin'
 };

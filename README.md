@@ -2,7 +2,7 @@
 
 A high-performance, polished functional prototype of **ShopAI**, a multi-vendor e-commerce marketplace platform built with React, Vite, Lucide Icons, and modern aesthetics.
 
-Designed with clean service abstractions (`src/services/`) for seamless future connection to **AWS Lambda** and **DynamoDB**.
+Backed by **AWS**: DynamoDB for data, one Lambda behind an API Gateway HTTP API, S3 for product images, and **Azure OpenAI** for the shopping assistant (`backend/`, AWS SAM).
 
 ---
 
@@ -17,7 +17,7 @@ Designed with clean service abstractions (`src/services/`) for seamless future c
 - **Visual Order Tracking (`/orders/:orderId`)**: Interactive 6-stage fulfillment stepper timeline:
   `Order Placed` -> `Confirmed` -> `Packed` -> `Shipped` -> `Out for Delivery` -> `Delivered`.
 - **Customer Profile & Returns (`/profile`, `/orders`)**: Order history, saved addresses, and an interactive return request workflow.
-- **AI Shopping Assistant (UI)**: Floating chat button on every marketplace page; hide/expand panel, suggestion chips, product suggestions. Ready to connect to Azure OpenAI (see `docs/ai-assistant.md`).
+- **AI Shopping Assistant**: Floating chat button on every marketplace page; hide/expand panel, suggestion chips, clickable product suggestions, answered by Azure OpenAI from live catalog data (see `docs/ai-assistant.md`).
 
 ### Merchant Platform & Dashboard
 - **Seller Landing & Onboarding Wizard (`/sell`, `/sell/create`)**:
@@ -36,29 +36,27 @@ Designed with clean service abstractions (`src/services/`) for seamless future c
 
 ## Tech Stack & Architecture
 
-- **Frontend**: React 19, Vite, Lucide React, Canvas Confetti
-- **Styling**: Vanilla CSS with modern dark mode, glassmorphism, responsive mobile drawers, and CSS variables
-- **State & Storage**: Frontend state + `localStorage` persistence
-- **Service Layer**:
-  - `storeService.js`
-  - `productService.js`
-  - `orderService.js`
-  - `returnService.js`
-  - `customerService.js`
+- **Frontend**: React 19, Vite, Lucide React, Canvas Confetti, vanilla CSS
+- **Backend** (`backend/`): AWS SAM template with DynamoDB (users, stores, products, orders, returns), one Node 22 Lambda behind an API Gateway HTTP API, an S3 bucket for product images, JWT auth
+- **AI**: Azure OpenAI (`gpt-4.1-mini`) called from the Lambda
+- **Browser state**: only the cart, the session token and the dashboard's selected store
 
 ---
 
-## Getting Started Locally
+## Getting Started
 
 ```bash
-# Clone the repository
 git clone https://github.com/rohankapoor0/shopAI.git
 cd shopAI
 
-# Install dependencies
-npm install
+# 1. Deploy the backend and seed it (needs AWS CLI + SAM CLI): see docs/cloud-migration.md
+cd backend && npm install && sam build && sam deploy --guided && cd ..
 
-# Start the development server
+# 2. Point the frontend at it
+echo "VITE_API_BASE_URL=<ApiUrl from the stack outputs>" > .env.local
+
+# 3. Run the frontend
+npm install
 npm run dev
 ```
 
@@ -70,5 +68,5 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 - [docs/handoff.md](docs/handoff.md) — current status, accounts, known gaps, next steps
 - [docs/implementation.md](docs/implementation.md) — how the frontend works (routing, auth, checkout, dashboard, data model)
-- [docs/cloud-migration.md](docs/cloud-migration.md) — DynamoDB tables, API Gateway routes, Lambda, S3 and Azure OpenAI plan
-- [docs/ai-assistant.md](docs/ai-assistant.md) — connecting the chat widget to Azure OpenAI (API contract + Lambda sketch)
+- [docs/cloud-migration.md](docs/cloud-migration.md) — AWS backend: deploy, seed, DynamoDB tables, routes, how checkout/auth work
+- [docs/ai-assistant.md](docs/ai-assistant.md) — the Azure OpenAI assistant route (contract, configuration, guardrails)

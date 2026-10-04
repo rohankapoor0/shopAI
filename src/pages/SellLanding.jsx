@@ -14,7 +14,7 @@ import {
 import { authService } from '../services/authService';
 
 export const SellLanding = ({ navigate }) => {
-  // The dashboard is admin-only; getActiveStoreId() always falls back to a store, so it can't gate this
+  // The dashboard is admin-only
   const isAdmin = authService.isAdmin(authService.getCurrentUser());
 
   const benefits = [

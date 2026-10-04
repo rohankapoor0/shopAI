@@ -1,55 +1,8 @@
-// ShopAI LocalStorage Service Layer & Database Abstraction
-// Designed to be drop-in replaceable with AWS Lambda + DynamoDB later.
-
-import {
-  INITIAL_STORES,
-  INITIAL_PRODUCTS,
-  INITIAL_CUSTOMERS,
-  INITIAL_ORDERS,
-  INITIAL_RETURNS,
-  INITIAL_REVIEWS
-} from './initialData';
-
+// Browser-only state. Everything else lives in DynamoDB behind the API (see api.js).
 const STORAGE_KEYS = {
-  STORES: 'shopai_stores_v1',
-  PRODUCTS: 'shopai_products_v1',
-  ORDERS: 'shopai_orders_v1',
-  RETURNS: 'shopai_returns_v1',
-  CUSTOMERS: 'shopai_customers_v1',
-  REVIEWS: 'shopai_reviews_v1',
   CART: 'shopai_cart_v1',
   ACTIVE_STORE_ID: 'shopai_active_store_id_v1',
-  ACTIVE_USER: 'shopai_active_user_v1',
-  SESSION: 'shopai_session_v2',
-  USERS: 'shopai_users_v1'
-};
-
-// Initialize DB with seed data if not present
-export const initDB = () => {
-  if (!localStorage.getItem(STORAGE_KEYS.STORES)) {
-    localStorage.setItem(STORAGE_KEYS.STORES, JSON.stringify(INITIAL_STORES));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.PRODUCTS)) {
-    localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(INITIAL_PRODUCTS));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.ORDERS)) {
-    localStorage.setItem(STORAGE_KEYS.ORDERS, JSON.stringify(INITIAL_ORDERS));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.RETURNS)) {
-    localStorage.setItem(STORAGE_KEYS.RETURNS, JSON.stringify(INITIAL_RETURNS));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.CUSTOMERS)) {
-    localStorage.setItem(STORAGE_KEYS.CUSTOMERS, JSON.stringify(INITIAL_CUSTOMERS));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.REVIEWS)) {
-    localStorage.setItem(STORAGE_KEYS.REVIEWS, JSON.stringify(INITIAL_REVIEWS));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.CART)) {
-    localStorage.setItem(STORAGE_KEYS.CART, JSON.stringify([]));
-  }
-  if (!localStorage.getItem(STORAGE_KEYS.ACTIVE_USER)) {
-    localStorage.setItem(STORAGE_KEYS.ACTIVE_USER, JSON.stringify(INITIAL_CUSTOMERS[0]));
-  }
+  SESSION: 'shopai_session_v3'
 };
 
 export const getFromStorage = (key, fallback = []) => {
@@ -68,19 +21,6 @@ export const saveToStorage = (key, data) => {
   } catch (err) {
     console.error(`Error saving ${key} to storage:`, err);
   }
-};
-
-// Random `${prefix}-<n>` id with min <= n < max that no existing record uses.
-export const generateUniqueId = (prefix, existing, min, max) => {
-  const used = new Set(existing.map(item => item.id));
-  for (let attempt = 0; attempt < 1000; attempt++) {
-    const id = `${prefix}-${Math.floor(min + Math.random() * (max - min))}`;
-    if (!used.has(id)) return id;
-  }
-  // Range nearly exhausted: fall back to a sequential id past the range
-  let n = max;
-  while (used.has(`${prefix}-${n}`)) n++;
-  return `${prefix}-${n}`;
 };
 
 export { STORAGE_KEYS };

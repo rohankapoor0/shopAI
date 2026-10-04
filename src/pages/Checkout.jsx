@@ -38,7 +38,7 @@ export const Checkout = ({ navigate }) => {
   const [cardNumber, setCardNumber] = useState("");
   const [isPlacing, setIsPlacing] = useState(false);
   const [errors, setErrors] = useState({});
-  const [stockError, setStockError] = useState('');
+  const [orderError, setOrderError] = useState('');
 
   const REQUIRED_FIELDS = {
     name: 'Full Name',
@@ -94,58 +94,24 @@ export const Checkout = ({ navigate }) => {
     }
 
     setIsPlacing(true);
-    setStockError('');
+    setOrderError('');
 
     try {
-      // Re-check stock first so no order is created when any line can't be fulfilled
-      const shortfalls = await orderService.getStockShortfalls(cartItems.map(item => ({ productId: item.id, name: item.name, quantity: item.quantity })));
-      if (shortfalls.length > 0) {
-        setStockError(shortfalls.map(s => s.available > 0 ? `${s.name}: only ${s.available} left` : `${s.name}: out of stock`).join(' • '));
-        setIsPlacing(false);
-        return;
-      }
-
-      // One order per store. Cart-level shipping and discount are split by each store's share of the
-      // subtotal (the last order takes the rounding remainder), so every order total stays non-negative.
-      const storeGroups = Object.values(Object.groupBy(cartItems, item => item.storeId));
-      const newOrders = [];
-      let shippingLeft = shippingFee;
-      let discountLeft = discount;
-
-      for (const [idx, group] of storeGroups.entries()) {
-        const groupSubtotal = group.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const isLast = idx === storeGroups.length - 1;
-        const groupShipping = isLast ? shippingLeft : Math.round(shippingFee * groupSubtotal / subtotal);
-        const groupDiscount = isLast ? discountLeft : Math.round(discount * groupSubtotal / subtotal);
-        shippingLeft -= groupShipping;
-        discountLeft -= groupDiscount;
-        newOrders.push(await orderService.createOrder({
-          storeId: group[0].storeId,
-          storeName: group[0].storeName,
-          customerId: customer.id,
-          customerName: formData.name,
-          customerEmail: formData.email,
-          customerPhone: formData.phone,
-          items: group.map(item => ({
-            productId: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity,
-            image: item.image
-          })),
-          amount: groupSubtotal,
-          shippingFee: groupShipping,
-          discount: groupDiscount,
-          totalAmount: groupSubtotal + groupShipping - groupDiscount,
-          paymentMethod: paymentMethod === 'UPI' ? `UPI (${upiId})` : paymentMethod === 'Card' ? `Card (•••• ${cardNumber.replace(/\D/g, '').slice(-4)})` : 'Cash on Delivery',
-          shippingAddress: {
-            address: formData.address,
-            city: formData.city,
-            state: formData.state,
-            pincode: formData.pincode
-          }
-        }));
-      }
+      // The Lambda re-prices the cart, checks stock, creates one order per store (splitting shipping and
+      // discount by each store's share) and decrements stock, all in one transaction.
+      const { orders: newOrders } = await orderService.createOrders({
+        items: cartItems.map(item => ({ productId: item.id, quantity: item.quantity })),
+        customerName: formData.name,
+        customerEmail: formData.email,
+        customerPhone: formData.phone,
+        paymentMethod: paymentMethod === 'UPI' ? `UPI (${upiId})` : paymentMethod === 'Card' ? `Card (•••• ${cardNumber.replace(/\D/g, '').slice(-4)})` : 'Cash on Delivery',
+        shippingAddress: {
+          address: formData.address,
+          city: formData.city,
+          state: formData.state,
+          pincode: formData.pincode
+        }
+      });
       // Trigger celebration confetti
       try {
         confetti({
@@ -162,6 +128,7 @@ export const Checkout = ({ navigate }) => {
       }, 700);
     } catch (err) {
       console.error(err);
+      setOrderError(err.status === 409 ? `Not enough stock: ${err.message}. Update your cart to continue.` : err.message);
       setIsPlacing(false);
     }
   };
@@ -516,9 +483,9 @@ export const Checkout = ({ navigate }) => {
               </div>
             </div>
 
-            {stockError && (
+            {orderError && (
               <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 10 }}>
-                Not enough stock: {stockError}. Update your cart to continue.
+                {orderError}
               </div>
             )}
 

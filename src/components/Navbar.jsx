@@ -9,16 +9,17 @@ import {
   Menu, 
   X, 
   LayoutDashboard,
-  ArrowRight
+  ArrowRight,
+  LogOut
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { authService } from '../services/authService';
 
-export const Navbar = ({ currentPath, navigate }) => {
+export const Navbar = ({ currentPath, navigate, onLogout }) => {
   const { totalCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  // The dashboard is admin-only; getActiveStoreId() always falls back to a store, so it can't gate this
+  // The dashboard is admin-only
   const isAdmin = authService.isAdmin(authService.getCurrentUser());
 
   const handleSearchSubmit = (e) => {
@@ -304,6 +305,36 @@ export const Navbar = ({ currentPath, navigate }) => {
             )}
           </button>
 
+          {/* Log out (desktop; the mobile drawer has its own) */}
+          <button
+            onClick={onLogout}
+            className="desktop-logout"
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 10,
+              display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#ffffff',
+              border: '1px solid var(--border-subtle)',
+              color: '#52525b',
+              boxShadow: 'var(--shadow-xs)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#fecdd3';
+              e.currentTarget.style.color = '#e11d48';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'var(--border-subtle)';
+              e.currentTarget.style.color = '#52525b';
+            }}
+            title="Log out"
+            aria-label="Log out"
+          >
+            <LogOut size={17} />
+          </button>
+
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -414,6 +445,26 @@ export const Navbar = ({ currentPath, navigate }) => {
             >
               Sell on ShopAI →
             </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onLogout();
+              }}
+              style={{
+                padding: '10px 12px',
+                borderRadius: 8,
+                textAlign: 'left',
+                fontSize: '0.92rem',
+                color: '#e11d48',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8
+              }}
+            >
+              <LogOut size={16} />
+              Log out
+            </button>
           </div>
         </div>
       )}
@@ -423,6 +474,7 @@ export const Navbar = ({ currentPath, navigate }) => {
         @media (min-width: 768px) {
           .desktop-nav { display: flex !important; }
           .desktop-search { display: block !important; }
+          .desktop-logout { display: flex !important; }
           .mobile-menu-btn { display: none !important; }
         }
       `}</style>

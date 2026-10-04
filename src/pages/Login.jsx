@@ -11,12 +11,17 @@ export const Login = ({ navigate, onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    const user = await authService.login(username, password);
-    setSubmitting(false);
-    if (user) {
-      onLogin(user);
-    } else {
-      setError('Invalid username or password');
+    try {
+      const user = await authService.login(username, password);
+      if (user) {
+        onLogin(user);
+      } else {
+        setError('Invalid username or password');
+      }
+    } catch (err) {
+      setError(err.message || 'Could not reach the server. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
 

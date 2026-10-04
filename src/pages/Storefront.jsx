@@ -16,7 +16,6 @@ import {
 } from 'lucide-react';
 import { storeService } from '../services/storeService';
 import { productService } from '../services/productService';
-import { getFromStorage, STORAGE_KEYS } from '../services/db';
 import { ProductCard } from '../components/ProductCard';
 
 export const Storefront = ({ storeId, navigate }) => {
@@ -33,9 +32,7 @@ export const Storefront = ({ storeId, navigate }) => {
         setStore(currentStore);
         const storeProducts = await productService.getProductsByStore(currentStore.id);
         setProducts(storeProducts);
-
-        const allReviews = getFromStorage(STORAGE_KEYS.REVIEWS, []);
-        setReviews(allReviews.filter(r => r.storeId === currentStore.id));
+        setReviews(currentStore.reviews ?? []);
       }
       setLoading(false);
     };

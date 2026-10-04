@@ -15,6 +15,7 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
   const [notes, setNotes] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const reasons = [
     "Damaged product",
@@ -28,20 +29,13 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError('');
 
     try {
+      // The Lambda fills in store, customer, quantity and refund amount from the order itself
       await returnService.createReturn({
         orderId: order.id,
-        storeId: order.storeId,
-        storeName: order.storeName,
-        customerId: order.customerId || "CUST-1",
-        customerName: order.customerName || "Rohan Kapoor",
-        customerEmail: order.customerEmail || "rohan.kapoor@example.com",
         productId: selectedProduct.productId,
-        productName: selectedProduct.name,
-        productImage: selectedProduct.image,
-        quantity: selectedProduct.quantity,
-        amount: selectedProduct.price * selectedProduct.quantity,
         reason: reason,
         notes: notes
       });
@@ -50,6 +44,7 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
       if (onSuccess) onSuccess();
     } catch (err) {
       console.error(err);
+      setSubmitError(err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -235,6 +230,10 @@ const ReturnModalContent = ({ order, onClose, onSuccess }) => {
                 }}
               />
             </div>
+
+            {submitError && (
+              <div role="alert" style={{ color: '#dc2626', fontSize: '0.82rem', fontWeight: 600, marginBottom: 12 }}>{submitError}</div>
+            )}
 
             <div style={{ display: 'flex', gap: 12 }}>
               <button
