@@ -17,7 +17,7 @@ import {
   ShoppingBag,
   LogOut
 } from 'lucide-react';
-import { storeService } from '../../services/storeService';
+import { storeService, STORES_CHANGED_EVENT } from '../../services/storeService';
 
 export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, children }) => {
   const [stores, setStores] = useState([]);
@@ -48,6 +48,13 @@ export const DashboardLayout = ({ activeTab = 'overview', navigate, onLogout, ch
     };
     loadStores();
   }, [reloadKey]);
+
+  // Pick up renames and new stores saved elsewhere (e.g. the Settings tab)
+  useEffect(() => {
+    const onStoresChanged = () => setReloadKey(k => k + 1);
+    window.addEventListener(STORES_CHANGED_EVENT, onStoresChanged);
+    return () => window.removeEventListener(STORES_CHANGED_EVENT, onStoresChanged);
+  }, []);
 
   const retryLoad = () => {
     setStatus('loading');

@@ -103,7 +103,7 @@ export const Orders = ({ navigate }) => {
           </div>
 
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {['All', 'Placed', 'Confirmed', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered'].map(st => (
+            {['All', ...statuses].map(st => (
               <button
                 key={st}
                 onClick={() => setFilterStatus(st)}
@@ -175,6 +175,8 @@ export const Orders = ({ navigate }) => {
                     <td style={{ padding: '12px 14px', textAlign: 'right' }}>
                       <select
                         value={o.status}
+                        disabled={o.status === 'Cancelled'}
+                        title={o.status === 'Cancelled' ? 'Cancelled orders are final' : undefined}
                         onChange={(e) => handleStatusChange(o.id, e.target.value)}
                         style={{
                           backgroundColor: '#ffffff',

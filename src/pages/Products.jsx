@@ -67,18 +67,19 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
 
         {/* Mobile Filter Trigger */}
         <button
-          onClick={() => setMobileFilterOpen(true)}
+          onClick={() => setMobileFilterOpen(open => !open)}
+          aria-expanded={mobileFilterOpen}
           className="btn-secondary mobile-filter-btn"
           style={{ display: 'none', alignItems: 'center', gap: 8 }}
         >
           <Filter size={16} />
-          <span>Filters & Sort</span>
+          <span>{mobileFilterOpen ? 'Hide Filters' : 'Filters & Sort'}</span>
         </button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 32 }} className="catalog-layout">
         {/* Left Filters Sidebar */}
-        <aside className="filters-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <aside className={`filters-sidebar${mobileFilterOpen ? ' open' : ''}`} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div className="clean-card" style={{ padding: '22px', borderRadius: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
               <div style={{ fontWeight: 700, fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: 6, color: '#09090b' }}>
@@ -262,7 +263,7 @@ export const Products = ({ initialSearch = '', initialCategory = 'All', navigate
       <style>{`
         @media (max-width: 840px) {
           .catalog-layout { grid-template-columns: 1fr !important; }
-          .filters-sidebar { display: none !important; }
+          .filters-sidebar:not(.open) { display: none !important; }
           .mobile-filter-btn { display: inline-flex !important; }
         }
       `}</style>

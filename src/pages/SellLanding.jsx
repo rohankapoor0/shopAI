@@ -11,10 +11,11 @@ import {
   Layers, 
   Users 
 } from 'lucide-react';
-import { storeService } from '../services/storeService';
+import { authService } from '../services/authService';
 
 export const SellLanding = ({ navigate }) => {
-  const activeStoreId = storeService.getActiveStoreId();
+  // The dashboard is admin-only; getActiveStoreId() always falls back to a store, so it can't gate this
+  const isAdmin = authService.isAdmin(authService.getCurrentUser());
 
   const benefits = [
     {
@@ -104,7 +105,7 @@ export const SellLanding = ({ navigate }) => {
           </p>
 
           <div style={{ display: 'flex', justifyContent: 'center', gap: 16 }}>
-            {activeStoreId ? (
+            {isAdmin ? (
               <button
                 onClick={() => navigate('/dashboard')}
                 className="btn-primary"

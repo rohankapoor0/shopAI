@@ -1,6 +1,6 @@
 // Minimal client for the future API Gateway backend (see docs/cloud-migration.md).
 // Set VITE_API_BASE_URL in .env.local to enable it; services fall back to local behaviour when it is unset.
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '');
 
 export const isApiConfigured = Boolean(BASE_URL);
 

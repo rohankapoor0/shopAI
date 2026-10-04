@@ -1215,6 +1215,8 @@ export const INITIAL_RETURNS = [
     reason: "Product not as described",
     notes: "Dropper cap was slightly loose.",
     status: "Refunded",
+    restocked: true,
+    refunded: true,
     createdAt: "2026-03-20",
     updatedAt: "2026-03-21"
   }

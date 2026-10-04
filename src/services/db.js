@@ -70,4 +70,17 @@ export const saveToStorage = (key, data) => {
   }
 };
 
+// Random `${prefix}-<n>` id with min <= n < max that no existing record uses.
+export const generateUniqueId = (prefix, existing, min, max) => {
+  const used = new Set(existing.map(item => item.id));
+  for (let attempt = 0; attempt < 1000; attempt++) {
+    const id = `${prefix}-${Math.floor(min + Math.random() * (max - min))}`;
+    if (!used.has(id)) return id;
+  }
+  // Range nearly exhausted: fall back to a sequential id past the range
+  let n = max;
+  while (used.has(`${prefix}-${n}`)) n++;
+  return `${prefix}-${n}`;
+};
+
 export { STORAGE_KEYS };

@@ -1,4 +1,6 @@
-import { getFromStorage, saveToStorage, STORAGE_KEYS } from './db';
+import { getFromStorage, saveToStorage, generateUniqueId, STORAGE_KEYS } from './db';
+import { productService } from './productService';
+import { adjustStoreMetrics } from './orderService';
 
 export const returnService = {
   getReturns: async () => {
@@ -17,7 +19,7 @@ export const returnService = {
 
   createReturn: async (returnPayload) => {
     const returns = getFromStorage(STORAGE_KEYS.RETURNS);
-    const newReturnId = `RET-${Math.floor(2000 + Math.random() * 8000)}`;
+    const newReturnId = generateUniqueId('RET', returns, 2000, 10000);
 
     const newReturn = {
       id: newReturnId,
@@ -30,6 +32,7 @@ export const returnService = {
       productId: returnPayload.productId,
       productName: returnPayload.productName,
       productImage: returnPayload.productImage,
+      quantity: returnPayload.quantity ?? 1,
       amount: returnPayload.amount,
       reason: returnPayload.reason,
       notes: returnPayload.notes || "",
@@ -46,12 +49,26 @@ export const returnService = {
   updateReturnStatus: async (returnId, newStatus) => {
     const returns = getFromStorage(STORAGE_KEYS.RETURNS);
     const index = returns.findIndex(r => r.id === returnId);
-    if (index !== -1) {
-      returns[index].status = newStatus;
-      returns[index].updatedAt = new Date().toISOString().split('T')[0];
-      saveToStorage(STORAGE_KEYS.RETURNS, returns);
-      return returns[index];
+    if (index === -1) return null;
+    const ret = returns[index];
+
+    // The item is back once it is Returned (or Refunded); restock it once.
+    if ((newStatus === "Returned" || newStatus === "Refunded") && !ret.restocked) {
+      const product = await productService.getProductById(ret.productId);
+      if (product) {
+        await productService.updateProduct(product.id, { stock: product.stock + (ret.quantity ?? 1) });
+      }
+      ret.restocked = true;
     }
-    return null;
+    // Refunds come out of the store's sales once.
+    if (newStatus === "Refunded" && !ret.refunded) {
+      adjustStoreMetrics(ret.storeId, -(ret.amount || 0));
+      ret.refunded = true;
+    }
+
+    ret.status = newStatus;
+    ret.updatedAt = new Date().toISOString().split('T')[0];
+    saveToStorage(STORAGE_KEYS.RETURNS, returns);
+    return ret;
   }
 };

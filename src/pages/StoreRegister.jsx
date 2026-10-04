@@ -13,9 +13,11 @@ import {
   CheckCircle2 
 } from 'lucide-react';
 import { storeService } from '../services/storeService';
+import { authService } from '../services/authService';
 import confetti from 'canvas-confetti';
 
 export const StoreRegister = ({ navigate }) => {
+  const isAdmin = authService.isAdmin(authService.getCurrentUser());
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [createdStore, setCreatedStore] = useState(null);
@@ -141,14 +143,16 @@ export const StoreRegister = ({ navigate }) => {
               <span>Go to Store</span>
             </button>
 
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="btn-primary"
-              style={{ padding: '12px 28px', fontSize: '0.95rem', borderRadius: 10 }}
-            >
-              <span>Open Store Dashboard</span>
-              <ArrowRight size={17} />
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="btn-primary"
+                style={{ padding: '12px 28px', fontSize: '0.95rem', borderRadius: 10 }}
+              >
+                <span>Open Store Dashboard</span>
+                <ArrowRight size={17} />
+              </button>
+            )}
           </div>
         </div>
       ) : (

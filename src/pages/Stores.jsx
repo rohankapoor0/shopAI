@@ -9,7 +9,6 @@ export const Stores = ({ navigate }) => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortBy, setSortBy] = useState('rating');
 
-  const categories = ['All', 'Fashion', 'Electronics', 'Home', 'Sports', 'Beauty'];
 
   useEffect(() => {
     const load = async () => {
@@ -18,6 +17,9 @@ export const Stores = ({ navigate }) => {
     };
     load();
   }, []);
+
+  // Include every category a store actually uses (StoreRegister offers more than the defaults)
+  const categories = ['All', ...new Set(['Fashion', 'Electronics', 'Home', 'Sports', 'Beauty', ...stores.map(s => s.category).filter(Boolean)])];
 
   const filteredStores = stores
     .filter(store => {

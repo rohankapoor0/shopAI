@@ -1,21 +1,43 @@
-import { getFromStorage, saveToStorage, STORAGE_KEYS } from './db';
+import { getFromStorage, saveToStorage, generateUniqueId, STORAGE_KEYS } from './db';
 import { productService } from './productService';
 
 const STAGES = ["Order Placed", "Confirmed", "Packed", "Shipped", "Out for Delivery", "Delivered"];
 
-const buildTrackingUpdates = (currentStatus) => {
-  const currentIndex = STAGES.indexOf(currentStatus === "Placed" ? "Order Placed" : currentStatus);
+// cancelledAt: the stage the order had reached when it was cancelled (keeps that progress visible)
+const buildTrackingUpdates = (currentStatus, cancelledAt) => {
+  const toStage = (status) => STAGES.indexOf(status === "Placed" ? "Order Placed" : status);
+  const isCancelled = currentStatus === "Cancelled";
+  const currentIndex = isCancelled ? toStage(cancelledAt ?? "Placed") : toStage(currentStatus);
   const now = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
 
-  return STAGES.map((stage, idx) => {
-    if (idx < currentIndex) {
+  const updates = STAGES.map((stage, idx) => {
+    if (idx < currentIndex || (isCancelled && idx === currentIndex)) {
       return { stage, date: "Completed", completed: true, current: false };
     } else if (idx === currentIndex) {
       return { stage, date: now, completed: true, current: true };
     } else {
-      return { stage, date: "Pending", completed: false, current: false };
+      return { stage, date: isCancelled ? "Cancelled" : "Pending", completed: false, current: false };
     }
   });
+  return isCancelled ? [...updates, { stage: "Cancelled", date: now, completed: true, current: true }] : updates;
+};
+
+// Adds delta to a product's stock (negative to deduct), never going below zero.
+const adjustStock = async (productId, delta) => {
+  const product = await productService.getProductById(productId);
+  if (product) {
+    await productService.updateProduct(product.id, { stock: Math.max(0, product.stock + delta) });
+  }
+};
+
+export const adjustStoreMetrics = (storeId, salesDelta, ordersDelta = 0) => {
+  const stores = getFromStorage(STORAGE_KEYS.STORES);
+  const store = stores.find(s => s.id === storeId);
+  if (!store) return;
+  store.metrics = store.metrics ?? { totalSales: 0, totalOrders: 0, totalCustomers: 0 };
+  store.metrics.totalSales = Math.max(0, store.metrics.totalSales + salesDelta);
+  store.metrics.totalOrders = Math.max(0, store.metrics.totalOrders + ordersDelta);
+  saveToStorage(STORAGE_KEYS.STORES, stores);
 };
 
 export const orderService = {
@@ -40,7 +62,7 @@ export const orderService = {
 
   createOrder: async (orderPayload) => {
     const orders = getFromStorage(STORAGE_KEYS.ORDERS);
-    const newOrderId = `ORD-${Math.floor(10000 + Math.random() * 90000)}`;
+    const newOrderId = generateUniqueId('ORD', orders, 10000, 100000);
 
     const newOrder = {
       id: newOrderId,
@@ -53,8 +75,9 @@ export const orderService = {
       customerPhone: orderPayload.customerPhone || "+91 98190 44321",
       items: orderPayload.items || [],
       amount: orderPayload.amount,
-      shippingFee: 0,
-      totalAmount: orderPayload.totalAmount || orderPayload.amount,
+      shippingFee: orderPayload.shippingFee ?? 0,
+      discount: orderPayload.discount ?? 0,
+      totalAmount: orderPayload.totalAmount ?? orderPayload.amount,
       paymentMethod: orderPayload.paymentMethod || "UPI",
       status: "Placed",
       shippingAddress: orderPayload.shippingAddress,
@@ -65,38 +88,51 @@ export const orderService = {
     const updated = [newOrder, ...orders];
     saveToStorage(STORAGE_KEYS.ORDERS, updated);
 
-    // Deduct purchased quantities from stock
     for (const item of newOrder.items) {
-      const product = await productService.getProductById(item.productId);
-      if (product) {
-        await productService.updateProduct(product.id, { stock: Math.max(0, product.stock - item.quantity) });
-      }
+      await adjustStock(item.productId, -item.quantity);
     }
-
-    // Update store metrics
-    const stores = getFromStorage(STORAGE_KEYS.STORES);
-    const storeIdx = stores.findIndex(s => s.id === newOrder.storeId);
-    if (storeIdx !== -1) {
-      stores[storeIdx].metrics.totalSales += newOrder.totalAmount;
-      stores[storeIdx].metrics.totalOrders += 1;
-      saveToStorage(STORAGE_KEYS.STORES, stores);
-    }
+    adjustStoreMetrics(newOrder.storeId, newOrder.totalAmount, 1);
 
     return newOrder;
+  },
+
+  // Returns the cart lines that exceed current stock: [{ productId, name, requested, available }]
+  getStockShortfalls: async (items) => {
+    const shortfalls = [];
+    for (const item of items) {
+      const product = await productService.getProductById(item.productId);
+      const available = product ? product.stock : 0;
+      if (item.quantity > available) {
+        shortfalls.push({ productId: item.productId, name: item.name, requested: item.quantity, available });
+      }
+    }
+    return shortfalls;
   },
 
   updateOrderStatus: async (orderId, newStatus) => {
     const orders = getFromStorage(STORAGE_KEYS.ORDERS);
     const index = orders.findIndex(o => o.id === orderId);
-    if (index !== -1) {
-      orders[index].status = newStatus;
-      orders[index].trackingUpdates = buildTrackingUpdates(newStatus);
-      if (newStatus === "Delivered") {
-        orders[index].expectedDelivery = "Delivered Today";
+    if (index === -1) return null;
+    const order = orders[index];
+
+    // A cancelled order has already been restocked and refunded, so it is final.
+    if (order.status === newStatus || order.status === "Cancelled") return order;
+
+    if (newStatus === "Cancelled") {
+      order.cancelledAt = order.status;
+      for (const item of order.items) {
+        await adjustStock(item.productId, item.quantity);
       }
-      saveToStorage(STORAGE_KEYS.ORDERS, orders);
-      return orders[index];
+      adjustStoreMetrics(order.storeId, -order.totalAmount, -1);
+      order.expectedDelivery = "Cancelled";
+    } else if (newStatus === "Delivered") {
+      order.expectedDelivery = "Delivered Today";
+    } else if (order.status === "Delivered") {
+      order.expectedDelivery = "In 3-5 business days";
     }
-    return null;
+    order.status = newStatus;
+    order.trackingUpdates = buildTrackingUpdates(newStatus, order.cancelledAt);
+    saveToStorage(STORAGE_KEYS.ORDERS, orders);
+    return order;
   }
 };

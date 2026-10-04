@@ -51,8 +51,9 @@ export const Overview = ({ navigate }) => {
   if (loading) return <div style={{ padding: 40, color: '#64748b' }}>Loading dashboard...</div>;
   if (!store) return <div style={{ padding: 40, color: '#64748b' }}>Store not found.</div>;
 
-  const totalSales = orders.reduce((sum, o) => sum + o.totalAmount, store.metrics?.totalSales || 0);
-  const totalOrdersCount = orders.length > 0 ? orders.length : (store.metrics?.totalOrders || 0);
+  // store.metrics is the lifetime running total; orderService/returnService keep it in sync with each order
+  const totalSales = store.metrics?.totalSales ?? orders.reduce((sum, o) => sum + o.totalAmount, 0);
+  const totalOrdersCount = store.metrics?.totalOrders ?? orders.length;
 
   // Synthetic Sales Chart Bar Data (Last 7 Days)
   const chartData = [
@@ -153,7 +154,7 @@ export const Overview = ({ navigate }) => {
             </div>
           </div>
           <div style={{ fontSize: '1.65rem', fontWeight: 800, color: '#09090b', letterSpacing: '-0.02em' }}>
-            {customers.length > 0 ? customers.length : 84}
+            {customers.length}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 8, fontSize: '0.78rem', color: '#059669', fontWeight: 600 }}>
             <ArrowUpRight size={14} />

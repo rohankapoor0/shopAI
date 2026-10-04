@@ -12,13 +12,14 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { storeService } from '../services/storeService';
+import { authService } from '../services/authService';
 
 export const Navbar = ({ currentPath, navigate }) => {
   const { totalCount } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const activeStoreId = storeService.getActiveStoreId();
+  // The dashboard is admin-only; getActiveStoreId() always falls back to a store, so it can't gate this
+  const isAdmin = authService.isAdmin(authService.getCurrentUser());
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -197,7 +198,7 @@ export const Navbar = ({ currentPath, navigate }) => {
         {/* Right Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {/* Sell on ShopAI or Dashboard CTA */}
-          {activeStoreId ? (
+          {isAdmin ? (
             <button
               onClick={() => navigate('/dashboard')}
               style={{

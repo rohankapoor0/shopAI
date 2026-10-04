@@ -1,7 +1,12 @@
 import { getFromStorage, saveToStorage, STORAGE_KEYS } from './db';
 
 export const customerService = {
+  // The shopper is the signed-in registered customer; the admin account shops as the seeded demo customer.
   getCurrentUser: () => {
+    const session = getFromStorage(STORAGE_KEYS.SESSION, null);
+    if (session && session.role !== 'admin') {
+      return { addresses: [], ...session };
+    }
     return getFromStorage(STORAGE_KEYS.ACTIVE_USER, {
       id: "CUST-1",
       name: "Rohan Kapoor",
@@ -25,7 +30,7 @@ export const customerService = {
     
     // Group orders by customerId
     const customerMap = {};
-    storeOrders.forEach(order => {
+    storeOrders.filter(order => order.status !== 'Cancelled').forEach(order => {
       if (!customerMap[order.customerId]) {
         customerMap[order.customerId] = {
           id: order.customerId,
@@ -44,12 +49,6 @@ export const customerService = {
       }
     });
 
-    const storeCustomers = Object.values(customerMap);
-    if (storeCustomers.length === 0) {
-      // Return sample customers with 0 orders if brand new store
-      const all = getFromStorage(STORAGE_KEYS.CUSTOMERS);
-      return all.slice(0, 5).map(c => ({ ...c, ordersCount: 0, totalSpent: 0 }));
-    }
-    return storeCustomers;
+    return Object.values(customerMap);
   }
 };

@@ -10,18 +10,21 @@ import {
 } from 'lucide-react';
 import { orderService } from '../services/orderService';
 
+// orderId may hold several comma-separated ids: checkout creates one order per store.
 export const OrderSuccess = ({ orderId, navigate }) => {
-  const [order, setOrder] = useState(null);
+  const [orders, setOrders] = useState(null);
+  const orderIds = (orderId || '').split(',').filter(Boolean);
 
   useEffect(() => {
-    const fetchOrder = async () => {
-      if (orderId) {
-        const o = await orderService.getOrderById(orderId);
-        setOrder(o);
-      }
+    const fetchOrders = async () => {
+      const ids = (orderId || '').split(',').filter(Boolean);
+      const found = await Promise.all(ids.map(id => orderService.getOrderById(id)));
+      setOrders(found.filter(Boolean));
     };
-    fetchOrder();
+    fetchOrders();
   }, [orderId]);
+
+  const grandTotal = (orders ?? []).reduce((sum, o) => sum + o.totalAmount, 0);
 
   const formatINR = (val) => new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -58,83 +61,95 @@ export const OrderSuccess = ({ orderId, navigate }) => {
           Thank you for supporting independent labels on ShopAI. Your simulated order has been registered and routed to the merchant.
         </p>
 
-        {order ? (
-          <div style={{
-            background: '#f8fafc',
-            border: '1px solid #e5e7eb',
-            borderRadius: 14,
-            padding: '24px',
-            textAlign: 'left',
-            marginBottom: 28
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: 14, marginBottom: 16 }}>
-              <div>
-                <div style={{ fontSize: '0.74rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
-                  Order ID
-                </div>
-                <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
-                  {order.id}
-                </div>
-              </div>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: '0.74rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
-                  Total Amount
-                </div>
-                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#09090b' }}>
-                  {formatINR(order.totalAmount)}
-                </div>
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, fontSize: '0.85rem' }}>
-              <div>
-                <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Store</span>
-                <span style={{ fontWeight: 700, color: '#09090b' }}>{order.storeName}</span>
-              </div>
-              <div>
-                <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Estimated Delivery</span>
-                <span style={{ fontWeight: 700, color: '#059669' }}>{order.expectedDelivery}</span>
-              </div>
-              <div>
-                <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Delivery Destination</span>
-                <span style={{ fontWeight: 700, color: '#09090b' }}>{order.shippingAddress?.city}, {order.shippingAddress?.state}</span>
-              </div>
-              <div>
-                <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Payment Method</span>
-                <span style={{ fontWeight: 700, color: '#09090b' }}>{order.paymentMethod}</span>
-              </div>
-            </div>
-
-            {/* Items list */}
-            <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 14, marginTop: 14 }}>
-              <div style={{ fontSize: '0.78rem', color: '#71717a', marginBottom: 8, fontWeight: 700 }}>
-                Ordered Items ({order.items.length})
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {order.items.map((it, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <img src={it.image} alt={it.name} style={{ width: 34, height: 34, borderRadius: 6, objectFit: 'cover' }} />
-                      <span style={{ color: '#09090b', fontWeight: 600 }}>{it.name} × {it.quantity}</span>
-                    </div>
-                    <span style={{ fontWeight: 700, color: '#09090b' }}>{formatINR(it.price * it.quantity)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        ) : (
+        {orders === null ? (
           <div style={{ padding: '20px', color: 'var(--text-muted)' }}>Loading order confirmation...</div>
+        ) : orders.length === 0 ? (
+          <div style={{ padding: '20px', color: 'var(--text-muted)' }}>We couldn't find this order. Check your Orders page for its status.</div>
+        ) : (
+          <>
+            {orders.length > 1 && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14, fontSize: '0.92rem', color: '#09090b' }}>
+                <span style={{ fontWeight: 600 }}>{orders.length} orders, one per store</span>
+                <span style={{ fontWeight: 800 }}>Total paid: {formatINR(grandTotal)}</span>
+              </div>
+            )}
+            {orders.map(order => (
+              <div key={order.id} style={{
+                background: '#f8fafc',
+                border: '1px solid #e5e7eb',
+                borderRadius: 14,
+                padding: '24px',
+                textAlign: 'left',
+                marginBottom: 28
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e5e7eb', paddingBottom: 14, marginBottom: 16 }}>
+                  <div>
+                    <div style={{ fontSize: '0.74rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+                      Order ID
+                    </div>
+                    <div style={{ fontSize: '1.05rem', fontWeight: 800, color: '#09090b', fontFamily: 'var(--font-mono)' }}>
+                      {order.id}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: '0.74rem', color: '#71717a', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.04em' }}>
+                      Total Amount
+                    </div>
+                    <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#09090b' }}>
+                      {formatINR(order.totalAmount)}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, fontSize: '0.85rem' }}>
+                  <div>
+                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Store</span>
+                    <span style={{ fontWeight: 700, color: '#09090b' }}>{order.storeName}</span>
+                  </div>
+                  <div>
+                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Estimated Delivery</span>
+                    <span style={{ fontWeight: 700, color: '#059669' }}>{order.expectedDelivery}</span>
+                  </div>
+                  <div>
+                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Delivery Destination</span>
+                    <span style={{ fontWeight: 700, color: '#09090b' }}>{order.shippingAddress?.city}, {order.shippingAddress?.state}</span>
+                  </div>
+                  <div>
+                    <span style={{ color: '#71717a', display: 'block', fontSize: '0.75rem' }}>Payment Method</span>
+                    <span style={{ fontWeight: 700, color: '#09090b' }}>{order.paymentMethod}</span>
+                  </div>
+                </div>
+
+                {/* Items list */}
+                <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 14, marginTop: 14 }}>
+                  <div style={{ fontSize: '0.78rem', color: '#71717a', marginBottom: 8, fontWeight: 700 }}>
+                    Ordered Items ({order.items.length})
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {order.items.map((it, idx) => (
+                      <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <img src={it.image} alt={it.name} style={{ width: 34, height: 34, borderRadius: 6, objectFit: 'cover' }} />
+                          <span style={{ color: '#09090b', fontWeight: 600 }}>{it.name} × {it.quantity}</span>
+                        </div>
+                        <span style={{ fontWeight: 700, color: '#09090b' }}>{formatINR(it.price * it.quantity)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
         )}
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, justifyContent: 'center' }}>
           <button
-            onClick={() => navigate(`/orders/${orderId || ''}`)}
+            onClick={() => navigate(orderIds.length === 1 ? `/orders/${orderIds[0]}` : '/orders')}
             className="btn-primary"
             style={{ padding: '12px 28px', fontSize: '0.95rem', borderRadius: 10 }}
           >
             <Package size={17} />
-            <span>Track This Order</span>
+            <span>{orderIds.length > 1 ? 'Track My Orders' : 'Track This Order'}</span>
           </button>
 
           <button
