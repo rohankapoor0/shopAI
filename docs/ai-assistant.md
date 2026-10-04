@@ -29,11 +29,15 @@ Content-Type: application/json
     { "role": "user", "content": "Gift ideas under ₹2,000" },
     { "role": "assistant", "content": "Here are a few ideas…" },
     { "role": "user", "content": "Something for a runner?" }
+  ],
+  "catalog": [
+    { "id": "PROD-401", "name": "Apex Aero Responsive Running Shoes", "category": "Sports", "price": 4999, "rating": 4.7, "storeName": "FitZone", "stock": 19 }
   ]
 }
 ```
 
-- `messages` is oldest first, at most the last 10, in OpenAI chat format (`role` is `user` or `assistant`).
+- `messages` is oldest first, at most the last 10, in OpenAI chat format (`role` is `user` or `assistant`). The last message must be from the user.
+- `catalog` (optional) is the live product list from the browser's localStorage, so answers match what the shopper sees (prices, stock, merchant-added products). The backend caps it at 200 rows and only links ids from it. Once products live in DynamoDB, the backend should load them itself and ignore this field.
 - Failed replies shown in the UI are **not** included.
 - There is no auth header yet (see Security).
 
@@ -57,6 +61,22 @@ Content-Type: application/json
 
 The UI shows a generic "Something went wrong. Please try again." bubble; the message goes to the browser console.
 
+## Local dev backend (working now)
+
+`server/assistant.mjs` is a dependency-free Node server (Node 22.9+) that implements this contract against the real Azure OpenAI resource. It grounds answers on the `catalog` the browser sends, falling back to the seed catalog in `src/services/initialData.js`. It listens on `127.0.0.1` only, allows a single CORS origin, caps request bodies at 256 KB and times out Azure calls after 20 s.
+
+| Azure | Value |
+|---|---|
+| Resource group | `shopai-rg` (South India) |
+| Azure OpenAI resource | `shopai-openai-6962` |
+| Deployment | `gpt-4.1-mini` (GlobalStandard, 50K tokens/min) |
+
+1. Create `server/.env.local` (git-ignored) with `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, `AZURE_OPENAI_DEPLOYMENT`, `ALLOWED_ORIGIN=http://localhost:5173` and `PORT=8787`. The key comes from `az cognitiveservices account keys list -g shopai-rg -n shopai-openai-6962`.
+2. Create `.env.local` with `VITE_API_BASE_URL=http://localhost:8787`.
+3. Run `npm run server` and `npm run dev` in two terminals.
+
+The Lambda below is a starting point for production. Port the server's validation too: role filtering, the last-message-is-user check, the content-filter and malformed-JSON handling in `parseModelReply`, and the Azure timeout.
+
 ## Lambda sketch (Node.js 20+)
 
 ```js
@@ -65,7 +85,7 @@ const { AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT } =
 const API_VERSION = '2024-10-21'; // check Azure docs for the current GA version
 
 const cors = {
-  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN ?? '*',
+  'Access-Control-Allow-Origin': process.env.ALLOWED_ORIGIN,
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Content-Type': 'application/json'
 };
@@ -89,7 +109,7 @@ export const handler = async (event) => {
         body: JSON.stringify({
           messages: [
             { role: 'system', content: systemPrompt(products) },
-            ...messages.slice(-10).map(({ role, content }) => ({ role, content: String(content).slice(0, 2000) }))
+            ...messages.filter(m => m?.role === 'user' || m?.role === 'assistant').slice(-10).map(({ role, content }) => ({ role, content: String(content).slice(0, 2000) }))
           ],
           max_tokens: 400,
           temperature: 0.4,
@@ -101,14 +121,14 @@ export const handler = async (event) => {
     const data = await res.json();
 
     // 3. Return { reply, productIds } — keep only ids that really exist
-    const parsed = JSON.parse(data.choices[0].message.content);
+    const parsed = JSON.parse(data.choices[0].message.content ?? '{}') ?? {};
     const known = new Set(products.map(p => p.id));
     return {
       statusCode: 200,
       headers: cors,
       body: JSON.stringify({
         reply: String(parsed.reply ?? ''),
-        productIds: (parsed.productIds ?? []).filter(id => known.has(id)).slice(0, 4)
+        productIds: (Array.isArray(parsed.productIds) ? parsed.productIds : []).filter(id => known.has(id)).slice(0, 4)
       })
     };
   } catch (err) {

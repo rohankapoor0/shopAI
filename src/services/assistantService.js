@@ -1,6 +1,7 @@
 // AI shopping assistant: the single seam between the chat UI and Azure OpenAI.
 // The request/response contract and the Lambda to build are described in docs/ai-assistant.md.
 import { apiFetch, isApiConfigured } from './api';
+import { productService } from './productService';
 
 const MAX_HISTORY = 10;
 
@@ -20,7 +21,11 @@ export const assistantService = {
       return { reply: NOT_CONNECTED_REPLY, productIds: [] };
     }
 
-    const data = await apiFetch('/assistant', { method: 'POST', body: { messages: history } });
+    // The live catalog is in localStorage until products move to the cloud, so send it for grounding.
+    const catalog = (await productService.getProducts()).map(({ id, name, category, price, rating, storeName, stock }) => ({
+      id, name, category, price, rating, storeName, stock
+    }));
+    const data = await apiFetch('/assistant', { method: 'POST', body: { messages: history, catalog } });
     return { reply: data.reply ?? '', productIds: data.productIds ?? [] };
   }
 };
