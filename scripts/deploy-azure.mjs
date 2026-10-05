@@ -1,6 +1,6 @@
 // Builds the website and publishes it, with the API as managed Functions, to the Azure Static Web App.
 // Run from the repo root after "az login": npm run deploy:azure
-// The app's settings must hold JWT_SECRET, ADMIN_PASSWORD, DEMO_PASSWORD and AZURE_OPENAI_* (see backend/azure.mjs).
+// The app's settings must hold the values listed at the top of backend/azure.mjs.
 import { execFileSync } from 'node:child_process';
 import { cpSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
@@ -15,12 +15,13 @@ cpSync('backend/src', `${api}/backend/src`, { recursive: true });
 for (const file of ['azure.mjs', 'tables.mjs', 'seed.mjs']) cpSync(`backend/${file}`, `${api}/backend/${file}`);
 cpSync('src/services/initialData.js', `${api}/src/services/initialData.js`);
 const backend = JSON.parse(readFileSync('backend/package.json', 'utf8'));
+const azureDeps = ['@azure/functions', '@azure/storage-blob', 'dynalite'];
 writeFileSync(`${api}/package.json`, JSON.stringify({
   name: 'shopai-azure-api',
   private: true,
   type: 'module',
   main: 'backend/azure.mjs',
-  dependencies: { ...backend.dependencies, '@azure/functions': backend.devDependencies['@azure/functions'], dynalite: backend.devDependencies.dynalite }
+  dependencies: { ...backend.dependencies, ...Object.fromEntries(azureDeps.map(d => [d, backend.devDependencies[d]])) }
 }, null, 2));
 writeFileSync(`${api}/host.json`, JSON.stringify({ version: '2.0' }));
 run('npm', ['install', '--omit=dev', '--no-fund', '--no-audit'], { cwd: api });

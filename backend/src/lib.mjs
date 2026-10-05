@@ -39,6 +39,17 @@ export const scanAll = async (TableName) => {
 
 export const getItem = async (TableName, Key) => (await db.get({ TableName, Key })).Item;
 
+// Writes items 25 at a time (the BatchWriteItem limit), retrying whatever DynamoDB leaves unprocessed.
+export const batchPutAll = async (TableName, items) => {
+  for (let i = 0; i < items.length; i += 25) {
+    let RequestItems = { [TableName]: items.slice(i, i + 25).map(Item => ({ PutRequest: { Item } })) };
+    while (Object.keys(RequestItems).length > 0) {
+      const { UnprocessedItems } = await db.batchWrite({ RequestItems });
+      RequestItems = UnprocessedItems ?? {};
+    }
+  }
+};
+
 // Puts a new item under a random `${prefix}-<n>` id (min <= n < max), retrying on the rare collision.
 export const putWithNewId = async (TableName, prefix, min, max, build) => {
   for (let attempt = 0; attempt < 5; attempt++) {

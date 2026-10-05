@@ -1,7 +1,7 @@
 // One-off seed: copies src/services/initialData.js into the DynamoDB tables of a deployed stack.
 // Usage (from backend/):  TABLE_PREFIX=shopai ADMIN_PASSWORD=... DEMO_PASSWORD=... AWS_REGION=ap-south-1 node seed.mjs
 // Re-running overwrites the seed items (and resets their stock/metrics); other records are left alone.
-import { db, TABLES, newSalt, hashPassword } from './src/lib.mjs';
+import { TABLES, newSalt, hashPassword, batchPutAll } from './src/lib.mjs';
 import {
   INITIAL_STORES, INITIAL_PRODUCTS, INITIAL_CUSTOMERS, INITIAL_ORDERS, INITIAL_RETURNS, INITIAL_REVIEWS
 } from '../src/services/initialData.js';
@@ -35,13 +35,7 @@ const users = [
 const stores = INITIAL_STORES.map(s => ({ ...s, reviews: INITIAL_REVIEWS.filter(r => r.storeId === s.id) }));
 
 const writeAll = async (TableName, items) => {
-  for (let i = 0; i < items.length; i += 25) {
-    let RequestItems = { [TableName]: items.slice(i, i + 25).map(Item => ({ PutRequest: { Item } })) };
-    while (Object.keys(RequestItems).length > 0) {
-      const { UnprocessedItems } = await db.batchWrite({ RequestItems });
-      RequestItems = UnprocessedItems ?? {};
-    }
-  }
+  await batchPutAll(TableName, items);
   console.log(`${TableName}: ${items.length} items`);
 };
 

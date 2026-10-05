@@ -14,10 +14,10 @@ export const productService = {
 
   deleteProduct: (productId) => apiFetch(`/products/${encodeURIComponent(productId)}`, { method: 'DELETE' }),
 
-  // Uploads straight to S3 with a presigned URL from the API; resolves to the public image URL.
+  // Uploads straight to storage (S3 or Azure Blob) with a presigned URL from the API; resolves to the public image URL.
   uploadImage: async (file) => {
-    const { uploadUrl, url } = await apiFetch('/uploads/product-image', { method: 'POST', body: { contentType: file.type, size: file.size } });
-    const res = await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': file.type }, body: file });
+    const { uploadUrl, url, uploadHeaders } = await apiFetch('/uploads/product-image', { method: 'POST', body: { contentType: file.type, size: file.size } });
+    const res = await fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': file.type, ...uploadHeaders }, body: file });
     if (!res.ok) throw new Error(`Image upload failed (${res.status})`);
     return url;
   }

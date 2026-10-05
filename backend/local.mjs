@@ -3,7 +3,7 @@
 // First run creates the tables and seeds them (admin / admin1234, seeded customers / demo1234).
 // Not available locally: the AI assistant (needs AZURE_OPENAI_*) and product image upload (needs S3).
 import { createServer } from 'node:http';
-import { setupTables } from './tables.mjs';
+import { createTables } from './tables.mjs';
 
 const env = {
   AWS_ENDPOINT_URL_DYNAMODB: 'http://localhost:8000',
@@ -17,7 +17,7 @@ const env = {
 };
 for (const [k, v] of Object.entries(env)) process.env[k] ??= v;
 
-await setupTables();
+if (await createTables()) await import('./seed.mjs');
 
 const { handler } = await import('./src/index.mjs');
 const PORT = process.env.PORT ?? 3001;

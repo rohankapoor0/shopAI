@@ -1,8 +1,8 @@
-// Creates the template.yaml tables in a local/in-memory DynamoDB and seeds them on first run.
-// Used by local.mjs (DynamoDB Local) and azure.mjs (dynalite). Call after the AWS_* env is set.
+// Creates the template.yaml tables in DynamoDB Local (local.mjs) or dynalite (azure.mjs).
+// Call after the AWS_* env is set. Resolves to true when at least one table was new (i.e. needs data).
 import { CreateTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
-export const setupTables = async () => {
+export const createTables = async () => {
   const client = new DynamoDBClient({});
   let created = false;
   for (const [name, key] of [['users', 'email'], ['stores', 'id'], ['products', 'id'], ['orders', 'id'], ['returns', 'id']]) {
@@ -18,5 +18,5 @@ export const setupTables = async () => {
       if (err.name !== 'ResourceInUseException') throw err;
     }
   }
-  if (created) await import('./seed.mjs');
+  return created;
 };

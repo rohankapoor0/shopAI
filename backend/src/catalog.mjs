@@ -217,10 +217,23 @@ export const deleteProduct = async ({ params }) => {
   return { deleted: Boolean(deleted) };
 };
 
-// --- Image uploads: the browser PUTs the file straight to S3 with this presigned URL ---
+// --- Image uploads: the browser PUTs the file straight to storage with this presigned URL ---
 
 const IMAGE_TYPES = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' };
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+
+// Resolves to { uploadUrl, url, uploadHeaders? }. S3 here; azure.mjs swaps in Azure Blob Storage.
+export const imageStore = {
+  sign: async (key, contentType, size) => {
+    const bucket = process.env.BUCKET_NAME;
+    // Type and size are signed, so S3 rejects an upload that differs from what was checked
+    const uploadUrl = await getSignedUrl(s3, new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: contentType, ContentLength: size }), {
+      expiresIn: 300,
+      signableHeaders: new Set(['content-type', 'content-length'])
+    });
+    return { uploadUrl, url: `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}` };
+  }
+};
 
 export const presignProductImage = async ({ body }) => {
   const ext = IMAGE_TYPES[body.contentType];
@@ -228,12 +241,5 @@ export const presignProductImage = async ({ body }) => {
   const size = Number(body.size);
   if (!Number.isInteger(size) || size <= 0) throw new HttpError(400, 'Image size is required');
   if (size > MAX_IMAGE_BYTES) throw new HttpError(400, 'Images must be 5 MB or smaller');
-  const bucket = process.env.BUCKET_NAME;
-  const key = `products/${randomUUID()}.${ext}`;
-  // Type and size are signed, so S3 rejects an upload that differs from what was checked above
-  const uploadUrl = await getSignedUrl(s3, new PutObjectCommand({ Bucket: bucket, Key: key, ContentType: body.contentType, ContentLength: size }), {
-    expiresIn: 300,
-    signableHeaders: new Set(['content-type', 'content-length'])
-  });
-  return { uploadUrl, url: `https://${bucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}` };
+  return imageStore.sign(`products/${randomUUID()}.${ext}`, body.contentType, size);
 };
