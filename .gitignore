@@ -16,6 +16,9 @@ dist-ssr
 .aws-sam
 samconfig.toml
 
+# Azure Functions package assembled by scripts/deploy-azure.mjs
+.azure-api
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

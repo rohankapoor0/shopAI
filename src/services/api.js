@@ -10,11 +10,14 @@ export const isApiConfigured = Boolean(BASE_URL);
 export const apiFetch = async (path, { method = 'GET', body } = {}) => {
   if (!BASE_URL) throw new Error('The backend is not configured: set VITE_API_BASE_URL in .env.local and restart npm run dev.');
   const token = getFromStorage(STORAGE_KEYS.SESSION, null)?.token;
+  // A same-origin API (Azure Static Web Apps: /api) gets the token in X-Session-Token, because the platform
+  // reserves Authorization for its own auth. Cross-origin APIs keep Authorization, which their CORS allows.
+  const tokenHeader = BASE_URL.startsWith('/') ? { 'X-Session-Token': token } : { Authorization: `Bearer ${token}` };
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` })
+      ...(token && tokenHeader)
     },
     body: body && JSON.stringify(body)
   });
