@@ -41,6 +41,7 @@ New AWS accounts can't create CloudFront until AWS Support verifies them (`Your 
 |---|---|
 | `JwtSecret` | Any random string of 32+ characters. Changing it signs everyone out. |
 | `AllowedOrigin` | `http://localhost:5173`: an extra origin for local development. The site URL (S3 website or CloudFront) is always allowed (API and S3 CORS). |
+| `FrontendOrigin` | `https://calm-flower-04d0e4b00.1.azurestaticapps.net`: the frontend hosted on Azure Static Web Apps, allowed by API and S3 CORS. No trailing slash. |
 | `CloudFrontEnabled` | `false` until AWS verifies the account for CloudFront, then `true` |
 | `AzureOpenAiEndpoint` / `AzureOpenAiKey` / `AzureOpenAiDeployment` | The Azure OpenAI resource (`shopai-openai-6962`, deployment `gpt-4.1-mini`). Leave empty to disable the assistant (it returns 503). |
 

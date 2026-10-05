@@ -7,6 +7,10 @@ Parameters:
     Type: String
     Default: http://localhost:5173
     Description: Extra frontend origin allowed by CORS, for local development. The CloudFront site URL is always allowed.
+  FrontendOrigin:
+    Type: String
+    Default: https://calm-flower-04d0e4b00.1.azurestaticapps.net
+    Description: The frontend hosted outside this stack (Azure Static Web Apps), allowed by CORS. No trailing slash.
   JwtSecret:
     Type: String
     NoEcho: true
@@ -86,7 +90,7 @@ Resources:
       CorsConfiguration:
         CorsRules:
           - AllowedMethods: [PUT]
-            AllowedOrigins: [!Ref AllowedOrigin, !If [UseCloudFront, !Sub 'https://${SiteDistribution.DomainName}', !GetAtt SiteBucket.WebsiteURL]]
+            AllowedOrigins: [!Ref AllowedOrigin, !Ref FrontendOrigin, !If [UseCloudFront, !Sub 'https://${SiteDistribution.DomainName}', !GetAtt SiteBucket.WebsiteURL]]
             AllowedHeaders: [content-type]
             MaxAge: 600
 
@@ -191,7 +195,7 @@ Resources:
     Type: AWS::Serverless::HttpApi
     Properties:
       CorsConfiguration:
-        AllowOrigins: [!Ref AllowedOrigin, !If [UseCloudFront, !Sub 'https://${SiteDistribution.DomainName}', !GetAtt SiteBucket.WebsiteURL]]
+        AllowOrigins: [!Ref AllowedOrigin, !Ref FrontendOrigin, !If [UseCloudFront, !Sub 'https://${SiteDistribution.DomainName}', !GetAtt SiteBucket.WebsiteURL]]
         AllowMethods: [GET, POST, PATCH, DELETE, OPTIONS]
         AllowHeaders: [content-type, authorization]
         MaxAge: 600
